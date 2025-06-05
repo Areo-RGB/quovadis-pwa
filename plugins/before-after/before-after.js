@@ -106,7 +106,7 @@ function initVideoControls() {
     if (afterVideo) afterVideo.playbackRate = speed;
 
     // Update button states
-    document.querySelectorAll('[id^="speed-"]').forEach((btn) => {
+    document.querySelectorAll('[id^="speed-"]').forEach(btn => {
       btn.classList.remove('active-speed', 'bg-green-dark');
       btn.classList.add('bg-gray-dark');
     });

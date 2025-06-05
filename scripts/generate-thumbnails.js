@@ -44,7 +44,7 @@ class ThumbnailGenerator {
 
           // Convert to blob
           this.canvas.toBlob(
-            (blob) => {
+            blob => {
               if (blob) {
                 clearTimeout(timeout);
 
@@ -73,7 +73,7 @@ class ThumbnailGenerator {
         }
       });
 
-      video.addEventListener('error', (e) => {
+      video.addEventListener('error', e => {
         clearTimeout(timeout);
         reject(new Error('Video loading failed: ' + e.message));
       });
@@ -171,7 +171,7 @@ class ThumbnailGenerator {
 4. Verify URLs work: https://videos-data.fra1.cdn.digitaloceanspaces.com/thumbnails/[filename].jpg
 
 Generated thumbnails:
-${this.generatedThumbnails.map((t) => `- ${t.filename} (${Math.round(t.size / 1024)}KB)`).join('\n')}
+${this.generatedThumbnails.map(t => `- ${t.filename} (${Math.round(t.size / 1024)}KB)`).join('\n')}
     `;
   }
 }

@@ -223,7 +223,7 @@ async function cleanupCache() {
   if (toDelete.length === 0) {
     for (const request of requests) {
       const url = request.url;
-      const isMediumPriority = CACHE_FILES[PRIORITY.MEDIUM].some((file) => url.includes(file));
+      const isMediumPriority = CACHE_FILES[PRIORITY.MEDIUM].some(file => url.includes(file));
 
       if (isMediumPriority || isThumbnailRequest(url)) {
         toDelete.push(request);
@@ -349,9 +349,9 @@ self.addEventListener('fetch', function (event) {
           if (APP_DIAG) console.log('SW: Detected thumbnail request:', url);
         }
         // Check if it's a critical file
-        else if (CACHE_FILES[PRIORITY.CRITICAL].some((file) => url.includes(file))) {
+        else if (CACHE_FILES[PRIORITY.CRITICAL].some(file => url.includes(file))) {
           priority = PRIORITY.CRITICAL;
-        } else if (CACHE_FILES[PRIORITY.HIGH].some((file) => url.includes(file))) {
+        } else if (CACHE_FILES[PRIORITY.HIGH].some(file => url.includes(file))) {
           priority = PRIORITY.HIGH;
         }
 
@@ -394,13 +394,13 @@ self.addEventListener('activate', function (event) {
   event.waitUntil(self.clients.claim());
   event.waitUntil(
     //Check cache number, clear all assets and re-add if cache number changed
-    caches.keys().then(async (cacheNames) => {
+    caches.keys().then(async cacheNames => {
       // Delete old caches
       await Promise.all(
         cacheNames
-          .filter((cacheName) => cacheName.startsWith(APP_NAME + '-'))
-          .filter((cacheName) => cacheName !== CACHE_NAME)
-          .map((cacheName) => caches.delete(cacheName))
+          .filter(cacheName => cacheName.startsWith(APP_NAME + '-'))
+          .filter(cacheName => cacheName !== CACHE_NAME)
+          .map(cacheName => caches.delete(cacheName))
       );
 
       // Perform initial cache cleanup if needed

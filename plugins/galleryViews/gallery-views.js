@@ -24,8 +24,8 @@ function galleryViews() {
       galleryViews[i].setAttribute('class', 'gallery-views');
     }
   }
-  galleryViewControls.forEach((el) =>
-    el.addEventListener('click', (e) => {
+  galleryViewControls.forEach(el =>
+    el.addEventListener('click', e => {
       removeSelected(el);
       var galleryActiveString = el.getAttribute('class');
       var galleryActiveValue = galleryActiveString.split('gallery-view-');

@@ -92,7 +92,7 @@ export function generateVideoThumbnail(options) {
     }
 
     // Set up event listeners for video loading
-    const loadErrorHandler = (e) => {
+    const loadErrorHandler = e => {
       let errorMessage = e.message || 'Unknown error';
 
       // Check for common CORS-related errors
@@ -247,7 +247,7 @@ export function initVideoThumbnails(selector, options = {}) {
   }
 
   // Process each video element
-  elements.forEach((videoElement) => {
+  elements.forEach(videoElement => {
     if (!(videoElement instanceof HTMLVideoElement)) {
       if (videoElement.querySelector('video')) {
         videoElement = videoElement.querySelector('video');
@@ -292,13 +292,13 @@ export function initVideoThumbnails(selector, options = {}) {
       format: options.format || 'jpeg',
       useCache: options.useCache !== false, // Default to true
       cacheExpiration: options.cacheExpiration || 24, // 24 hours default
-      onSuccess: (dataURL) => {
+      onSuccess: dataURL => {
         videoElement.setAttribute('poster', dataURL);
         container.classList.remove('thumbnail-loading');
         container.classList.add('thumbnail-ready', 'thumbnail-generated');
         console.log('✓ Thumbnail generated for:', videoSrc);
       },
-      onError: (error) => {
+      onError: error => {
         container.classList.remove('thumbnail-loading');
         container.classList.add('thumbnail-error');
         console.error('✗ Thumbnail error:', error);

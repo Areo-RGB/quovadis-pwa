@@ -51,7 +51,7 @@ export function initHomePageHeroAnimations() {
     };
 
     const elementsToRender = [];
-    initialStatsData.forEach((stat) => {
+    initialStatsData.forEach(stat => {
       elementsToRender.push({ type: 'stat', data: stat });
       // Add divider after "Ballkontrolle" or before "Gesamtleistung"
       if (stat.name === 'Ballkontrolle') {

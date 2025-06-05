@@ -4,5 +4,10 @@
   "trailingComma": "es5",
   "printWidth": 100,
   "tabWidth": 2,
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+  "arrowParens": "avoid",
+  "bracketSpacing": true,
+  "htmlWhitespaceSensitivity": "css",
+  "jsxSingleQuote": false,
+  "quoteProps": "as-needed"
 }

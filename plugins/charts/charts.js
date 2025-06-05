@@ -19,7 +19,7 @@
         }
       : window.requestAnimationFrame;
   function e(e, i, n) {
-    const o = n || ((t) => Array.prototype.slice.call(t));
+    const o = n || (t => Array.prototype.slice.call(t));
     let s = !1,
       a = [];
     return function (...n) {
@@ -37,7 +37,7 @@
       return e ? (clearTimeout(i), (i = setTimeout(t, e))) : t(), e;
     };
   }
-  const n = (t) => ('start' === t ? 'left' : 'end' === t ? 'right' : 'center'),
+  const n = t => ('start' === t ? 'left' : 'end' === t ? 'right' : 'center'),
     o = (t, e, i) => ('start' === t ? e : 'end' === t ? i : (e + i) / 2),
     s = (t, e, i, n) => (t === (n ? 'left' : 'right') ? i : 'center' === t ? (e + i) / 2 : e);
   var a = new (class {
@@ -50,7 +50,7 @@
     _notify(t, e, i, n) {
       const o = e.listeners[n],
         s = e.duration;
-      o.forEach((n) =>
+      o.forEach(n =>
         n({ chart: t, initial: e.initial, numSteps: s, currentStep: Math.min(i - e.start, s) })
       );
     }
@@ -157,9 +157,9 @@
       f: 15,
     },
     l = '0123456789ABCDEF',
-    c = (t) => l[15 & t],
-    h = (t) => l[(240 & t) >> 4] + l[15 & t],
-    d = (t) => (240 & t) >> 4 == (15 & t);
+    c = t => l[15 & t],
+    h = t => l[(240 & t) >> 4] + l[15 & t],
+    d = t => (240 & t) >> 4 == (15 & t);
   function u(t) {
     var e = (function (t) {
       return d(t.r) && d(t.g) && d(t.b) && d(t.a);
@@ -625,7 +625,7 @@
   function B(t) {
     return new F(t);
   }
-  const V = (t) => t instanceof CanvasGradient || t instanceof CanvasPattern;
+  const V = t => t instanceof CanvasGradient || t instanceof CanvasPattern;
   function W(t) {
     return V(t) ? t : B(t);
   }
@@ -650,7 +650,7 @@
   function U(t) {
     return null !== t && '[object Object]' === Object.prototype.toString.call(t);
   }
-  const X = (t) => ('number' == typeof t || t instanceof Number) && isFinite(+t);
+  const X = t => ('number' == typeof t || t instanceof Number) && isFinite(+t);
   function q(t, e) {
     return X(t) ? t : e;
   }
@@ -734,8 +734,8 @@
   function ct(t) {
     return t.charAt(0).toUpperCase() + t.slice(1);
   }
-  const ht = (t) => void 0 !== t,
-    dt = (t) => 'function' == typeof t,
+  const ht = t => void 0 !== t,
+    dt = t => 'function' == typeof t,
     ut = (t, e) => {
       if (t.size !== e.size) return !1;
       for (const i of t) if (!e.has(i)) return !1;
@@ -762,7 +762,7 @@
         (this.borderColor = 'rgba(0,0,0,0.1)'),
         (this.color = '#666'),
         (this.datasets = {}),
-        (this.devicePixelRatio = (t) => t.chart.platform.getDevicePixelRatio()),
+        (this.devicePixelRatio = t => t.chart.platform.getDevicePixelRatio()),
         (this.elements = {}),
         (this.events = ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove']),
         (this.font = {
@@ -821,8 +821,8 @@
       });
     }
   })({
-    _scriptable: (t) => !t.startsWith('on'),
-    _indexable: (t) => 'events' !== t,
+    _scriptable: t => !t.startsWith('on'),
+    _indexable: t => 'events' !== t,
     hover: { _fallback: 'interaction' },
     interaction: { _scriptable: !1, _indexable: !1 },
   });
@@ -1137,15 +1137,15 @@
       t.lineTo(i + a.topLeft, n);
   }
   function oe(t, e, i) {
-    i = i || ((i) => t[i] < e);
+    i = i || (i => t[i] < e);
     let n,
       o = t.length - 1,
       s = 0;
     for (; o - s > 1; ) (n = (s + o) >> 1), i(n) ? (s = n) : (o = n);
     return { lo: s, hi: o };
   }
-  const se = (t, e, i) => oe(t, i, (n) => t[n][e] < i),
-    ae = (t, e, i) => oe(t, i, (n) => t[n][e] >= i);
+  const se = (t, e, i) => oe(t, i, n => t[n][e] < i),
+    ae = (t, e, i) => oe(t, i, n => t[n][e] >= i);
   function re(t, e, i) {
     let n = 0,
       o = t.length;
@@ -1162,7 +1162,7 @@
           enumerable: !1,
           value: { listeners: [e] },
         }),
-        le.forEach((e) => {
+        le.forEach(e => {
           const i = '_onData' + ct(e),
             n = t[e];
           Object.defineProperty(t, e, {
@@ -1171,7 +1171,7 @@
             value(...e) {
               const o = n.apply(this, e);
               return (
-                t._chartjs.listeners.forEach((t) => {
+                t._chartjs.listeners.forEach(t => {
                   'function' == typeof t[i] && t[i](...e);
                 }),
                 o
@@ -1187,7 +1187,7 @@
       o = n.indexOf(e);
     -1 !== o && n.splice(o, 1),
       n.length > 0 ||
-        (le.forEach((e) => {
+        (le.forEach(e => {
           delete t[e];
         }),
         delete t._chartjs);
@@ -1214,7 +1214,7 @@
       n
     );
   }
-  const pe = (t) => window.getComputedStyle(t, null);
+  const pe = t => window.getComputedStyle(t, null);
   function me(t, e) {
     return pe(t).getPropertyValue(e);
   }
@@ -1265,7 +1265,7 @@
       }
     );
   }
-  const ye = (t) => Math.round(10 * t) / 10;
+  const ye = t => Math.round(10 * t) / 10;
   function ve(t, e, i, n) {
     const o = pe(t),
       s = be(o, 'margin'),
@@ -1442,7 +1442,7 @@
           a = i.intersect ? Ce(t, o, s, n) : Oe(t, o, s, !1, n),
           r = [];
         return a.length
-          ? (t.getSortedVisibleDatasetMetas().forEach((t) => {
+          ? (t.getSortedVisibleDatasetMetas().forEach(t => {
               const e = a[0].index,
                 i = t.data[e];
               i && !i.skip && r.push({ element: i, datasetIndex: t.index, index: e });
@@ -1485,7 +1485,7 @@
     const i = {},
       n = U(e),
       o = n ? Object.keys(e) : e,
-      s = U(t) ? (n ? (i) => K(t[i], t[e[i]]) : (e) => t[e]) : () => t;
+      s = U(t) ? (n ? i => K(t[i], t[e[i]]) : e => t[e]) : () => t;
     for (const t of o) i[t] = +s(t) || 0;
     return i;
   }
@@ -1538,10 +1538,10 @@
   }
   const He = ['left', 'top', 'right', 'bottom'];
   function je(t, e) {
-    return t.filter((t) => t.pos === e);
+    return t.filter(t => t.pos === e);
   }
   function $e(t, e) {
-    return t.filter((t) => -1 === He.indexOf(t.pos) && t.box.axis === e);
+    return t.filter(t => -1 === He.indexOf(t.pos) && t.box.axis === e);
   }
   function Ye(t, e) {
     return t.sort((t, i) => {
@@ -1605,7 +1605,7 @@
     function n(t) {
       const n = { left: 0, top: 0, right: 0, bottom: 0 };
       return (
-        t.forEach((t) => {
+        t.forEach(t => {
           n[t] = Math.max(e[t], i[t]);
         }),
         n
@@ -1712,7 +1712,7 @@
               return e;
             })(t),
             i = Ye(
-              e.filter((t) => t.box.fullSize),
+              e.filter(t => t.box.fullSize),
               !0
             ),
             n = Ye(je(e, 'left'), !0),
@@ -1732,7 +1732,7 @@
         })(t.boxes),
         l = r.vertical,
         c = r.horizontal;
-      J(t.boxes, (t) => {
+      J(t.boxes, t => {
         'function' == typeof t.beforeLayout && t.beforeLayout();
       });
       const h =
@@ -1773,7 +1773,7 @@
           height: f.h,
           width: f.w,
         }),
-        J(r.chartArea, (e) => {
+        J(r.chartArea, e => {
           const i = e.box;
           Object.assign(i, t.chartArea), i.update(f.w, f.h);
         });
@@ -1788,7 +1788,7 @@
       _rootScopes: i,
       _fallback: n,
       _getTarget: o,
-      override: (o) => ei([o, ...t], e, i, n),
+      override: o => ei([o, ...t], e, i, n),
     };
     return new Proxy(s, {
       deleteProperty: (e, i) => (delete e[i], delete e._keys, delete t[0][i], !0),
@@ -1803,7 +1803,7 @@
       getOwnPropertyDescriptor: (t, e) => Reflect.getOwnPropertyDescriptor(t._scopes[0], e),
       getPrototypeOf: () => Reflect.getPrototypeOf(t[0]),
       has: (t, e) => fi(t).includes(e),
-      ownKeys: (t) => fi(t),
+      ownKeys: t => fi(t),
       set: (t, e, i) => (
         ((t._storage || (t._storage = o()))[e] = i), delete t[e], delete t._keys, !0
       ),
@@ -1817,8 +1817,8 @@
       _subProxy: i,
       _stack: new Set(),
       _descriptors: ni(t, n),
-      setContext: (e) => ii(t, e, i, n),
-      override: (o) => ii(t.override(o), e, i, n),
+      setContext: e => ii(t, e, i, n),
+      override: o => ii(t.override(o), e, i, n),
     };
     return new Proxy(o, {
       deleteProperty: (e, i) => (delete e[i], delete t[i], !0),
@@ -1843,7 +1843,7 @@
                 if (ht(s.index) && n(t)) e = e[s.index % e.length];
                 else if (U(e[0])) {
                   const i = e,
-                    n = o._scopes.filter((t) => t !== i);
+                    n = o._scopes.filter(t => t !== i);
                   e = [];
                   for (const l of i) {
                     const i = hi(n, o, t, l);
@@ -1943,7 +1943,7 @@
           (function (t) {
             const e = new Set();
             for (const i of t)
-              for (const t of Object.keys(i).filter((t) => !t.startsWith('_'))) e.add(t);
+              for (const t of Object.keys(i).filter(t => !t.startsWith('_'))) e.add(t);
             return Array.from(e);
           })(t._scopes)),
       e
@@ -1951,7 +1951,7 @@
   }
   const gi = Number.EPSILON || 1e-14,
     pi = (t, e) => e < t.length && !t[e].skip && t[e],
-    mi = (t) => ('x' === t ? 'y' : 'x');
+    mi = t => ('x' === t ? 'y' : 'x');
   function xi(t, e, i, n) {
     const o = t.skip ? e : t,
       s = e,
@@ -2027,7 +2027,7 @@
   }
   function yi(t, e, i, n, o) {
     let s, a, r, l;
-    if ((e.spanGaps && (t = t.filter((t) => !t.skip)), 'monotone' === e.cubicInterpolationMode))
+    if ((e.spanGaps && (t = t.filter(t => !t.skip)), 'monotone' === e.cubicInterpolationMode))
       bi(t, o);
     else {
       let i = n ? t[t.length - 1] : t[0];
@@ -2059,44 +2059,44 @@
                 ((o.cp2x = _i(o.cp2x, e.left, e.right)), (o.cp2y = _i(o.cp2y, e.top, e.bottom))));
       })(t, i);
   }
-  const vi = (t) => 0 === t || 1 === t,
+  const vi = t => 0 === t || 1 === t,
     wi = (t, e, i) => -Math.pow(2, 10 * (t -= 1)) * Math.sin(((t - e) * _t) / i),
     Mi = (t, e, i) => Math.pow(2, -10 * t) * Math.sin(((t - e) * _t) / i) + 1,
     ki = {
-      linear: (t) => t,
-      easeInQuad: (t) => t * t,
-      easeOutQuad: (t) => -t * (t - 2),
-      easeInOutQuad: (t) => ((t /= 0.5) < 1 ? 0.5 * t * t : -0.5 * (--t * (t - 2) - 1)),
-      easeInCubic: (t) => t * t * t,
-      easeOutCubic: (t) => (t -= 1) * t * t + 1,
-      easeInOutCubic: (t) => ((t /= 0.5) < 1 ? 0.5 * t * t * t : 0.5 * ((t -= 2) * t * t + 2)),
-      easeInQuart: (t) => t * t * t * t,
-      easeOutQuart: (t) => -((t -= 1) * t * t * t - 1),
-      easeInOutQuart: (t) =>
+      linear: t => t,
+      easeInQuad: t => t * t,
+      easeOutQuad: t => -t * (t - 2),
+      easeInOutQuad: t => ((t /= 0.5) < 1 ? 0.5 * t * t : -0.5 * (--t * (t - 2) - 1)),
+      easeInCubic: t => t * t * t,
+      easeOutCubic: t => (t -= 1) * t * t + 1,
+      easeInOutCubic: t => ((t /= 0.5) < 1 ? 0.5 * t * t * t : 0.5 * ((t -= 2) * t * t + 2)),
+      easeInQuart: t => t * t * t * t,
+      easeOutQuart: t => -((t -= 1) * t * t * t - 1),
+      easeInOutQuart: t =>
         (t /= 0.5) < 1 ? 0.5 * t * t * t * t : -0.5 * ((t -= 2) * t * t * t - 2),
-      easeInQuint: (t) => t * t * t * t * t,
-      easeOutQuint: (t) => (t -= 1) * t * t * t * t + 1,
-      easeInOutQuint: (t) =>
+      easeInQuint: t => t * t * t * t * t,
+      easeOutQuint: t => (t -= 1) * t * t * t * t + 1,
+      easeInOutQuint: t =>
         (t /= 0.5) < 1 ? 0.5 * t * t * t * t * t : 0.5 * ((t -= 2) * t * t * t * t + 2),
-      easeInSine: (t) => 1 - Math.cos(t * Mt),
-      easeOutSine: (t) => Math.sin(t * Mt),
-      easeInOutSine: (t) => -0.5 * (Math.cos(bt * t) - 1),
-      easeInExpo: (t) => (0 === t ? 0 : Math.pow(2, 10 * (t - 1))),
-      easeOutExpo: (t) => (1 === t ? 1 : 1 - Math.pow(2, -10 * t)),
-      easeInOutExpo: (t) =>
+      easeInSine: t => 1 - Math.cos(t * Mt),
+      easeOutSine: t => Math.sin(t * Mt),
+      easeInOutSine: t => -0.5 * (Math.cos(bt * t) - 1),
+      easeInExpo: t => (0 === t ? 0 : Math.pow(2, 10 * (t - 1))),
+      easeOutExpo: t => (1 === t ? 1 : 1 - Math.pow(2, -10 * t)),
+      easeInOutExpo: t =>
         vi(t)
           ? t
           : t < 0.5
             ? 0.5 * Math.pow(2, 10 * (2 * t - 1))
             : 0.5 * (2 - Math.pow(2, -10 * (2 * t - 1))),
-      easeInCirc: (t) => (t >= 1 ? t : -(Math.sqrt(1 - t * t) - 1)),
-      easeOutCirc: (t) => Math.sqrt(1 - (t -= 1) * t),
-      easeInOutCirc: (t) =>
+      easeInCirc: t => (t >= 1 ? t : -(Math.sqrt(1 - t * t) - 1)),
+      easeOutCirc: t => Math.sqrt(1 - (t -= 1) * t),
+      easeInOutCirc: t =>
         (t /= 0.5) < 1
           ? -0.5 * (Math.sqrt(1 - t * t) - 1)
           : 0.5 * (Math.sqrt(1 - (t -= 2) * t) + 1),
-      easeInElastic: (t) => (vi(t) ? t : wi(t, 0.075, 0.3)),
-      easeOutElastic: (t) => (vi(t) ? t : Mi(t, 0.075, 0.3)),
+      easeInElastic: t => (vi(t) ? t : wi(t, 0.075, 0.3)),
+      easeOutElastic: t => (vi(t) ? t : Mi(t, 0.075, 0.3)),
       easeInOutElastic(t) {
         const e = 0.1125;
         return vi(t) ? t : t < 0.5 ? 0.5 * wi(2 * t, e, 0.45) : 0.5 + 0.5 * Mi(2 * t - 1, e, 0.45);
@@ -2115,7 +2115,7 @@
           ? t * t * ((1 + (e *= 1.525)) * t - e) * 0.5
           : 0.5 * ((t -= 2) * t * ((1 + (e *= 1.525)) * t + e) + 2);
       },
-      easeInBounce: (t) => 1 - ki.easeOutBounce(1 - t),
+      easeInBounce: t => 1 - ki.easeOutBounce(1 - t),
       easeOutBounce(t) {
         const e = 7.5625,
           i = 2.75;
@@ -2127,7 +2127,7 @@
               ? e * (t -= 2.25 / i) * t + 0.9375
               : e * (t -= 2.625 / i) * t + 0.984375;
       },
-      easeInOutBounce: (t) =>
+      easeInOutBounce: t =>
         t < 0.5 ? 0.5 * ki.easeInBounce(2 * t) : 0.5 * ki.easeOutBounce(2 * t - 1) + 0.5,
     };
   function Si(t, e, i, n) {
@@ -2173,19 +2173,19 @@
     return t
       ? (function (t, e) {
           return {
-            x: (i) => t + t + e - i,
+            x: i => t + t + e - i,
             setWidth(t) {
               e = t;
             },
-            textAlign: (t) => ('center' === t ? t : 'right' === t ? 'left' : 'right'),
+            textAlign: t => ('center' === t ? t : 'right' === t ? 'left' : 'right'),
             xPlus: (t, e) => t - e,
             leftForLtr: (t, e) => t - e,
           };
         })(e, i)
       : {
-          x: (t) => t,
+          x: t => t,
           setWidth(t) {},
-          textAlign: (t) => t,
+          textAlign: t => t,
           xPlus: (t, e) => t + e,
           leftForLtr: (t, e) => t,
         };
@@ -2208,7 +2208,7 @@
       : {
           between: (t, e, i) => t >= Math.min(e, i) && t <= Math.max(i, e),
           compare: (t, e) => t - e,
-          normalize: (t) => t,
+          normalize: t => t,
         };
   }
   function Ei({ start: t, end: e, count: i, loop: n, style: o }) {
@@ -2513,7 +2513,7 @@
       pointerleave: 'mouseout',
       pointerout: 'mouseout',
     },
-    Yi = (t) => null === t || '' === t;
+    Yi = t => null === t || '' === t;
   const Ui = !!Me && { passive: !0 };
   function Xi(t, e, i) {
     t.canvas.removeEventListener(e, i, Ui);
@@ -2521,9 +2521,9 @@
   function qi(t, e, i) {
     const n = t.canvas,
       o = (n && fe(n)) || n,
-      s = new MutationObserver((t) => {
+      s = new MutationObserver(t => {
         const e = fe(o);
-        t.forEach((t) => {
+        t.forEach(t => {
           for (let n = 0; n < t.addedNodes.length; n++) {
             const s = t.addedNodes[n];
             (s !== o && s !== e) || i(t.target);
@@ -2536,8 +2536,8 @@
     const n = t.canvas,
       o = n && fe(n);
     if (!o) return;
-    const s = new MutationObserver((t) => {
-      t.forEach((t) => {
+    const s = new MutationObserver(t => {
+      t.forEach(t => {
         for (let e = 0; e < t.removedNodes.length; e++)
           if (t.removedNodes[e] === n) {
             i();
@@ -2565,7 +2565,7 @@
         const i = s.clientWidth;
         n(t, e), i < s.clientWidth && n();
       }, window),
-      r = new ResizeObserver((t) => {
+      r = new ResizeObserver(t => {
         const e = t[0],
           i = e.contentRect.width,
           n = e.contentRect.height;
@@ -2589,7 +2589,7 @@
   function en(t, i, n) {
     const o = t.canvas,
       s = e(
-        (e) => {
+        e => {
           null !== t.ctx &&
             n(
               (function (t, e) {
@@ -2606,7 +2606,7 @@
             );
         },
         t,
-        (t) => {
+        t => {
           const e = t[0];
           return [e, e.offsetX, e.offsetY];
         }
@@ -2655,13 +2655,13 @@
       const e = t.canvas;
       if (!e.$chartjs) return !1;
       const i = e.$chartjs.initial;
-      ['height', 'width'].forEach((t) => {
+      ['height', 'width'].forEach(t => {
         const n = i[t];
         $(n) ? e.removeAttribute(t) : e.setAttribute(t, n);
       });
       const n = i.style || {};
       return (
-        Object.keys(n).forEach((t) => {
+        Object.keys(n).forEach(t => {
           e.style[t] = n[t];
         }),
         (e.width = e.width),
@@ -2797,7 +2797,7 @@
   xt.describe('animation', {
     _fallback: !1,
     _indexable: !1,
-    _scriptable: (t) => 'onProgress' !== t && 'onComplete' !== t && 'fn' !== t,
+    _scriptable: t => 'onProgress' !== t && 'onComplete' !== t && 'fn' !== t,
   }),
     xt.set('animations', {
       colors: { type: 'color', properties: ['color', 'borderColor', 'backgroundColor'] },
@@ -2813,7 +2813,7 @@
       hide: {
         animations: {
           colors: { to: 'transparent' },
-          visible: { type: 'boolean', easing: 'linear', fn: (t) => 0 | t },
+          visible: { type: 'boolean', easing: 'linear', fn: t => 0 | t },
         },
       },
     });
@@ -2824,12 +2824,12 @@
     configure(t) {
       if (!U(t)) return;
       const e = this._properties;
-      Object.getOwnPropertyNames(t).forEach((i) => {
+      Object.getOwnPropertyNames(t).forEach(i => {
         const n = t[i];
         if (!U(n)) return;
         const o = {};
         for (const t of cn) o[t] = n[t];
-        ((Y(n.properties) && n.properties) || [i]).forEach((t) => {
+        ((Y(n.properties) && n.properties) || [i]).forEach(t => {
           (t !== i && e.has(t)) || e.set(t, o);
         });
       });
@@ -2965,7 +2965,7 @@
   function bn(t, e) {
     const i = t.scales;
     return Object.keys(i)
-      .filter((t) => i[t].axis === e)
+      .filter(t => i[t].axis === e)
       .shift();
   }
   function _n(t, e) {
@@ -2980,7 +2980,7 @@
       }
     }
   }
-  const yn = (t) => 'reset' === t || 'none' === t,
+  const yn = t => 'reset' === t || 'none' === t,
     vn = (t, e) => (e ? t : Object.assign({}, t));
   class wn {
     constructor(t, e) {
@@ -3395,7 +3395,7 @@
         s = o.data,
         a = t + e;
       let r;
-      const l = (t) => {
+      const l = t => {
         for (t.length += e, r = t.length - 1; r >= a; r--) t[r] = t[r - e];
       };
       for (l(s), r = t; r < a; ++r) s[r] = new n.dataElementType();
@@ -3452,7 +3452,7 @@
       if (!e || !n) return i;
       const o = {};
       return (
-        t.forEach((t) => {
+        t.forEach(t => {
           o[t] = n[t] && n[t].active() ? n[t]._to : i[t];
         }),
         o
@@ -3461,7 +3461,7 @@
   }
   (Mn.defaults = {}), (Mn.defaultRoutes = void 0);
   const kn = {
-    values: (t) => (Y(t) ? t : '' + t),
+    values: t => (Y(t) ? t : '' + t),
     numeric(t, e, i) {
       if (0 === t) return '0';
       const n = this.chart.options.locale;
@@ -3609,14 +3609,14 @@
     xt.route('scale.title', 'color', '', 'color'),
     xt.describe('scale', {
       _fallback: !1,
-      _scriptable: (t) =>
+      _scriptable: t =>
         !t.startsWith('before') && !t.startsWith('after') && 'callback' !== t && 'parser' !== t,
-      _indexable: (t) => 'borderDash' !== t && 'tickBorderDash' !== t,
+      _indexable: t => 'borderDash' !== t && 'tickBorderDash' !== t,
     }),
     xt.describe('scales', { _fallback: 'scale' }),
     xt.describe('scale.ticks', {
-      _scriptable: (t) => 'backdropPadding' !== t && 'callback' !== t,
-      _indexable: (t) => 'backdropPadding' !== t,
+      _scriptable: t => 'backdropPadding' !== t && 'callback' !== t,
+      _indexable: t => 'backdropPadding' !== t,
     });
   const Cn = (t, e, i) => ('top' === e || 'left' === e ? t[e] + i : t[e] - i);
   function On(t, e) {
@@ -3663,7 +3663,7 @@
     let o = n(t);
     return (
       ((i && 'right' !== e) || (!i && 'right' === e)) &&
-        (o = ((t) => ('left' === t ? 'right' : 'right' === t ? 'left' : t))(o)),
+        (o = (t => ('left' === t ? 'right' : 'right' === t ? 'left' : t))(o)),
       o
     );
   }
@@ -4059,7 +4059,7 @@
         o.push(g), s.push(p), (x = Math.max(g, x)), (b = Math.max(p, b));
       }
       !(function (t, e) {
-        J(t, (t) => {
+        J(t, t => {
           const i = t.gc,
             n = i.length / 2;
           let o;
@@ -4071,7 +4071,7 @@
       })(n, e);
       const _ = o.indexOf(x),
         y = s.indexOf(b),
-        v = (t) => ({ width: o[t] || 0, height: s[t] || 0 });
+        v = t => ({ width: o[t] || 0, height: s[t] || 0 });
       return { first: v(0), last: v(e - 1), widest: v(_), highest: v(y), widths: o, heights: s };
     }
     getLabelForValue(t) {
@@ -4404,7 +4404,7 @@
       const e = this,
         i = e.options.grid;
       if (!e._isVisible() || !i.display) return 0;
-      const n = e.ticks.findIndex((e) => e.value === t);
+      const n = e.ticks.findIndex(e => e.value === t);
       if (n >= 0) {
         return i.setContext(e.getContext(n)).lineWidth;
       }
@@ -4631,7 +4631,7 @@
             xt.set(e, n),
               t.defaultRoutes &&
                 (function (t, e) {
-                  Object.keys(e).forEach((i) => {
+                  Object.keys(e).forEach(i => {
                     const n = i.split('.'),
                       o = n.pop(),
                       s = [t].concat(n).join('.'),
@@ -4709,11 +4709,11 @@
     }
     _each(t, e, i) {
       const n = this;
-      [...e].forEach((e) => {
+      [...e].forEach(e => {
         const o = i || n._getRegistryForType(e);
         i || o.isForType(e) || (o === n.plugins && e.id)
           ? n._exec(t, o, e)
-          : J(e, (e) => {
+          : J(e, e => {
               const o = i || n._getRegistryForType(e);
               n._exec(t, o, e);
             });
@@ -4794,7 +4794,7 @@
     _notifyStateChanges(t) {
       const e = this._oldCache || [],
         i = this._cache,
-        n = (t, e) => t.filter((t) => !e.some((e) => t.plugin.id === e.plugin.id));
+        n = (t, e) => t.filter(t => !e.some(e => t.plugin.id === e.plugin.id));
       this._notify(n(e, i), t, 'stop'), this._notify(n(i, e), t, 'start');
     }
   }
@@ -4832,7 +4832,7 @@
           s = Object.create(null),
           a = Object.create(null);
         return (
-          Object.keys(n).forEach((t) => {
+          Object.keys(n).forEach(t => {
             const e = n[t],
               r = Nn(t, e),
               l = (function (t, e) {
@@ -4841,11 +4841,11 @@
               c = i.scales || {};
             (s[r] = s[r] || t), (a[t] = st(Object.create(null), [{ axis: r }, e, c[r], c[l]]));
           }),
-          t.data.datasets.forEach((i) => {
+          t.data.datasets.forEach(i => {
             const o = i.type || t.type,
               r = i.indexAxis || Wn(o, e),
               l = (ft[o] || {}).scales || {};
-            Object.keys(l).forEach((t) => {
+            Object.keys(l).forEach(t => {
               const e = (function (t, e) {
                   let i = t;
                   return (
@@ -4856,7 +4856,7 @@
               (a[o] = a[o] || Object.create(null)), st(a[o], [{ axis: e }, n[o], l[t]]);
             });
           }),
-          Object.keys(a).forEach((t) => {
+          Object.keys(a).forEach(t => {
             const e = a[t];
             st(e, [xt.scales[e.type], xt.scale]);
           }),
@@ -4947,12 +4947,12 @@
         a = s.get(e);
       if (a) return a;
       const r = new Set();
-      e.forEach((e) => {
-        t && (r.add(t), e.forEach((e) => Xn(r, t, e))),
-          e.forEach((t) => Xn(r, n, t)),
-          e.forEach((t) => Xn(r, ft[o] || {}, t)),
-          e.forEach((t) => Xn(r, xt, t)),
-          e.forEach((t) => Xn(r, gt, t));
+      e.forEach(e => {
+        t && (r.add(t), e.forEach(e => Xn(r, t, e))),
+          e.forEach(t => Xn(r, n, t)),
+          e.forEach(t => Xn(r, ft[o] || {}, t)),
+          e.forEach(t => Xn(r, xt, t)),
+          e.forEach(t => Xn(r, gt, t));
       });
       const l = Array.from(r);
       return 0 === l.length && l.push(Object.create(null)), Yn.has(e) && s.set(e, l), l;
@@ -4991,7 +4991,7 @@
     if (!s) {
       (s = {
         resolver: ei(e, i),
-        subPrefixes: i.filter((t) => !t.toLowerCase().includes('hover')),
+        subPrefixes: i.filter(t => !t.toLowerCase().includes('hover')),
       }),
         n.set(o, s);
     }
@@ -5024,10 +5024,10 @@
     );
   }
   const io = {},
-    no = (t) => {
+    no = t => {
       const e = eo(t);
       return Object.values(io)
-        .filter((t) => t.canvas === e)
+        .filter(t => t.canvas === e)
         .pop();
     };
   class oo {
@@ -5152,7 +5152,7 @@
       let s = [];
       i &&
         (s = s.concat(
-          Object.keys(i).map((t) => {
+          Object.keys(i).map(t => {
             const e = i[t],
               n = Nn(t, e),
               o = 'r' === n,
@@ -5164,7 +5164,7 @@
             };
           })
         )),
-        J(s, (i) => {
+        J(s, i => {
           const s = i.options,
             a = s.id,
             r = Nn(a, s),
@@ -5182,7 +5182,7 @@
         J(o, (t, e) => {
           t || delete n[e];
         }),
-        J(n, (e) => {
+        J(n, e => {
           ti.configure(t, e, e.options), ti.addBox(t, e);
         });
     }
@@ -5205,7 +5205,7 @@
         } = t;
       e.length > i.length && delete t._stacks,
         e.forEach((e, n) => {
-          0 === i.filter((t) => t === e._dataset).length && t._destroyDatasetMeta(n);
+          0 === i.filter(t => t === e._dataset).length && t._destroyDatasetMeta(n);
         });
     }
     buildOrUpdateControllers() {
@@ -5259,7 +5259,7 @@
         i = e.config;
       i.update(),
         (e._options = i.createResolver(i.chartOptionScopes(), e.getContext())),
-        J(e.scales, (t) => {
+        J(e.scales, t => {
           ti.removeBox(e, t);
         });
       const n = (e._animationsDisabled = !e.options.animation);
@@ -5284,7 +5284,7 @@
       (e._minPadding = r),
         e._updateLayout(r),
         n ||
-          J(a, (t) => {
+          J(a, t => {
             t.reset();
           }),
         e._updateDatasets(t),
@@ -5302,7 +5302,7 @@
       (e._layers = []),
         J(
           e.boxes,
-          (t) => {
+          t => {
             (n && 'chartArea' === t.position) ||
               (t.configure && t.configure(), e._layers.push(...t._layers()));
           },
@@ -5395,7 +5395,7 @@
     getDatasetMeta(t) {
       const e = this.data.datasets[t],
         i = this._metasets;
-      let n = i.filter((t) => t && t._dataset === e).pop();
+      let n = i.filter(t => t && t._dataset === e).pop();
       return (
         n ||
           ((n = {
@@ -5446,7 +5446,7 @@
         ? ((s.data[e].hidden = !i), n.update())
         : (n.setDatasetVisibility(t, i),
           a.update(s, { visible: i }),
-          n.update((e) => (e.datasetIndex === t ? o : void 0)));
+          n.update(e => (e.datasetIndex === t ? o : void 0)));
     }
     hide(t, e) {
       this._updateVisibility(t, e, !1);
@@ -5489,7 +5489,7 @@
         n = function (e, i, n) {
           (e.offsetX = i), (e.offsetY = n), t._eventHandler(e);
         };
-      J(t.options.events, (o) =>
+      J(t.options.events, o =>
         ((n, o) => {
           i.addEventListener(t, n, o), (e[n] = o);
         })(o, n)
@@ -5566,7 +5566,7 @@
       const n = this,
         o = n.options.hover,
         s = (t, e) =>
-          t.filter((t) => !e.some((e) => t.datasetIndex === e.datasetIndex && t.index === e.index)),
+          t.filter(t => !e.some(e => t.datasetIndex === e.datasetIndex && t.index === e.index)),
         a = s(e, t),
         r = i ? t : s(t, e);
       a.length && n.updateHoverStyle(a, o.mode, !1),
@@ -5575,7 +5575,7 @@
     _eventHandler(t, e) {
       const i = this,
         n = { event: t, replay: e, cancelable: !0 },
-        o = (e) => (e.options.events || this.options.events).includes(t.type);
+        o = e => (e.options.events || this.options.events).includes(t.type);
       if (!1 === i.notifyPlugins('beforeEvent', n, o)) return;
       const s = i._handleEvent(t, e);
       return (
@@ -5606,7 +5606,7 @@
       );
     }
   }
-  const so = () => J(oo.instances, (t) => t._plugins.invalidate()),
+  const so = () => J(oo.instances, t => t._plugins.invalidate()),
     ao = !0;
   function ro() {
     throw new Error(
@@ -6299,7 +6299,7 @@
       spacing: 0,
       indexAxis: 'r',
     }),
-    (yo.descriptors = { _scriptable: (t) => 'spacing' !== t, _indexable: (t) => 'spacing' !== t }),
+    (yo.descriptors = { _scriptable: t => 'spacing' !== t, _indexable: t => 'spacing' !== t }),
     (yo.overrides = {
       aspectRatio: 1,
       plugins: {
@@ -6571,7 +6571,7 @@
         tooltip: {
           callbacks: {
             title: () => '',
-            label: (t) => t.chart.data.labels[t.dataIndex] + ': ' + t.formattedValue,
+            label: t => t.chart.data.labels[t.dataIndex] + ': ' + t.formattedValue,
           },
         },
       },
@@ -6642,7 +6642,7 @@
         tooltip: {
           callbacks: {
             title: () => '',
-            label: (t) => '(' + t.label + ', ' + t.formattedValue + ')',
+            label: t => '(' + t.label + ', ' + t.formattedValue + ')',
           },
         },
       },
@@ -6672,7 +6672,7 @@
     const o = Ie(t.options.borderRadius, ['outerStart', 'outerEnd', 'innerStart', 'innerEnd']);
     const s = (i - e) / 2,
       a = Math.min(s, (n * e) / 2),
-      r = (t) => {
+      r = t => {
         const e = ((i - Math.min(s, t)) * n) / 2;
         return Ht(t, 0, Math.min(s, e));
       };
@@ -6881,7 +6881,7 @@
       p,
       m = 0,
       x = 0;
-    const b = (t) => (a + (c ? r - t : t)) % s,
+    const b = t => (a + (c ? r - t : t)) % s,
       _ = () => {
         f !== g && (t.lineTo(m, g), t.lineTo(m, f), t.lineTo(m, p));
       };
@@ -7057,7 +7057,7 @@
       tension: 0,
     }),
     (No.defaultRoutes = { backgroundColor: 'backgroundColor', borderColor: 'borderColor' }),
-    (No.descriptors = { _scriptable: !0, _indexable: (t) => 'borderDash' !== t && 'fill' !== t });
+    (No.descriptors = { _scriptable: !0, _indexable: t => 'borderDash' !== t && 'fill' !== t });
   class jo extends Mn {
     constructor(t) {
       super(),
@@ -7269,7 +7269,7 @@
     }
   }
   function Jo(t) {
-    t.data.datasets.forEach((t) => {
+    t.data.datasets.forEach(t => {
       Qo(t);
     });
   }
@@ -7501,7 +7501,7 @@
     }
     return new No({ points: s, options: {} });
   }
-  const as = (t) => 'line' === t.type && !t.hidden;
+  const as = t => 'line' === t.type && !t.hidden;
   function rs(t, e, i) {
     const n = [];
     for (let o = 0; o < i.length; o++) {
@@ -7778,7 +7778,7 @@
       const t = this,
         e = t.options.labels || {};
       let i = Q(e.generateLabels, [t.chart], t) || [];
-      e.filter && (i = i.filter((i) => e.filter(i, t.chart.data))),
+      e.filter && (i = i.filter(i => e.filter(i, t.chart.data))),
         e.sort && (i = i.sort((i, n) => e.sort(i, n, t.chart.data))),
         t.options.reverse && i.reverse(),
         (t.legendItems = i);
@@ -7970,7 +7970,7 @@
               s = h.leftForLtr(t, x),
               r = Fe(i.borderRadius);
             a.beginPath(),
-              Object.values(r).some((t) => 0 !== t)
+              Object.values(r).some(t => 0 !== t)
                 ? ne(a, { x: s, y: o, w: x, h: b, radius: r })
                 : a.rect(s, o, x, b),
               a.fill(),
@@ -8099,7 +8099,7 @@
       onHover: null,
       onLeave: null,
       labels: {
-        color: (t) => t.chart.options.color,
+        color: t => t.chart.options.color,
         boxWidth: 40,
         padding: 10,
         generateLabels(t) {
@@ -8107,7 +8107,7 @@
             {
               labels: { usePointStyle: i, pointStyle: n, textAlign: o, color: s },
             } = t.legend.options;
-          return t._getSortedDatasetMetas().map((t) => {
+          return t._getSortedDatasetMetas().map(t => {
             const a = t.controller.getStyle(i ? 0 : void 0),
               r = Be(a.borderWidth);
             return {
@@ -8130,11 +8130,11 @@
           }, this);
         },
       },
-      title: { color: (t) => t.chart.options.color, display: !1, position: 'center', text: '' },
+      title: { color: t => t.chart.options.color, display: !1, position: 'center', text: '' },
     },
     descriptors: {
-      _scriptable: (t) => !t.startsWith('on'),
-      labels: { _scriptable: (t) => !['generateLabels', 'filter', 'sort'].includes(t) },
+      _scriptable: t => !t.startsWith('on'),
+      labels: { _scriptable: t => !['generateLabels', 'filter', 'sort'].includes(t) },
     },
   };
   class ws extends Mn {
@@ -8360,7 +8360,7 @@
       (i.font = l.string),
       J(t.beforeBody.concat(t.afterBody), _),
       (b = e.displayColors ? a + 2 : 0),
-      J(n, (t) => {
+      J(n, t => {
         J(t.before, _), J(t.lines, _), J(t.after, _);
       }),
       (b = 0),
@@ -8513,7 +8513,7 @@
         { callbacks: n } = e,
         o = [];
       return (
-        J(t, (t) => {
+        J(t, t => {
           const e = { before: [], lines: [], after: [] },
             s = zs(n, t);
           Ds(e.before, Cs(s.beforeLabel.call(i, t))),
@@ -8550,7 +8550,7 @@
       return (
         t.filter && (c = c.filter((e, i, o) => t.filter(e, i, o, n))),
         t.itemSort && (c = c.sort((e, i) => t.itemSort(e, i, n))),
-        J(c, (i) => {
+        J(c, i => {
           const n = zs(t.callbacks, i);
           o.push(n.labelColor.call(e, i)),
             s.push(n.labelPointStyle.call(e, i)),
@@ -8680,7 +8680,7 @@
         const e = n.leftForLtr(u, c),
           i = n.leftForLtr(n.xPlus(u, 1), c - 2),
           s = Fe(a.borderRadius);
-        Object.values(s).some((t) => 0 !== t)
+        Object.values(s).some(t => 0 !== t)
           ? (t.beginPath(),
             (t.fillStyle = o.multiKeyBackground),
             ne(t, { x: e, y: g, w: c, h: l, radius: s }),
@@ -8995,7 +8995,7 @@
       },
       defaultRoutes: { bodyFont: 'font', footerFont: 'font', titleFont: 'font' },
       descriptors: {
-        _scriptable: (t) => 'filter' !== t && 'itemSort' !== t && 'external' !== t,
+        _scriptable: t => 'filter' !== t && 'itemSort' !== t && 'external' !== t,
         _indexable: !1,
         callbacks: { _scriptable: !1, _indexable: !1 },
         animation: { _fallback: !1 },
@@ -9102,8 +9102,8 @@
         { beginAtZero: e } = t.options,
         { minDefined: i, maxDefined: n } = t.getUserBounds();
       let { min: o, max: s } = t;
-      const a = (t) => (o = i ? o : t),
-        r = (t) => (s = n ? s : t);
+      const a = t => (o = i ? o : t),
+        r = t => (s = n ? s : t);
       if (e) {
         const t = Dt(o),
           e = Dt(s);
@@ -9290,8 +9290,8 @@
         { minDefined: e, maxDefined: i } = t.getUserBounds();
       let n = t.min,
         o = t.max;
-      const s = (t) => (n = e ? n : t),
-        a = (t) => (o = i ? o : t),
+      const s = t => (n = e ? n : t),
+        a = t => (o = i ? o : t),
         r = (t, e) => Math.pow(10, Math.floor(Pt(t)) + e);
       n === o && (n <= 0 ? (s(1), a(10)) : (s(r(n, -1)), a(r(o, 1)))),
         n <= 0 && s(r(o, -1)),
@@ -9690,7 +9690,7 @@
         backdropPadding: 2,
         display: !0,
         font: { size: 10 },
-        callback: (t) => t,
+        callback: t => t,
         padding: 5,
       },
     }),
@@ -9892,7 +9892,7 @@
         (d !== n && 'ticks' !== o.bounds && 1 !== u) || ra(h, d, g),
         Object.keys(h)
           .sort((t, e) => t - e)
-          .map((t) => +t)
+          .map(t => +t)
       );
     }
     getLabelForValue(t) {

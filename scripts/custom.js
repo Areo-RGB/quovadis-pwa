@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 50);
 
     //Activating Menus
-    document.querySelectorAll('.menu').forEach((el) => {
+    document.querySelectorAll('.menu').forEach(el => {
       el.style.display = 'block';
     });
 
@@ -73,8 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       var regularField = document.querySelectorAll('.input-style input:not([type="date"])');
-      regularField.forEach((el) =>
-        el.addEventListener('keyup', (e) => {
+      regularField.forEach(el =>
+        el.addEventListener('keyup', e => {
           if (!el.value == '') {
             el.parentElement.classList.add('input-style-active');
             el.parentElement.querySelector('em').classList.add('disabled');
@@ -88,8 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
       var regularTextarea = document.querySelectorAll('.input-style textarea');
-      regularTextarea.forEach((el) =>
-        el.addEventListener('keyup', (e) => {
+      regularTextarea.forEach(el =>
+        el.addEventListener('keyup', e => {
           if (!el.value == '') {
             el.parentElement.classList.add('input-style-active');
             el.parentElement.querySelector('em').classList.add('disabled');
@@ -101,8 +101,8 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
       var selectField = document.querySelectorAll('.input-style select');
-      selectField.forEach((el) =>
-        el.addEventListener('change', (e) => {
+      selectField.forEach(el =>
+        el.addEventListener('change', e => {
           if (el.value !== 'default') {
             el.parentElement.classList.add('input-style-active');
             var validEl = el.parentElement.querySelectorAll('.valid')[0];
@@ -121,8 +121,8 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
       var dateField = document.querySelectorAll('.input-style input[type="date"]');
-      dateField.forEach((el) =>
-        el.addEventListener('change', (e) => {
+      dateField.forEach(el =>
+        el.addEventListener('change', e => {
           el.parentElement.classList.add('input-style-active');
           el.parentElement.querySelectorAll('.valid')[0].classList.remove('disabled');
           el.parentElement.querySelectorAll('.invalid')[0].classList.add('disabled');
@@ -133,8 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
         '.validate-field input, .validator-field textarea'
       );
       if (validateField.length) {
-        validateField.forEach((el) =>
-          el.addEventListener('keyup', (e) => {
+        validateField.forEach(el =>
+          el.addEventListener('keyup', e => {
             var getAttribute = el.getAttribute('type');
             switch (getAttribute) {
               case 'name':
@@ -181,13 +181,13 @@ document.addEventListener('DOMContentLoaded', () => {
           }).mount();
           var sliderNext = document.querySelectorAll('.slider-next');
           var sliderPrev = document.querySelectorAll('.slider-prev');
-          sliderNext.forEach((el) =>
-            el.addEventListener('click', (el) => {
+          sliderNext.forEach(el =>
+            el.addEventListener('click', el => {
               single.go('>');
             })
           );
-          sliderPrev.forEach((el) =>
-            el.addEventListener('click', (el) => {
+          sliderPrev.forEach(el =>
+            el.addEventListener('click', el => {
               single.go('<');
             })
           );
@@ -228,8 +228,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Don't jump on Empty Links
     const emptyHref = document.querySelectorAll('a[href="#"]');
-    emptyHref.forEach((el) =>
-      el.addEventListener('click', (e) => {
+    emptyHref.forEach(el =>
+      el.addEventListener('click', e => {
         e.preventDefault();
         return false;
       })
@@ -254,8 +254,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //To Do List
     var toDoList = document.querySelectorAll('.todo-list a');
-    toDoList.forEach((el) =>
-      el.addEventListener('click', (e) => {
+    toDoList.forEach(el =>
+      el.addEventListener('click', e => {
         el.classList.toggle('opacity-50');
         el.querySelector('i:last-child').classList.toggle('far');
         el.querySelector('i:last-child').classList.toggle('fa');
@@ -293,8 +293,8 @@ document.addEventListener('DOMContentLoaded', () => {
       var menuOpen = document.querySelectorAll('[data-menu]');
       var wrappers = document.querySelectorAll('.header, #footer-bar, .page-content');
 
-      menuOpen.forEach((el) =>
-        el.addEventListener('click', (e) => {
+      menuOpen.forEach(el =>
+        el.addEventListener('click', e => {
           //Close Existing Opened Menus
           const activeMenu = document.querySelectorAll('.menu-active');
           for (let i = 0; i < activeMenu.length; i++) {
@@ -365,8 +365,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       //Closing Menus
       const menuClose = document.querySelectorAll('.close-menu, .menu-hider');
-      menuClose.forEach((el) =>
-        el.addEventListener('click', (e) => {
+      menuClose.forEach(el =>
+        el.addEventListener('click', e => {
           const activeMenu = document.querySelectorAll('.menu-active');
           for (let i = 0; i < activeMenu.length; i++) {
             activeMenu[i].classList.remove('menu-active');
@@ -375,7 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
             wrappers[i].style.transform = 'translateX(-' + 0 + 'px)';
           }
           var iframes = document.querySelectorAll('iframe');
-          iframes.forEach((el) => {
+          iframes.forEach(el => {
             var hrefer = el.getAttribute('src');
             el.setAttribute('newSrc', hrefer);
             el.setAttribute('src', '');
@@ -389,8 +389,8 @@ document.addEventListener('DOMContentLoaded', () => {
     //Back Button
     const backButton = document.querySelectorAll('[data-back-button]');
     if (backButton.length) {
-      backButton.forEach((el) =>
-        el.addEventListener('click', (e) => {
+      backButton.forEach(el =>
+        el.addEventListener('click', e => {
           e.stopPropagation;
           e.preventDefault;
           window.history.go(-1);
@@ -403,8 +403,8 @@ document.addEventListener('DOMContentLoaded', () => {
       '.back-to-top-icon, .back-to-top-badge, .back-to-top'
     );
     if (backToTop.length) {
-      backToTop.forEach((el) =>
-        el.addEventListener('click', (e) => {
+      backToTop.forEach(el =>
+        el.addEventListener('click', e => {
           window.scrollTo({ top: 0, behavior: `smooth` });
         })
       );
@@ -474,8 +474,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Page Highlights
     var highlightData = document.querySelectorAll('[data-change-highlight]');
-    highlightData.forEach((el) =>
-      el.addEventListener('click', (e) => {
+    highlightData.forEach(el =>
+      el.addEventListener('click', e => {
         var highlight = el.getAttribute('data-change-highlight');
         var pageHighlight = document.querySelectorAll('.page-highlight');
         if (pageHighlight.length) {
@@ -523,8 +523,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Background Gradient Color
     var gradientData = document.querySelectorAll('[data-change-background]');
-    gradientData.forEach((el) =>
-      el.addEventListener('click', (e) => {
+    gradientData.forEach(el =>
+      el.addEventListener('click', e => {
         var gradient = el.getAttribute('data-change-background');
         document.body.setAttribute('data-gradient', 'body-' + gradient + '');
         localStorage.setItem(pwaName + '-Gradient', gradient);
@@ -578,18 +578,18 @@ document.addEventListener('DOMContentLoaded', () => {
       const isNoPreference = window.matchMedia('(prefers-color-scheme: no-preference)').matches;
       window
         .matchMedia('(prefers-color-scheme: dark)')
-        .addListener((e) => e.matches && activateDarkMode());
+        .addListener(e => e.matches && activateDarkMode());
       window
         .matchMedia('(prefers-color-scheme: light)')
-        .addListener((e) => e.matches && activateLightMode());
+        .addListener(e => e.matches && activateLightMode());
       if (isDarkMode) activateDarkMode();
       if (isLightMode) activateLightMode();
     }
 
     //Activating Dark Mode
     const darkModeSwitch = document.querySelectorAll('[data-toggle-theme]');
-    darkModeSwitch.forEach((el) =>
-      el.addEventListener('click', (e) => {
+    darkModeSwitch.forEach(el =>
+      el.addEventListener('click', e => {
         if (document.body.className == 'theme-light') {
           removeTransitions();
           activateDarkMode();
@@ -619,8 +619,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Detect Dark/Light Mode
     const darkModeDetect = document.querySelectorAll('.detect-dark-mode');
-    darkModeDetect.forEach((el) =>
-      el.addEventListener('click', (e) => {
+    darkModeDetect.forEach(el =>
+      el.addEventListener('click', e => {
         document.body.classList.remove('theme-light', 'theme-dark');
         document.body.classList.add('detect-theme');
         setTimeout(function () {
@@ -632,8 +632,8 @@ document.addEventListener('DOMContentLoaded', () => {
     //Accordion Rotate
     const accordionBtn = document.querySelectorAll('.accordion-btn');
     if (accordionBtn.length) {
-      accordionBtn.forEach((el) =>
-        el.addEventListener('click', (event) => {
+      accordionBtn.forEach(el =>
+        el.addEventListener('click', event => {
           el.querySelector('i:last-child').classList.toggle('fa-rotate-180');
         })
       );
@@ -718,13 +718,13 @@ document.addEventListener('DOMContentLoaded', () => {
     //Card Effects
     const cardScale = document.querySelectorAll('.card-scale');
     if (cardScale.length) {
-      cardScale.forEach((el) =>
-        el.addEventListener('mouseenter', (event) => {
+      cardScale.forEach(el =>
+        el.addEventListener('mouseenter', event => {
           el.querySelectorAll('img')[0].classList.add('card-scale-image');
         })
       );
-      cardScale.forEach((el) =>
-        el.addEventListener('mouseleave', (event) => {
+      cardScale.forEach(el =>
+        el.addEventListener('mouseleave', event => {
           el.querySelectorAll('img')[0].classList.remove('card-scale-image');
         })
       );
@@ -732,15 +732,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const cardHide = document.querySelectorAll('.card-hide');
     if (cardHide.length) {
-      cardHide.forEach((el) =>
-        el.addEventListener('mouseenter', (event) => {
+      cardHide.forEach(el =>
+        el.addEventListener('mouseenter', event => {
           el.querySelectorAll(
             '.card-center, .card-bottom, .card-top, .card-overlay'
           )[0].classList.add('card-hide-image');
         })
       );
-      cardHide.forEach((el) =>
-        el.addEventListener('mouseleave', (event) => {
+      cardHide.forEach(el =>
+        el.addEventListener('mouseleave', event => {
           el.querySelectorAll(
             '.card-center, .card-bottom, .card-top, .card-overlay'
           )[0].classList.remove('card-hide-image');
@@ -750,13 +750,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const cardRotate = document.querySelectorAll('.card-rotate');
     if (cardRotate.length) {
-      cardRotate.forEach((el) =>
-        el.addEventListener('mouseenter', (event) => {
+      cardRotate.forEach(el =>
+        el.addEventListener('mouseenter', event => {
           el.querySelectorAll('img')[0].classList.add('card-rotate-image');
         })
       );
-      cardRotate.forEach((el) =>
-        el.addEventListener('mouseleave', (event) => {
+      cardRotate.forEach(el =>
+        el.addEventListener('mouseleave', event => {
           el.querySelectorAll('img')[0].classList.remove('card-rotate-image');
         })
       );
@@ -764,13 +764,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const cardGray = document.querySelectorAll('.card-grayscale');
     if (cardGray.length) {
-      cardGray.forEach((el) =>
-        el.addEventListener('mouseenter', (event) => {
+      cardGray.forEach(el =>
+        el.addEventListener('mouseenter', event => {
           el.querySelectorAll('img')[0].classList.add('card-grayscale-image');
         })
       );
-      cardGray.forEach((el) =>
-        el.addEventListener('mouseleave', (event) => {
+      cardGray.forEach(el =>
+        el.addEventListener('mouseleave', event => {
           el.querySelectorAll('img')[0].classList.remove('card-grayscale-image');
         })
       );
@@ -778,13 +778,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const cardBlur = document.querySelectorAll('.card-blur');
     if (cardBlur.length) {
-      cardBlur.forEach((el) =>
-        el.addEventListener('mouseenter', (event) => {
+      cardBlur.forEach(el =>
+        el.addEventListener('mouseenter', event => {
           el.querySelectorAll('img')[0].classList.add('card-blur-image');
         })
       );
-      cardBlur.forEach((el) =>
-        el.addEventListener('mouseleave', (event) => {
+      cardBlur.forEach(el =>
+        el.addEventListener('mouseleave', event => {
           el.querySelectorAll('img')[0].classList.remove('card-blur-image');
         })
       );
@@ -854,15 +854,15 @@ document.addEventListener('DOMContentLoaded', () => {
     var stepperAdd = document.querySelectorAll('.stepper-add');
     var stepperSub = document.querySelectorAll('.stepper-sub');
     if (stepperAdd.length) {
-      stepperAdd.forEach((el) =>
-        el.addEventListener('click', (event) => {
+      stepperAdd.forEach(el =>
+        el.addEventListener('click', event => {
           var currentValue = el.parentElement.querySelector('input').value;
           el.parentElement.querySelector('input').value = +currentValue + 1;
         })
       );
 
-      stepperSub.forEach((el) =>
-        el.addEventListener('click', (event) => {
+      stepperSub.forEach(el =>
+        el.addEventListener('click', event => {
           var currentValue = el.parentElement.querySelector('input').value;
           el.parentElement.querySelector('input').value = +currentValue - 1;
         })
@@ -874,8 +874,8 @@ document.addEventListener('DOMContentLoaded', () => {
       '[data-trigger-switch]:not([data-toggle-theme])'
     );
     if (linkListToggle.length) {
-      linkListToggle.forEach((el) =>
-        el.addEventListener('click', (event) => {
+      linkListToggle.forEach(el =>
+        el.addEventListener('click', event => {
           var switchData = el.getAttribute('data-trigger-switch');
           var getCheck = document.getElementById(switchData);
           getCheck.checked ? (getCheck.checked = false) : (getCheck.checked = true);
@@ -886,8 +886,8 @@ document.addEventListener('DOMContentLoaded', () => {
     //Classic Toggle
     var classicToggle = document.querySelectorAll('.classic-toggle');
     if (classicToggle.length) {
-      classicToggle.forEach((el) =>
-        el.addEventListener('click', (event) => {
+      classicToggle.forEach(el =>
+        el.addEventListener('click', event => {
           el.querySelector('i:last-child').classList.toggle('fa-rotate-180');
           el.querySelector('i:last-child').style.transition = 'all 250ms ease';
         })
@@ -897,8 +897,8 @@ document.addEventListener('DOMContentLoaded', () => {
     //Toasts
     var toastTrigger = document.querySelectorAll('[data-toast]');
     if (toastTrigger.length) {
-      toastTrigger.forEach((el) =>
-        el.addEventListener('click', (event) => {
+      toastTrigger.forEach(el =>
+        el.addEventListener('click', event => {
           var toastData = el.getAttribute('data-toast');
           var notificationToast = document.getElementById(toastData);
           var notificationToast = new bootstrap.Toast(notificationToast);
@@ -998,8 +998,8 @@ document.addEventListener('DOMContentLoaded', () => {
       stopVibrating.addEventListener('click', function () {
         window.navigator.vibrate(0);
       });
-      vibrateButton.forEach((el) =>
-        el.addEventListener('click', (e) => {
+      vibrateButton.forEach(el =>
+        el.addEventListener('click', e => {
           var vibrateTime = el.getAttribute('data-vibrate');
           window.navigator.vibrate(vibrateTime);
         })
@@ -1009,8 +1009,8 @@ document.addEventListener('DOMContentLoaded', () => {
     //Time Ads
     var timedAd = document.querySelectorAll('[data-timed-ad]');
     if (timedAd.length) {
-      timedAd.forEach((el) =>
-        el.addEventListener('click', (e) => {
+      timedAd.forEach(el =>
+        el.addEventListener('click', e => {
           var timedAdTime = el.getAttribute('data-timed-ad');
           var timedAdData = el.getAttribute('data-menu');
           var timedAdTimer = timedAdTime;
@@ -1135,8 +1135,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (window.location.protocol === 'file:') {
       var linksLocal = document.querySelectorAll('a');
-      linksLocal.forEach((el) =>
-        el.addEventListener('mouseover', (event) => {
+      linksLocal.forEach(el =>
+        el.addEventListener('mouseover', event => {
           // console.log("You are seeing these errors because your file is on your local computer. For real life simulations please use a Live Server or a Local Server such as AMPPS or WAMPP or simulate a  Live Preview using a Code Editor like http://brackets.io (it's 100% free) - PWA functions and AJAX Page Transitions will only work in these scenarios.");
         })
       );
@@ -1217,8 +1217,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       var searchClick = document.querySelectorAll('.search-trending a');
-      searchClick.forEach((el) =>
-        el.addEventListener('click', (event) => {
+      searchClick.forEach(el =>
+        el.addEventListener('click', event => {
           var trendingResult = el.querySelectorAll('span')[0].textContent.toLowerCase();
           searchField[0].value = trendingResult;
           searchField[0].click();
@@ -1229,8 +1229,8 @@ document.addEventListener('DOMContentLoaded', () => {
     //Search Header
     var searchHeader = document.querySelectorAll('[data-toggle-search]');
     if (searchHeader) {
-      searchHeader.forEach((el) =>
-        el.addEventListener('click', (event) => {
+      searchHeader.forEach(el =>
+        el.addEventListener('click', event => {
           window.scrollTo({ top: 0, behavior: `smooth` });
           document.querySelectorAll('.header')[0].classList.toggle('header-search-active');
         })
@@ -1246,33 +1246,33 @@ document.addEventListener('DOMContentLoaded', () => {
         .querySelectorAll(
           '.shareToFacebook, .shareToTwitter, .shareToLinkedIn, .shareToWhatsApp, .shareToMail'
         )
-        .forEach((x) => {
+        .forEach(x => {
           x.setAttribute('target', '_blank');
         });
       document
         .querySelectorAll('.shareToFacebook')
-        .forEach((x) =>
+        .forEach(x =>
           x.setAttribute('href', 'https://www.facebook.com/sharer/sharer.php?u=' + shareLink)
         );
       document
         .querySelectorAll('.shareToTwitter')
-        .forEach((x) =>
+        .forEach(x =>
           x.setAttribute('href', 'http://twitter.com/share?text=' + shareTitle + '%20' + shareLink)
         );
       document
         .querySelectorAll('.shareToPinterest')
-        .forEach((x) =>
+        .forEach(x =>
           x.setAttribute('href', 'https://pinterest.com/pin/create/button/?url=' + shareLink)
         );
       document
         .querySelectorAll('.shareToWhatsApp')
-        .forEach((x) => x.setAttribute('href', 'whatsapp://send?text=' + shareLink));
+        .forEach(x => x.setAttribute('href', 'whatsapp://send?text=' + shareLink));
       document
         .querySelectorAll('.shareToMail')
-        .forEach((x) => x.setAttribute('href', 'mailto:?body=' + shareLink));
+        .forEach(x => x.setAttribute('href', 'mailto:?body=' + shareLink));
       document
         .querySelectorAll('.shareToLinkedIn')
-        .forEach((x) =>
+        .forEach(x =>
           x.setAttribute(
             'href',
             'https://www.linkedin.com/shareArticle?mini=true&url=' +
@@ -1288,7 +1288,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const shareData = { title: shareTitle, text: shareText, url: shareLink };
       var shareMenu = document.querySelectorAll('[data-menu="menu-share"], [data-show-share]');
       if (shareMenu) {
-        shareMenu.forEach((el) => {
+        shareMenu.forEach(el => {
           el.addEventListener('click', async () => {
             menu('menu-share', 'hide', 0);
             try {
@@ -1385,8 +1385,8 @@ document.addEventListener('DOMContentLoaded', () => {
     //Collapse Flip Icon
     var collapseBtn = document.querySelectorAll('[data-bs-toggle="collapse"]:not(.no-effect)');
     if (collapseBtn.length) {
-      collapseBtn.forEach((el) =>
-        el.addEventListener('click', (e) => {
+      collapseBtn.forEach(el =>
+        el.addEventListener('click', e => {
           if (el.querySelectorAll('i').length) {
             el.querySelector('i').classList.toggle('fa-rotate-180');
           }
@@ -1404,8 +1404,8 @@ document.addEventListener('DOMContentLoaded', () => {
           e.classList.add('no-click');
         }
       });
-      tabTrigger.forEach((el) =>
-        el.addEventListener('click', (e) => {
+      tabTrigger.forEach(el =>
+        el.addEventListener('click', e => {
           var highlightColor = el.parentNode.getAttribute('data-highlight');
           var tabParentGroup = el.parentNode.querySelectorAll('a');
           tabParentGroup.forEach(function (e) {
@@ -1508,8 +1508,8 @@ document.addEventListener('DOMContentLoaded', () => {
       //    if(hrefs.match(/.html/)){e.classList.add('show-offline'); e.setAttribute('data-link',hrefs); e.setAttribute('href','#');}
       //});
       var showOffline = document.querySelectorAll('.show-offline');
-      showOffline.forEach((el) =>
-        el.addEventListener('click', (event) => {
+      showOffline.forEach(el =>
+        el.addEventListener('click', event => {
           document
             .getElementsByClassName('offline-message')[0]
             .classList.add('offline-message-active');
@@ -1579,8 +1579,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //iOS Badge
     const iOSBadge = document.querySelectorAll('.simulate-iphone-badge');
-    iOSBadge.forEach((el) =>
-      el.addEventListener('click', (e) => {
+    iOSBadge.forEach(el =>
+      el.addEventListener('click', e => {
         document
           .getElementsByClassName('add-to-home')[0]
           .classList.add('add-to-home-visible', 'add-to-home-ios');
@@ -1590,8 +1590,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Android Badge
     const AndroidBadge = document.querySelectorAll('.simulate-android-badge');
-    AndroidBadge.forEach((el) =>
-      el.addEventListener('click', (e) => {
+    AndroidBadge.forEach(el =>
+      el.addEventListener('click', e => {
         document
           .getElementsByClassName('add-to-home')[0]
           .classList.add('add-to-home-visible', 'add-to-home-android');
@@ -1601,8 +1601,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Remove Add to Home Badge
     const addToHomeBadgeClose = document.querySelectorAll('.add-to-home');
-    addToHomeBadgeClose.forEach((el) =>
-      el.addEventListener('click', (e) => {
+    addToHomeBadgeClose.forEach(el =>
+      el.addEventListener('click', e => {
         document.getElementsByClassName('add-to-home')[0].classList.remove('add-to-home-visible');
       })
     );
@@ -1654,11 +1654,11 @@ document.addEventListener('DOMContentLoaded', () => {
     //OTP Boxes
     var otp = document.querySelectorAll('.otp');
     if (otp[0]) {
-      otp.forEach((el) => {
-        el.addEventListener('focus', (e) => {
+      otp.forEach(el => {
+        el.addEventListener('focus', e => {
           el.value = '';
         });
-        el.addEventListener('input', (e) => {
+        el.addEventListener('input', e => {
           el.nextElementSibling ? el.nextElementSibling.focus() : el.blur();
         });
       });
@@ -1667,17 +1667,22 @@ document.addEventListener('DOMContentLoaded', () => {
     //PWA Settings
     if (isPWA === true) {
       var checkPWA = document.getElementsByTagName('html')[0];
-      if (!checkPWA.classList.contains('isPWA')) { // This custom check can remain if desired
+      if (!checkPWA.classList.contains('isPWA')) {
+        // This custom check can remain if desired
         if ('serviceWorker' in navigator) {
-          window.addEventListener('load', function() {
-            navigator.serviceWorker.register(pwaLocation, { scope: pwaScope })
-              .then(function(registration) {
-                console.log('PWA: ServiceWorker registration successful with scope: ', registration.scope);
+          window.addEventListener('load', function () {
+            navigator.serviceWorker
+              .register(pwaLocation, { scope: pwaScope })
+              .then(function (registration) {
+                console.log(
+                  'PWA: ServiceWorker registration successful with scope: ',
+                  registration.scope
+                );
 
-                registration.onupdatefound = function() {
+                registration.onupdatefound = function () {
                   const installingWorker = registration.installing;
                   if (installingWorker) {
-                    installingWorker.onstatechange = function() {
+                    installingWorker.onstatechange = function () {
                       if (installingWorker.state === 'installed') {
                         if (navigator.serviceWorker.controller) {
                           // New content is available and has been installed.
@@ -1693,7 +1698,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   }
                 };
               })
-              .catch(function(err) {
+              .catch(function (err) {
                 console.error('PWA: ServiceWorker registration failed: ', err);
               });
           });
@@ -1712,8 +1717,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const pwaClose = document.querySelectorAll('.pwa-dismiss');
-        pwaClose.forEach((el) =>
-          el.addEventListener('click', (e) => {
+        pwaClose.forEach(el =>
+          el.addEventListener('click', e => {
             const pwaWindows = document.querySelectorAll(
               '#menu-install-pwa-android, #menu-install-pwa-ios'
             );
@@ -1745,17 +1750,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 3500);
               }
               var deferredPrompt;
-              window.addEventListener('beforeinstallprompt', (e) => {
+              window.addEventListener('beforeinstallprompt', e => {
                 e.preventDefault();
                 deferredPrompt = e;
                 showInstallPrompt();
               });
             }
             const pwaInstall = document.querySelectorAll('.pwa-install');
-            pwaInstall.forEach((el) =>
-              el.addEventListener('click', (e) => {
+            pwaInstall.forEach(el =>
+              el.addEventListener('click', e => {
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
+                deferredPrompt.userChoice.then(choiceResult => {
                   if (choiceResult.outcome === 'accepted') {
                     console.log('Added');
                   } else {
@@ -1774,7 +1779,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
               })
             );
-            window.addEventListener('appinstalled', (evt) => {
+            window.addEventListener('appinstalled', evt => {
               document.getElementById('menu-install-pwa-android').classList.remove('menu-active');
               document.querySelectorAll('.menu-hider')[0].classList.remove('menu-active');
             });
@@ -1799,8 +1804,8 @@ document.addEventListener('DOMContentLoaded', () => {
     //End of isPWA
     if (pwaNoCache === true) {
       sessionStorage.clear();
-      caches.keys().then((cacheNames) => {
-        cacheNames.forEach((cacheName) => {
+      caches.keys().then(cacheNames => {
+        cacheNames.forEach(cacheName => {
           caches.delete(cacheName);
         });
       });
@@ -1832,7 +1837,7 @@ document.addEventListener('DOMContentLoaded', () => {
       async clearCache() {
         try {
           const cacheNames = await caches.keys();
-          await Promise.all(cacheNames.map((cacheName) => caches.delete(cacheName)));
+          await Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)));
           console.log('Cache cleared successfully');
           return true;
         } catch (error) {
@@ -2019,7 +2024,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async clearCache() {
       const cacheNames = await caches.keys();
-      await Promise.all(cacheNames.map((name) => caches.delete(name)));
+      await Promise.all(cacheNames.map(name => caches.delete(name)));
       console.log('🗑️ All caches cleared');
       location.reload();
     },
@@ -2039,7 +2044,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const cache = await caches.open(cacheName);
         const requests = await cache.keys();
         console.log(`📁 Cache: ${cacheName} (${requests.length} files)`);
-        requests.forEach((req) => console.log(`  - ${req.url}`));
+        requests.forEach(req => console.log(`  - ${req.url}`));
       }
     },
   };

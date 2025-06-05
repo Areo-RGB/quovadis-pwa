@@ -11,7 +11,7 @@ export function initHighQualityVideoThumbnails() {
   const defaultFallbackImage = 'images/thumbnails/DJI_20250511155856_0068_D.jpg';
 
   // First, ensure all videos have crossorigin attribute
-  document.querySelectorAll('video').forEach((video) => {
+  document.querySelectorAll('video').forEach(video => {
     if (!video.hasAttribute('crossorigin')) {
       video.setAttribute('crossorigin', 'anonymous');
     }
@@ -41,7 +41,7 @@ function handleSpecialVideoContainers() {
 
   // Generate thumbnails for video cards
   const videoCards = document.querySelectorAll('.video-card-container video');
-  videoCards.forEach((video) => {
+  videoCards.forEach(video => {
     // Ensure crossOrigin attribute is set for all videos
     if (!video.hasAttribute('crossorigin')) {
       video.setAttribute('crossorigin', 'anonymous');
@@ -57,7 +57,7 @@ function handleSpecialVideoContainers() {
         cors: true,
         fallbackImage: defaultFallbackImage,
         cacheExpiration: 48, // Cache for longer (48 hours)
-        onSuccess: (dataURL) => {
+        onSuccess: dataURL => {
           video.setAttribute('poster', dataURL);
           container.classList.remove('thumbnail-loading');
           container.classList.add('thumbnail-ready');
@@ -93,7 +93,7 @@ function handleSpecialVideoContainers() {
       seekTime: 1,
       cors: true,
       fallbackImage: defaultFallbackImage,
-      onSuccess: (dataUrl) => {
+      onSuccess: dataUrl => {
         video.setAttribute('poster', dataUrl);
         console.log(`✅ Generated thumbnail for list video ${index + 1}`);
       },

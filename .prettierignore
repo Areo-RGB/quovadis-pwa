@@ -1,0 +1,26 @@
+# Build outputs
+dist/
+build/
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+
+# Coverage reports
+coverage/
+
+# Cache directories
+.cache/
+
+# Environment variables
+.env*
+
+# Development tools
+dev-tools/
+templates-only-copy-paste/
+
+# Other files to ignore
+*.min.js
+*.min.css

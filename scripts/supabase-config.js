@@ -119,7 +119,7 @@ const YoYoDatabase = {
       }
 
       // Get unique session names
-      const uniqueSessions = [...new Set(data.map((item) => item.session_name))];
+      const uniqueSessions = [...new Set(data.map(item => item.session_name))];
       return uniqueSessions;
     } catch (error) {
       console.error('Error loading sessions:', error);
@@ -205,15 +205,15 @@ const YoYoDatabase = {
 
       // Calculate statistics
       const stats = {
-        totalSessions: [...new Set(data.map((item) => item.session_name))].length,
-        totalAthletes: [...new Set(data.map((item) => item.athlete_name))].length,
+        totalSessions: [...new Set(data.map(item => item.session_name))].length,
+        totalAthletes: [...new Set(data.map(item => item.athlete_name))].length,
         totalTests: data.length,
         averageDistance:
           data.length > 0
             ? Math.round(data.reduce((sum, item) => sum + item.distance_meters, 0) / data.length)
             : 0,
-        maxDistance: data.length > 0 ? Math.max(...data.map((item) => item.distance_meters)) : 0,
-        eliminatedCount: data.filter((item) => item.warning_state === 2).length,
+        maxDistance: data.length > 0 ? Math.max(...data.map(item => item.distance_meters)) : 0,
+        eliminatedCount: data.filter(item => item.warning_state === 2).length,
       };
 
       return stats;

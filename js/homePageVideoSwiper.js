@@ -18,13 +18,13 @@ export function initHomePageVideoSwiper() {
       return;
     }
 
-    slides.forEach((slide) => {
+    slides.forEach(slide => {
       slide.classList.remove('active');
       const video = slide.querySelector('video');
       if (video) video.pause();
     });
 
-    indicators.forEach((indicator) => {
+    indicators.forEach(indicator => {
       indicator.classList.remove('active');
     });
 
@@ -34,7 +34,7 @@ export function initHomePageVideoSwiper() {
       const currentVideo = slides[index].querySelector('video');
       if (currentVideo) {
         currentVideo.currentTime = 0;
-        currentVideo.play().catch((e) => console.warn('VideoSwiper: Video play failed:', e));
+        currentVideo.play().catch(e => console.warn('VideoSwiper: Video play failed:', e));
       }
     }
     currentSlide = index;
