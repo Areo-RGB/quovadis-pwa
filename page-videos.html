@@ -74,12 +74,10 @@
                 <div class="swipe-card-container" style="position: relative; overflow: hidden;">
                   <!-- Card 1 - 10m Sprint -->
                   <div class="swipe-card active" data-card-index="0">
-                    <div class="card card-style mx-2 mt-2 video-card-container" data-card-height="auto">
-                      <!-- Video Background -->
-                      <video class="card-video-bg" muted loop preload="metadata"
-                        poster="images\thumbnails\DJI_20250511155856_0068_D.jpg">
+                    <div class="card card-style mx-2 mt-2 video-card-container thumbnail-loading" data-card-height="auto">
+                      <video playsinline class="card-video-bg" preload="metadata">
                         <source src="https://data3.fra1.cdn.digitaloceanspaces.com/DJI_20250511155856_0068_D.mp4"
-                          type="video/mp4">
+                          type="video/mp4" />
                       </video>
 
                       <div class="card-top p-3">
@@ -100,12 +98,10 @@
 
                   <!-- Card 2 - Alternative 10m Sprint -->
                   <div class="swipe-card" data-card-index="1">
-                    <div class="card card-style mx-2 mt-2 video-card-container" data-card-height="auto">
-                      <!-- Video Background -->
-                      <video class="card-video-bg" muted loop preload="metadata"
-                        poster="images\thumbnails\DJI_20250511155856_0068_D.jpg">
+                    <div class="card card-style mx-2 mt-2 video-card-container thumbnail-loading" data-card-height="auto">
+                      <video playsinline class="card-video-bg" preload="metadata">
                         <source src="https://data3.fra1.cdn.digitaloceanspaces.com/DJI_20250511155856_0068_D.mp4"
-                          type="video/mp4">
+                          type="video/mp4" />
                       </video>
 
                       <div class="card-top p-3">
@@ -130,12 +126,10 @@
                 <div class="swipe-card-container" style="position: relative; overflow: hidden;">
                   <!-- Card 1 - 20m Sprint -->
                   <div class="swipe-card active" data-card-index="0">
-                    <div class="card card-style mx-2 mt-2 video-card-container" data-card-height="auto">
-                      <!-- Video Background -->
-                      <video class="card-video-bg" muted loop preload="metadata"
-                        poster="images\thumbnails\DJI_20250511155856_0068_D.jpg">
+                    <div class="card card-style mx-2 mt-2 video-card-container thumbnail-loading" data-card-height="auto">
+                      <video playsinline class="card-video-bg" preload="metadata">
                         <source src="https://data3.fra1.cdn.digitaloceanspaces.com/DJI_20250511155856_0068_D.mp4"
-                          type="video/mp4">
+                          type="video/mp4" />
                       </video>
 
                       <div class="card-top p-3">
@@ -156,12 +150,10 @@
 
                   <!-- Card 2 - Alternative 20m Sprint -->
                   <div class="swipe-card" data-card-index="1">
-                    <div class="card card-style mx-2 mt-2 video-card-container" data-card-height="auto">
-                      <!-- Video Background -->
-                      <video class="card-video-bg" muted loop preload="metadata"
-                        poster="images\thumbnails\DJI_20250511155856_0068_D.jpg">
+                    <div class="card card-style mx-2 mt-2 video-card-container thumbnail-loading" data-card-height="auto">
+                      <video playsinline class="card-video-bg" preload="metadata">
                         <source src="https://data3.fra1.cdn.digitaloceanspaces.com/DJI_20250511155856_0068_D.mp4"
-                          type="video/mp4">
+                          type="video/mp4" />
                       </video>
 
                       <div class="card-top p-3">
@@ -182,12 +174,10 @@
                 </div>
               </div>
               <div class="card card-style mx-0">
-                <div class="card card-style mx-2 mt-2 video-card-container" data-card-height="auto">
-                  <!-- Video Background -->
-                  <video class="card-video-bg" muted loop preload="metadata"
-                    poster="thumbnails/DJI_20250511155856_0068_D.jpg">
+                <div class="card card-style mx-2 mt-2 video-card-container thumbnail-loading" data-card-height="auto">
+                  <video playsinline class="card-video-bg" preload="metadata">
                     <source src="https://data3.fra1.cdn.digitaloceanspaces.com/DJI_20250511155856_0068_D.mp4"
-                      type="video/mp4">
+                      type="video/mp4" />
                   </video>
 
                   <div class="card-top p-3">
@@ -206,6 +196,18 @@
 
                 </div>
                 <!-- Video content container removed -->
+              </div>
+              <div class="card card-style mx-0">
+                <div class="card card-style mx-2 mt-2 video-card-container" data-card-height="auto">
+                  <video playsinline class="card-video-bg" preload="metadata">
+                    <source src="https://data3.fra1.cdn.digitaloceanspaces.com/Jala_Libby_0001_D.mp4" type="video/mp4" />
+                  </video>
+                  <div class="card-center ps-3 pe-3">
+                    <h1 class="color-white text-uppercase font-900 mb-0">Lorem Ipsum</h1>
+                    <h4 class="color-white font-400 opacity-80">Dolor Sit Amet Consectetur</h4>
+                  </div>
+                  <div class="card-overlay bg-gradient"></div>
+                </div>
               </div>
               <div class="card card-style mx-0">
                 <div class="card card-style mx-2 mt-2 video-card-container" data-card-height="auto">
@@ -647,6 +649,8 @@
 
       <script type="text/javascript" src="scripts/bootstrap.min.js"></script>
       <script type="text/javascript" src="scripts/custom.js"></script>
+      <!-- Import video thumbnail generator -->
+      <script type="module" src="js/initVideoThumbnails.js"></script>
 
       <!-- Swipe Card Styles -->
       <style>
@@ -778,6 +782,69 @@
           .video-card-container {
             aspect-ratio: 9/16 !important;
           }
+        }
+
+        /* Thumbnail loading styles */
+        .thumbnail-loading {
+          position: relative;
+        }
+
+        .thumbnail-loading::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.2);
+          z-index: 3;
+        }
+
+        .thumbnail-loading::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 30px;
+          height: 30px;
+          margin-top: -15px;
+          margin-left: -15px;
+          border: 3px solid rgba(255, 255, 255, 0.3);
+          border-top: 3px solid #fff;
+          border-radius: 50%;
+          z-index: 4;
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        /* Thumbnail ready state */
+        .thumbnail-ready {
+          transition: all 0.3s ease;
+        }
+
+        /* High-quality thumbnails */
+        .thumbnail-generated {
+          opacity: 1;
+        }
+
+        /* Error state */
+        .thumbnail-error {
+          position: relative;
+        }
+
+        .thumbnail-error::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(135deg, rgba(255,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%);
+          z-index: 2;
         }
       </style>
 

@@ -1,11 +1,32 @@
 // js/homePageHeroAnimations.js
 export function initHomePageHeroAnimations() {
     console.log("Initializing Homepage Hero Animations");
+    
+    // Add initial delay to account for page loading
+    const initialDelay = 800; // 800ms delay before starting animations
+    
+    // Get text elements for initial fade-in
+    const charlierText = document.querySelector(".card-bottom h1.font-24");
     const finleyHeading = document.querySelector(".finley-animated-heading");
+    const clubText = document.querySelector(".card-bottom p.opacity-70");
+    
+    // Set initial opacity to 0
+    if (charlierText) charlierText.style.opacity = "0";
+    if (clubText) clubText.style.opacity = "0";
+    
+    // Fade in Charlier text first
+    setTimeout(() => {
+        if (charlierText) {
+            charlierText.style.transition = "opacity 0.8s ease-in-out";
+            charlierText.style.opacity = "1";
+        }
+    }, initialDelay);
+    
+    // Then animate Finley letters
     if (finleyHeading) {
         const finleyLetters = finleyHeading.querySelectorAll("span");
         finleyLetters.forEach((span, index) => {
-            span.style.animationDelay = `${index * 0.1}s`;
+            span.style.animationDelay = `${initialDelay + 400 + (index * 100)}ms`;
             span.classList.add("fade-in-letter-anim");
         });
 
@@ -124,7 +145,7 @@ export function initHomePageHeroAnimations() {
                     const finleyHeading = document.querySelector(".finley-animated-heading");
                     const clubText = document.querySelector(".card-bottom p.opacity-70");
                     
-                    // Add animation to move text up and out
+                    // Add animation to move text up and out - synchronized
                     if (charlierText) {
                         charlierText.style.transition = "transform 1.2s ease-in-out, opacity 1s ease-in-out";
                         charlierText.style.transform = "translateY(-100px)";
@@ -133,17 +154,17 @@ export function initHomePageHeroAnimations() {
                     }
                     
                     if (finleyHeading) {
-                        finleyHeading.style.transition = "transform 1.5s ease-in-out, opacity 1.2s ease-in-out";
+                        finleyHeading.style.transition = "transform 1.2s ease-in-out, opacity 1s ease-in-out";
                         finleyHeading.style.transform = "translateY(-100px)";
                         finleyHeading.style.opacity = "0";
-                        setTimeout(() => finleyHeading.style.visibility = "hidden", 1500);
+                        setTimeout(() => finleyHeading.style.visibility = "hidden", 1200);
                     }
                     
                     if (clubText) {
-                        clubText.style.transition = "transform 1.8s ease-in-out, opacity 1.4s ease-in-out";
+                        clubText.style.transition = "transform 1.2s ease-in-out, opacity 1s ease-in-out";
                         clubText.style.transform = "translateY(-100px)";
                         clubText.style.opacity = "0";
-                        setTimeout(() => clubText.style.visibility = "hidden", 1800);
+                        setTimeout(() => clubText.style.visibility = "hidden", 1200);
                         
                         // Remove overlays after all animations complete
                         setTimeout(() => {
