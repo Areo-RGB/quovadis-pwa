@@ -16,235 +16,426 @@
  * @param {boolean} options.cors - Enable CORS, default: true
  * @param {Function} options.onSuccess - Success callback with dataURL
  * @param {Function} options.onError - Error callback
- * @returns {Promise<string>} - Promise resolving to dataURL
+ * @param {boolean} options.useCache - Whether to use caching, default: true
+ * @param {number} options.cacheExpiration - Cache expiration in hours, default: 24
+ * @param {string} options.fallbackImage - URL to a fallback image if thumbnail generation fails
+ * @returns {Promise} - Promise resolving to dataURL
  */
 export function generateVideoThumbnail(options) {
-  // Default options
-  const settings = {
-    video: null,
-    quality: 0.9,
-    seekTime: 1,
-    format: 'jpeg',
-    cors: true,
-    width: null,
-    height: null,
-    onSuccess: null,
-    onError: null,
-    ...options
-  };
-
   return new Promise((resolve, reject) => {
-    try {
-      // Create video element if URL was provided
-      const videoEl = typeof settings.video === 'string'
-        ? createVideoElement(settings.video, settings.cors)
-        : settings.video;
+    // Default options
+    const settings = {
+      video: null,
+      quality: 0.9,
+      width: null,
+      height: null,
+      seekTime: 1,
+      format: 'jpeg',
+      cors: true,
+      onSuccess: null,
+      onError: null,
+      useCache: true,
+      cacheExpiration: 24, // hours
+      fallbackImage: null, // New setting for fallback image
+    };
 
-      if (!videoEl) {
-        const error = new Error('Invalid video source');
-        if (settings.onError) settings.onError(error);
-        reject(error);
-        return;
-      }
+    // Merge options
+    Object.assign(settings, options);
 
-      // If video is already loaded, generate thumbnail immediately
-      if (videoEl.readyState >= 3) {
-        createThumbnail(videoEl, settings, resolve, reject);
-        return;
-      }
+    // Extract video source from video element or use URL directly
+    let videoSrc = '';
+    let videoElement = null;
 
-      // Setup event listeners for video loading
-      const loadHandler = () => {
-        // Seek to specified time for better thumbnail
-        videoEl.currentTime = settings.seekTime;
-      };
+    if (settings.video instanceof HTMLVideoElement) {
+      videoElement = settings.video;
+      videoSrc = videoElement.querySelector('source')
+        ? videoElement.querySelector('source').src
+        : videoElement.src;
+    } else if (typeof settings.video === 'string') {
+      videoSrc = settings.video;
+    } else {
+      const error = new Error('Invalid video source');
+      if (settings.onError) settings.onError(error);
+      return reject(error);
+    }
 
-      const seekedHandler = () => {
-        createThumbnail(videoEl, settings, resolve, reject);
+    // Generate cache key from video source
+    const cacheKey = `videoThumbnail_${hashString(videoSrc)}`;
 
-        // Clean up event listeners
-        videoEl.removeEventListener('loadeddata', loadHandler);
-        videoEl.removeEventListener('seeked', seekedHandler);
+    // Check cache first if enabled
+    if (settings.useCache) {
+      try {
+        const cachedData = getCachedThumbnail(cacheKey, settings.cacheExpiration);
+        if (cachedData) {
+          console.log('Using cached thumbnail for:', videoSrc);
 
-        // Clean up temp video element if we created one
-        if (typeof settings.video === 'string') {
-          document.body.removeChild(videoEl);
+          if (settings.onSuccess) settings.onSuccess(cachedData);
+          return resolve(cachedData);
         }
-      };
-
-      const errorHandler = (e) => {
-        console.error('Error loading video:', e);
-
-        // Clean up event listeners
-        videoEl.removeEventListener('loadeddata', loadHandler);
-        videoEl.removeEventListener('seeked', seekedHandler);
-        videoEl.removeEventListener('error', errorHandler);
-
-        // Clean up temp video element if we created one
-        if (typeof settings.video === 'string') {
-          document.body.removeChild(videoEl);
-        }
-
-        const error = new Error('Failed to load video');
-        if (settings.onError) settings.onError(error);
-        reject(error);
-      };
-
-      // Add event listeners
-      videoEl.addEventListener('loadeddata', loadHandler);
-      videoEl.addEventListener('seeked', seekedHandler);
-      videoEl.addEventListener('error', errorHandler);
-
-      // Load the video if it's not loaded yet
-      if (videoEl.readyState === 0) {
-        videoEl.load();
+      } catch (e) {
+        console.warn('Cache retrieval error:', e);
+        // Continue with thumbnail generation if cache fails
       }
-    } catch (error) {
-      console.error('Thumbnail generation error:', error);
+    }
+
+    // Create video element if not provided
+    if (!videoElement) {
+      videoElement = document.createElement('video');
+      videoElement.preload = 'metadata';
+      videoElement.muted = true;
+      videoElement.playsInline = true;
+      videoElement.src = videoSrc;
+
+      if (settings.cors) {
+        videoElement.crossOrigin = 'anonymous';
+      }
+    }
+
+    // Set up event listeners for video loading
+    const loadErrorHandler = (e) => {
+      let errorMessage = e.message || 'Unknown error';
+
+      // Check for common CORS-related errors
+      if (
+        errorMessage.includes('Tainted canvases may not be exported') ||
+        e.name === 'SecurityError' ||
+        e.name === 'InvalidStateError'
+      ) {
+        errorMessage = `CORS error: The video might be from a different origin that doesn't allow cross-origin access. Make sure:
+        1. The video element has crossorigin="anonymous" attribute
+        2. The server provides proper CORS headers (Access-Control-Allow-Origin)
+        Original error: ${errorMessage}`;
+
+        // Try to use fallback image if provided
+        if (settings.fallbackImage) {
+          console.warn(`Using fallback image due to CORS error for video: ${videoSrc}`);
+
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = settings.width || img.width;
+            canvas.height = settings.height || img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            try {
+              const dataURL = canvas.toDataURL(`image/${settings.format}`, settings.quality);
+              cleanup();
+              if (settings.onSuccess) settings.onSuccess(dataURL);
+              resolve(dataURL);
+              return;
+            } catch (err) {
+              console.error('Failed to generate fallback thumbnail:', err);
+              // Continue with the normal error flow
+            }
+          };
+
+          img.onerror = () => {
+            console.error('Failed to load fallback image:', settings.fallbackImage);
+            // Continue with the normal error flow
+          };
+
+          img.src = settings.fallbackImage;
+          return;
+        }
+      }
+
+      const error = new Error(`Video loading failed: ${errorMessage}`);
+      cleanup();
       if (settings.onError) settings.onError(error);
       reject(error);
+    };
+
+    const loadHandler = () => {
+      try {
+        // Set video to seekTime
+        videoElement.currentTime = settings.seekTime;
+      } catch (e) {
+        loadErrorHandler(e);
+      }
+    };
+
+    const seekedHandler = () => {
+      try {
+        // Get video dimensions
+        const videoWidth = settings.width || videoElement.videoWidth;
+        const videoHeight = settings.height || videoElement.videoHeight;
+
+        // Create canvas with the right dimensions
+        const canvas = document.createElement('canvas');
+        canvas.width = videoWidth;
+        canvas.height = videoHeight;
+
+        // Draw the video frame to the canvas
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(videoElement, 0, 0, videoWidth, videoHeight);
+
+        // Generate data URL
+        const dataURL = canvas.toDataURL(`image/${settings.format}`, settings.quality);
+
+        // Store in cache if enabled
+        if (settings.useCache) {
+          try {
+            cacheThumbnail(cacheKey, dataURL);
+          } catch (e) {
+            console.warn('Cache storage error:', e);
+            // Continue even if caching fails
+          }
+        }
+
+        // Return the data URL
+        cleanup();
+        if (settings.onSuccess) settings.onSuccess(dataURL);
+        resolve(dataURL);
+      } catch (e) {
+        loadErrorHandler(e);
+      }
+    };
+
+    // Clean up event listeners
+    const cleanup = () => {
+      videoElement.removeEventListener('loadeddata', loadHandler);
+      videoElement.removeEventListener('seeked', seekedHandler);
+      videoElement.removeEventListener('error', loadErrorHandler);
+
+      // Stop the video and release resources
+      try {
+        videoElement.pause();
+        if (!options.video) {
+          // Only if we created this video element
+          videoElement.src = '';
+          videoElement.load();
+        }
+      } catch (e) {
+        console.warn('Cleanup error:', e);
+      }
+    };
+
+    // Set up event handlers
+    videoElement.addEventListener('loadeddata', loadHandler);
+    videoElement.addEventListener('seeked', seekedHandler);
+    videoElement.addEventListener('error', loadErrorHandler);
+
+    // Start loading the video
+    try {
+      videoElement.load();
+    } catch (e) {
+      loadErrorHandler(e);
     }
   });
 }
 
 /**
- * Creates a temporary hidden video element for thumbnail generation
+ * Initialize video thumbnails for multiple videos
+ * @param {string|NodeList|HTMLElement} selector - CSS selector, NodeList, or element
+ * @param {Object} options - Options for thumbnail generation
  */
-function createVideoElement(videoSrc, cors = true) {
-  const videoEl = document.createElement('video');
+export function initVideoThumbnails(selector, options = {}) {
+  let elements;
 
-  // Configure video element
-  videoEl.style.position = 'absolute';
-  videoEl.style.opacity = '0';
-  videoEl.style.pointerEvents = 'none';
-  videoEl.style.zIndex = '-1';
-  videoEl.style.width = '1px';
-  videoEl.style.height = '1px';
-  videoEl.setAttribute('muted', '');
-  videoEl.setAttribute('playsinline', '');
-
-  // Enable cross-origin support
-  if (cors) {
-    videoEl.setAttribute('crossorigin', 'anonymous');
-  }
-
-  // Set source
-  videoEl.src = videoSrc;
-
-  // Append to body temporarily (required for some browsers)
-  document.body.appendChild(videoEl);
-
-  return videoEl;
-}
-
-/**
- * Creates the actual thumbnail from a video frame
- */
-function createThumbnail(videoEl, settings, resolve, reject) {
-  try {
-    // Get dimensions (use original video size if not specified)
-    const width = settings.width || videoEl.videoWidth;
-    const height = settings.height || videoEl.videoHeight;
-
-    // Create canvas and context
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-
-    const ctx = canvas.getContext('2d');
-
-    // Apply high-quality settings
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = 'high';
-
-    // Draw video frame to canvas
-    ctx.drawImage(videoEl, 0, 0, width, height);
-
-    // Convert to data URL
-    const mimeType = `image/${settings.format}`;
-    const dataURL = canvas.toDataURL(mimeType, settings.quality);
-
-    // Execute success callback if provided
-    if (settings.onSuccess) {
-      settings.onSuccess(dataURL);
-    }
-
-    // Resolve promise
-    resolve(dataURL);
-  } catch (error) {
-    console.error('Error creating thumbnail:', error);
-
-    // Execute error callback if provided
-    if (settings.onError) {
-      settings.onError(error);
-    }
-
-    reject(error);
-  }
-}
-
-/**
- * Initialize thumbnail generation for all videos in a container
- *
- * @param {string|Element} container - Container selector or element
- * @param {Object} options - Thumbnail generation options
- */
-export function initVideoThumbnails(container, options = {}) {
-  // Get container element
-  const containerElement = typeof container === 'string'
-    ? document.querySelector(container)
-    : container;
-
-  if (!containerElement) {
-    console.warn('Container not found:', container);
+  // Process selector
+  if (typeof selector === 'string') {
+    elements = document.querySelectorAll(selector + ' video');
+  } else if (selector instanceof NodeList) {
+    elements = selector;
+  } else if (selector instanceof HTMLElement) {
+    elements = [selector];
+  } else {
+    console.error('Invalid selector for initVideoThumbnails');
     return;
   }
 
-  // Get all video elements in the container
-  const videos = containerElement.querySelectorAll('video:not([data-thumbnail-ignore])');
+  // Process each video element
+  elements.forEach((videoElement) => {
+    if (!(videoElement instanceof HTMLVideoElement)) {
+      if (videoElement.querySelector('video')) {
+        videoElement = videoElement.querySelector('video');
+      } else {
+        return;
+      }
+    }
 
-  // Process each video
-  videos.forEach((video, index) => {
-    // Skip videos that already have a poster
-    if (video.hasAttribute('poster') && video.getAttribute('poster') !== '') {
+    // Get video container
+    const container =
+      videoElement.closest('.video-card-container, .video-thumbnail-container') ||
+      videoElement.parentElement;
+
+    if (!container) return;
+
+    // Skip if video already has a poster
+    if (
+      videoElement.hasAttribute('poster') &&
+      videoElement.getAttribute('poster').startsWith('data:')
+    ) {
+      container.classList.remove('thumbnail-loading');
+      container.classList.add('thumbnail-ready');
       return;
     }
+
+    // Add loading class to container
+    container.classList.add('thumbnail-loading');
 
     // Get video source
-    const videoSrc = video.querySelector('source')?.src || video.src;
+    const videoSrc = videoElement.querySelector('source')?.src || videoElement.src;
     if (!videoSrc) {
-      console.warn(`Video ${index} has no source:`, video);
+      container.classList.remove('thumbnail-loading');
+      container.classList.add('thumbnail-error');
       return;
     }
 
-    // Generate and apply thumbnail
-    generateVideoThumbnail({
-      video: videoSrc,
-      ...options,
-      onSuccess: (dataUrl) => {
-        // Set as poster
-        video.setAttribute('poster', dataUrl);
-        video.classList.add('thumbnail-generated');
-
-        // Call custom success handler if provided
-        if (options.onSuccess) {
-          options.onSuccess(dataUrl, video);
-        }
+    // Generate thumbnail
+    const thumbnailOptions = {
+      video: videoElement,
+      quality: options.quality || 0.95,
+      seekTime: options.seekTime || 1.5,
+      format: options.format || 'jpeg',
+      useCache: options.useCache !== false, // Default to true
+      cacheExpiration: options.cacheExpiration || 24, // 24 hours default
+      onSuccess: (dataURL) => {
+        videoElement.setAttribute('poster', dataURL);
+        container.classList.remove('thumbnail-loading');
+        container.classList.add('thumbnail-ready', 'thumbnail-generated');
+        console.log('✓ Thumbnail generated for:', videoSrc);
       },
       onError: (error) => {
-        console.warn(`Failed to generate thumbnail for video ${index}:`, error);
+        container.classList.remove('thumbnail-loading');
+        container.classList.add('thumbnail-error');
+        console.error('✗ Thumbnail error:', error);
+      },
+    };
 
-        // Call custom error handler if provided
-        if (options.onError) {
-          options.onError(error, video);
+    generateVideoThumbnail(thumbnailOptions);
+  });
+}
+
+/**
+ * Store thumbnail in localStorage with timestamp
+ * @param {string} key - Cache key
+ * @param {string} dataURL - Thumbnail data URL
+ */
+function cacheThumbnail(key, dataURL) {
+  try {
+    const cacheData = {
+      timestamp: Date.now(),
+      dataURL: dataURL,
+    };
+    localStorage.setItem(key, JSON.stringify(cacheData));
+    return true;
+  } catch (e) {
+    console.warn('Error storing thumbnail in cache:', e);
+
+    // If localStorage is full, try to clear old items
+    if (e.name === 'QuotaExceededError') {
+      cleanupOldCache();
+
+      // Try again
+      try {
+        const cacheData = {
+          timestamp: Date.now(),
+          dataURL: dataURL,
+        };
+        localStorage.setItem(key, JSON.stringify(cacheData));
+        return true;
+      } catch (retryError) {
+        console.error('Failed to store thumbnail after cleanup:', retryError);
+      }
+    }
+    return false;
+  }
+}
+
+/**
+ * Get cached thumbnail if valid
+ * @param {string} key - Cache key
+ * @param {number} expirationHours - Cache expiration in hours
+ * @returns {string|null} - Thumbnail data URL or null if not found/expired
+ */
+function getCachedThumbnail(key, expirationHours = 24) {
+  try {
+    const data = localStorage.getItem(key);
+    if (!data) return null;
+
+    const cacheData = JSON.parse(data);
+    const expirationTime = expirationHours * 60 * 60 * 1000; // Convert hours to ms
+
+    // Check if cache is expired
+    if (Date.now() - cacheData.timestamp > expirationTime) {
+      localStorage.removeItem(key);
+      return null;
+    }
+
+    return cacheData.dataURL;
+  } catch (e) {
+    console.warn('Error retrieving cached thumbnail:', e);
+    return null;
+  }
+}
+
+/**
+ * Remove old cache entries to free up space
+ */
+function cleanupOldCache() {
+  try {
+    // Find and remove oldest video thumbnails
+    const thumbnailKeys = [];
+
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key.startsWith('videoThumbnail_')) {
+        try {
+          const data = JSON.parse(localStorage.getItem(key));
+          thumbnailKeys.push({
+            key,
+            timestamp: data.timestamp || 0,
+          });
+        } catch (e) {
+          // If we can't parse it, add it for removal anyway
+          thumbnailKeys.push({
+            key,
+            timestamp: 0,
+          });
         }
       }
-    });
-  });
+    }
+
+    // Sort by timestamp (oldest first)
+    thumbnailKeys.sort((a, b) => a.timestamp - b.timestamp);
+
+    // Remove the oldest 50% of items
+    const removeCount = Math.ceil(thumbnailKeys.length / 2);
+    for (let i = 0; i < removeCount && i < thumbnailKeys.length; i++) {
+      localStorage.removeItem(thumbnailKeys[i].key);
+    }
+
+    console.log(`Cache cleanup: removed ${removeCount} old thumbnails`);
+    return true;
+  } catch (e) {
+    console.error('Error during cache cleanup:', e);
+    return false;
+  }
+}
+
+/**
+ * Create a simple hash from a string (for cache keys)
+ * @param {string} str - String to hash
+ * @returns {string} - Hashed string
+ */
+function hashString(str) {
+  let hash = 0;
+  if (str.length === 0) return hash.toString();
+
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+
+  return Math.abs(hash).toString(36);
 }
 
 // Export default functions
 export default {
   generateVideoThumbnail,
-  initVideoThumbnails
+  initVideoThumbnails,
 };

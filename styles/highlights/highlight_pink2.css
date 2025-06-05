@@ -5,7 +5,7 @@
 
 .bg-highlight {
   background-color: #fb3365 !important;
-  color: #FFF !important;
+  color: #fff !important;
 }
 
 .border-highlight {
@@ -47,10 +47,10 @@
 
 .bg-highlight {
   background-color: #fb3365;
-  color: #FFF !important;
+  color: #fff !important;
 }
 
 .interest-check input:checked ~ label {
-  color: #FFF !important;
+  color: #fff !important;
   background-color: #fb3365 !important;
 }

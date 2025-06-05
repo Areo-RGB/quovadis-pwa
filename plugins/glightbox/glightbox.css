@@ -27,10 +27,12 @@
 }
 
 .glightbox-container .gslider {
-  -webkit-transition: -webkit-transform .4s ease;
-  transition: -webkit-transform .4s ease;
-  transition: transform .4s ease;
-  transition: transform .4s ease, -webkit-transform .4s ease;
+  -webkit-transition: -webkit-transform 0.4s ease;
+  transition: -webkit-transform 0.4s ease;
+  transition: transform 0.4s ease;
+  transition:
+    transform 0.4s ease,
+    -webkit-transform 0.4s ease;
   height: 100%;
   left: 0;
   top: 0;
@@ -273,10 +275,16 @@
   order: 2 !important;
   max-height: 78vh;
   overflow: auto !important;
-  background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 0.75)));
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    from(rgba(0, 0, 0, 0)),
+    to(rgba(0, 0, 0, 0.75))
+  );
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.75) 100%);
-  -webkit-transition: opacity .3s linear;
-  transition: opacity .3s linear;
+  -webkit-transition: opacity 0.3s linear;
+  transition: opacity 0.3s linear;
   padding-bottom: 50px;
 }
 
@@ -304,13 +312,13 @@
 
 .glightbox-mobile .glightbox-container .gslide-desc .desc-more {
   color: #fff;
-  opacity: .4;
+  opacity: 0.4;
 }
 
 .gdesc-open .gslide-media {
-  -webkit-transition: opacity .5s ease;
-  transition: opacity .5s ease;
-  opacity: .4;
+  -webkit-transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease;
+  opacity: 0.4;
 }
 
 .gdesc-open .gdesc-inner {
@@ -318,14 +326,14 @@
 }
 
 .gdesc-closed .gslide-media {
-  -webkit-transition: opacity .5s ease;
-  transition: opacity .5s ease;
+  -webkit-transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease;
   opacity: 1;
 }
 
 .greset {
-  -webkit-transition: all .3s ease;
-  transition: all .3s ease;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .gabsolute {
@@ -347,8 +355,8 @@
 .gloader {
   height: 25px;
   width: 25px;
-  -webkit-animation: lightboxLoader .8s infinite linear;
-  animation: lightboxLoader .8s infinite linear;
+  -webkit-animation: lightboxLoader 0.8s infinite linear;
+  animation: lightboxLoader 0.8s infinite linear;
   border: 2px solid #fff;
   border-right-color: transparent;
   border-radius: 50%;
@@ -399,7 +407,7 @@
 .gprev.disabled,
 .gnext.disabled,
 .gclose.disabled {
-  opacity: .1;
+  opacity: 0.1;
 }
 
 .gprev .garrow,
@@ -429,7 +437,7 @@ iframe.wait-autoplay {
   font-size: 16px !important;
   font-weight: normal;
   text-align: center;
-  color: #FFF;
+  color: #fff;
   margin-bottom: 19px;
   line-height: 1.4em;
 }
@@ -501,10 +509,10 @@ iframe.wait-autoplay {
 .glightbox-modern .gclose {
   width: 35px;
   height: 35px;
-  top: calc(15px + (env(safe-area-inset-top)))!important; /*iOS Fix*/
+  top: calc(15px + (env(safe-area-inset-top))) !important; /*iOS Fix*/
   right: 10px;
   position: absolute;
-  opacity: .7;
+  opacity: 0.7;
   background-position: -59px 2px;
 }
 
@@ -520,43 +528,43 @@ iframe.wait-autoplay {
 
 /*CSS Animations*/
 .gfadeIn {
-  -webkit-animation: gfadeIn .5s ease;
-  animation: gfadeIn .5s ease;
+  -webkit-animation: gfadeIn 0.5s ease;
+  animation: gfadeIn 0.5s ease;
 }
 
 .gfadeOut {
-  -webkit-animation: gfadeOut .5s ease;
-  animation: gfadeOut .5s ease;
+  -webkit-animation: gfadeOut 0.5s ease;
+  animation: gfadeOut 0.5s ease;
 }
 
 .gslideOutLeft {
-  -webkit-animation: gslideOutLeft .3s ease;
-  animation: gslideOutLeft .3s ease;
+  -webkit-animation: gslideOutLeft 0.3s ease;
+  animation: gslideOutLeft 0.3s ease;
 }
 
 .gslideInLeft {
-  -webkit-animation: gslideInLeft .3s ease;
-  animation: gslideInLeft .3s ease;
+  -webkit-animation: gslideInLeft 0.3s ease;
+  animation: gslideInLeft 0.3s ease;
 }
 
 .gslideOutRight {
-  -webkit-animation: gslideOutRight .3s ease;
-  animation: gslideOutRight .3s ease;
+  -webkit-animation: gslideOutRight 0.3s ease;
+  animation: gslideOutRight 0.3s ease;
 }
 
 .gslideInRight {
-  -webkit-animation: gslideInRight .3s ease;
-  animation: gslideInRight .3s ease;
+  -webkit-animation: gslideInRight 0.3s ease;
+  animation: gslideInRight 0.3s ease;
 }
 
 .gzoomIn {
-  -webkit-animation: gzoomIn .5s ease;
-  animation: gzoomIn .5s ease;
+  -webkit-animation: gzoomIn 0.5s ease;
+  animation: gzoomIn 0.5s ease;
 }
 
 .gzoomOut {
-  -webkit-animation: gzoomOut .5s ease;
-  animation: gzoomOut .5s ease;
+  -webkit-animation: gzoomOut 0.5s ease;
+  animation: gzoomOut 0.5s ease;
 }
 
 @-webkit-keyframes lightboxLoader {

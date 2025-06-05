@@ -59,8 +59,8 @@
 }
 #resizer:after {
   background: #1f1f1f;
-  font-family: "Font Awesome 5 Free";
-  content: "\f337";
+  font-family: 'Font Awesome 5 Free';
+  content: '\f337';
   font-weight: 900;
   font-size: 18px;
   display: flex;
