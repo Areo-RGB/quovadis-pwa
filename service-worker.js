@@ -1,7 +1,7 @@
 // To clear cache on devices, always increase APP_VER number after making changes.
 // The app will serve fresh content right away or after 2-3 refreshes (open / close)
 var APP_NAME = 'QuoVadis';
-var APP_VER = '5.0.0'; // Incremented for maximum cache usage optimization
+var APP_VER = '5.0.1'; // Incremented for PWA settings update
 var CACHE_NAME = APP_NAME + '-' + APP_VER;
 
 // Storage Limits and Configuration - Optimized for Maximum Usage
@@ -26,7 +26,6 @@ var CACHE_FILES = {
     'page-Vergleich.html',
     'page-profile-finley.html',
     'page-videos.html',
-    'page-consulting-history.html',
     // Essential styles
     'styles/style.css',
     'styles/bootstrap.css',
@@ -45,6 +44,9 @@ var CACHE_FILES = {
     'fonts/webfonts/fa-solid-900.woff2',
     'fonts/webfonts/fa-regular-400.woff2',
     'fonts/webfonts/fa-brands-400.woff2',
+    // Homepage specific scripts
+    'js/homePageVideoSwiper.js',
+    'js/homePageHeroAnimations.js',
     // All plugins
     'plugins/glightbox/glightbox.js',
     'plugins/glightbox/glightbox.css',
@@ -68,17 +70,14 @@ var CACHE_FILES = {
     'plugins/filterizr/filterizr.css',
     'plugins/filterizr/filterizr-call.js',
     'plugins/galleryViews/gallery-views.js',
-    // All local videos (small files)
+    // All local videos (ensure these are small if precached)
     'videos/exercise1.mp4',
     'videos/exercise2.mp4',
     'videos/exercise3.mp4',
     'videos/exercise4.mp4',
     'videos/exercise5.mp4',
-    // Images and thumbnails (dynamically cached)
-    'thumbnail',
-    'thumb',
-    'preview',
-    'images/',
+    // Generic image/thumbnail paths removed, rely on fetch handler.
+    // If specific, frequently used, small images are known, they can be listed here.
   ],
 
   // PRIORITY.LOW files (videos, large images) - cached when storage available, cleaned up first

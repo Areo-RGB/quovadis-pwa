@@ -1,7 +1,7 @@
 // To clear cache on devices, always increase APP_VER number after making changes.
 // The app will serve fresh content right away or after 2-3 refreshes (open / close)
 var APP_NAME = 'QuoVadis';
-var APP_VER = '5.0.0'; // Incremented for maximum cache usage optimization
+var APP_VER = '5.0.1'; // Incremented for PWA settings update
 var CACHE_NAME = APP_NAME + '-' + APP_VER;
 
 // Storage Limits and Configuration - Optimized for Maximum Usage
@@ -45,6 +45,9 @@ var CACHE_FILES = {
     'fonts/webfonts/fa-solid-900.woff2',
     'fonts/webfonts/fa-regular-400.woff2',
     'fonts/webfonts/fa-brands-400.woff2',
+    // Homepage specific scripts
+    'js/homePageVideoSwiper.js',
+    'js/homePageHeroAnimations.js',
     // All plugins
     'plugins/glightbox/glightbox.js',
     'plugins/glightbox/glightbox.css',

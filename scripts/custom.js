@@ -1667,16 +1667,38 @@ document.addEventListener('DOMContentLoaded', () => {
     //PWA Settings
     if (isPWA === true) {
       var checkPWA = document.getElementsByTagName('html')[0];
-      if (!checkPWA.classList.contains('isPWA')) {
+      if (!checkPWA.classList.contains('isPWA')) { // This custom check can remain if desired
         if ('serviceWorker' in navigator) {
-          window.addEventListener('load', function () {
-            navigator.serviceWorker
-              .register(pwaLocation, { scope: pwaScope })
-              .then(function (registration) {
-                registration.update();
+          window.addEventListener('load', function() {
+            navigator.serviceWorker.register(pwaLocation, { scope: pwaScope })
+              .then(function(registration) {
+                console.log('PWA: ServiceWorker registration successful with scope: ', registration.scope);
+
+                registration.onupdatefound = function() {
+                  const installingWorker = registration.installing;
+                  if (installingWorker) {
+                    installingWorker.onstatechange = function() {
+                      if (installingWorker.state === 'installed') {
+                        if (navigator.serviceWorker.controller) {
+                          // New content is available and has been installed.
+                          // For a better user experience, prompt the user to refresh.
+                          console.log('PWA: New content is available; please refresh.');
+                          // Example: showToast('New version available. Refresh to update.');
+                        } else {
+                          // Content is cached for offline use.
+                          console.log('PWA: Content is cached for offline use.');
+                        }
+                      }
+                    };
+                  }
+                };
+              })
+              .catch(function(err) {
+                console.error('PWA: ServiceWorker registration failed: ', err);
               });
           });
         }
+        checkPWA.setAttribute('class', 'isPWA'); // Ensure this is set after successful or attempted registration
 
         //Setting Timeout Before Prompt Shows Again if Dismissed
         var hours = pwaRemind * 24; // Reset when storage is more than 24hours
