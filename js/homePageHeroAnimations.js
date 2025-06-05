@@ -1,5 +1,5 @@
 // js/homePageHeroAnimations.js
-function initHomePageHeroAnimations() {
+export function initHomePageHeroAnimations() {
     console.log("Initializing Homepage Hero Animations");
     const finleyHeading = document.querySelector(".finley-animated-heading");
     if (finleyHeading) {
@@ -108,6 +108,62 @@ function initHomePageHeroAnimations() {
                         }, rowBaseDelay);
                     }
                 });
+                
+                // Calculate when all animations should be complete
+                const lastElementIndex = elementsToRender.length - 1;
+                const lastElementDelay = lastElementIndex * 350;
+                const animationCompletionTime = lastElementDelay + 1000; // Add buffer for last animation
+                
+                // Fade out statistics after 5 seconds
+                setTimeout(() => {
+                    statsContainer.style.transition = "opacity 1s ease-in-out";
+                    statsContainer.style.opacity = "0";
+                    
+                    // Get the text elements
+                    const charlierText = document.querySelector(".card-bottom h1.font-24");
+                    const finleyHeading = document.querySelector(".finley-animated-heading");
+                    const clubText = document.querySelector(".card-bottom p.opacity-70");
+                    
+                    // Add animation to move text up and out
+                    if (charlierText) {
+                        charlierText.style.transition = "transform 1.2s ease-in-out, opacity 1s ease-in-out";
+                        charlierText.style.transform = "translateY(-100px)";
+                        charlierText.style.opacity = "0";
+                        setTimeout(() => charlierText.style.visibility = "hidden", 1200);
+                    }
+                    
+                    if (finleyHeading) {
+                        finleyHeading.style.transition = "transform 1.5s ease-in-out, opacity 1.2s ease-in-out";
+                        finleyHeading.style.transform = "translateY(-100px)";
+                        finleyHeading.style.opacity = "0";
+                        setTimeout(() => finleyHeading.style.visibility = "hidden", 1500);
+                    }
+                    
+                    if (clubText) {
+                        clubText.style.transition = "transform 1.8s ease-in-out, opacity 1.4s ease-in-out";
+                        clubText.style.transform = "translateY(-100px)";
+                        clubText.style.opacity = "0";
+                        setTimeout(() => clubText.style.visibility = "hidden", 1800);
+                        
+                        // Remove overlays after all animations complete
+                        setTimeout(() => {
+                            // Target both overlays specifically
+                            const overlay1 = document.querySelector('.card-overlay.bg-gradient:not(.fa-rotate-180)');
+                            const overlay2 = document.querySelector('.card-overlay.bg-gradient.fa-rotate-180');
+                            
+                            if (overlay1) {
+                                overlay1.style.transition = "opacity 1s ease-out";
+                                overlay1.style.opacity = "0";
+                            }
+                            
+                            if (overlay2) {
+                                overlay2.style.transition = "opacity 1s ease-out";
+                                overlay2.style.opacity = "0";
+                                overlay2.style.visibility = "hidden"; // Force hide the rotated overlay
+                            }
+                        }, 2000);
+                    }
+                }, animationCompletionTime + 5000); // 5 seconds after animations complete
             }, statsAnimationStartTime);
         } else {
             console.warn("HeroAnimations: Statistics container .statistics-container not found.");
@@ -116,3 +172,8 @@ function initHomePageHeroAnimations() {
         console.warn("HeroAnimations: Finley heading .finley-animated-heading not found.");
     }
 }
+
+// Initialize automatically when module is loaded
+document.addEventListener("DOMContentLoaded", function() {
+    initHomePageHeroAnimations();
+});

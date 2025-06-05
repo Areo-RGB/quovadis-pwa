@@ -1,5 +1,5 @@
 // js/homePageVideoSwiper.js
-function initHomePageVideoSwiper() {
+export function initHomePageVideoSwiper() {
     console.log("Initializing Homepage Video Swiper");
     let currentSlide = 0;
     const slides = document.querySelectorAll("#video-swiper .video-slide");
@@ -72,3 +72,8 @@ function initHomePageVideoSwiper() {
         console.warn("VideoSwiper: No slides found for the swiper.");
     }
 }
+
+// Initialize automatically when module is loaded
+document.addEventListener("DOMContentLoaded", function() {
+    initHomePageVideoSwiper();
+});

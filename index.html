@@ -36,39 +36,53 @@
 
     <div class="page-content pb-0">
       <div class="card mb-0" data-card-height="cover" style="position: relative; overflow: hidden" id="video-swiper">
-        <!-- Video Slide 1 -->
-        <div class="video-slide active" data-slide="0">
-          <video autoplay muted loop playsinline
-            poster="https://videos-data.fra1.cdn.digitaloceanspaces.com/thumbnails/finley-page-profile.jpg" style="
+        <!-- Background Image Slides -->
+        <div id="bg-slideshow">
+          <div class="bg-slide active" style="
                 position: absolute;
                 top: 0;
                 left: 0;
                 width: 100%;
                 height: 100%;
-                object-fit: cover;
+                background-image: url('https://yjigvfwnka1wr4cl.public.blob.vercel-storage.com/players/Finley_portrait-2kSYRxbRRIf5EQVNSWlDnbGpiwlDAw.webp');
+                background-size: cover;
+                background-position: center;
                 z-index: 1;
+                opacity: 1;
+                transition: opacity 1.5s ease-in-out;
               ">
-            <source src="https://videos-data.fra1.cdn.digitaloceanspaces.com/finley-page-profile" type="video/mp4" />
-          </video>
-        </div>
-
-        <!-- Video Slide 2 -->
-        <div class="video-slide" data-slide="1">
-          <video muted loop playsinline poster="https://videos-data.fra1.cdn.digitaloceanspaces.com/thumbnails/3.jpg"
-            style="
+          </div>
+          <div class="bg-slide" style="
                 position: absolute;
                 top: 0;
                 left: 0;
                 width: 100%;
                 height: 100%;
-                object-fit: cover;
+                background-image: url('https://yjigvfwnka1wr4cl.public.blob.vercel-storage.com/players/WhatsApp%20Bild%202025-06-05%20um%2011.20.34_bf82bc68-mqhX1TiA7QVkvagWYeEzta0n8PZDpS.jpg');
+                background-size: cover;
+                background-position: center;
                 z-index: 1;
+                opacity: 0;
+                transition: opacity 1.5s ease-in-out;
               ">
-            <source src="https://videos-data.fra1.cdn.digitaloceanspaces.com/3.mp4" type="video/mp4" />
-          </video>
+          </div>
+          <div class="bg-slide" style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-image: url('https://yjigvfwnka1wr4cl.public.blob.vercel-storage.com/players/WhatsApp%20Bild%202025-06-05%20um%2011.20.34_3bc43130-a65CEpOKBYGuQCqdtbq2SBAsXKWGun.jpg');
+                background-size: cover;
+                background-position: center;
+                z-index: 1;
+                opacity: 0;
+                transition: opacity 1.5s ease-in-out;
+              ">
+          </div>
         </div>
 
-        <!-- Swipe indicators -->
+        <!-- Indicators -->
         <div class="swipe-indicators" style="
               position: absolute;
               bottom: 20px;
@@ -86,6 +100,13 @@
                 cursor: pointer;
               "></div>
           <div class="indicator" data-slide="1" style="
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.3);
+                cursor: pointer;
+              "></div>
+          <div class="indicator" data-slide="2" style="
                 width: 8px;
                 height: 8px;
                 border-radius: 50%;
@@ -237,26 +258,51 @@
     </div>
   </div>
 
-  <script type="text/javascript" src="scripts/bootstrap.min.js"></script>
-  <script type="text/javascript" src="scripts/custom.js"></script>
+  <script type="module" src="scripts/bootstrap.min.js"></script>
+  <script type="module" src="scripts/custom.js"></script>
 
   <!-- ADD THESE NEW SCRIPT INCLUDES -->
-  <script type="text/javascript" src="js/homePageVideoSwiper.js"></script>
-  <script type="text/javascript" src="js/homePageHeroAnimations.js"></script>
+  <script type="module" src="js/homePageVideoSwiper.js"></script>
+  <script type="module" src="js/homePageHeroAnimations.js"></script>
 
-  <!-- ADD THIS NEW INITIALIZATION SCRIPT -->
+  <!-- Background image rotation script -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      if (typeof initHomePageVideoSwiper === 'function') {
-        initHomePageVideoSwiper();
-      } else {
-        console.error('Error: initHomePageVideoSwiper function not found. Check js/homePageVideoSwiper.js');
+      // Auto background image rotation
+      let currentSlide = 0;
+      const slides = document.querySelectorAll('.bg-slide');
+      const indicators = document.querySelectorAll('.indicator');
+      const totalSlides = slides.length;
+
+      function rotateBackground() {
+        // Hide current slide
+        slides[currentSlide].style.opacity = 0;
+        indicators[currentSlide].classList.remove('active');
+
+        // Move to next slide
+        currentSlide = (currentSlide + 1) % totalSlides;
+
+        // Show new slide
+        slides[currentSlide].style.opacity = 1;
+        indicators[currentSlide].classList.add('active');
       }
-      if (typeof initHomePageHeroAnimations === 'function') {
-        initHomePageHeroAnimations();
-      } else {
-        console.error('Error: initHomePageHeroAnimations function not found. Check js/homePageHeroAnimations.js');
-      }
+
+      // Change background every 5 seconds
+      setInterval(rotateBackground, 5000);
+
+      // Handle indicator clicks
+      indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+          // Hide current slide
+          slides[currentSlide].style.opacity = 0;
+          indicators[currentSlide].classList.remove('active');
+
+          // Show clicked slide
+          currentSlide = index;
+          slides[currentSlide].style.opacity = 1;
+          indicators[currentSlide].classList.add('active');
+        });
+      });
     });
   </script>
 
@@ -380,22 +426,22 @@
     }
 
     .label-ausgezeichnet {
-      background-color: #28a745;
+      background-color: rgba(40, 167, 69, 0.7);
       color: white;
     }
 
     .label-sehr-gut {
-      background-color: #17a2b8;
+      background-color: rgba(23, 162, 184, 0.7);
       color: white;
     }
 
     .label-durchschnittlich {
-      background-color: #ffc107;
+      background-color: rgba(255, 193, 7, 0.7);
       color: #212529;
     }
 
     .label-unterdurchschnittlich {
-      background-color: #dc3545;
+      background-color: rgba(220, 53, 69, 0.7);
       color: white;
     }
 
