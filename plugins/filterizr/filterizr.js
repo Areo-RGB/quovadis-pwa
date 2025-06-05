@@ -952,7 +952,7 @@ var Filterizr = (function (t) {
                 return [
                   2,
                   new Promise(function (e) {
-                    !!t.node.querySelectorAll('img').length
+                    t.node.querySelectorAll('img').length
                       ? F(t.node, function () {
                           setTimeout(function () {
                             t.updateTransitionStyle(), e();
