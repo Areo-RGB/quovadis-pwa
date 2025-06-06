@@ -30,5 +30,8 @@
     "*.{json,css,md,html}": [
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "@vercel/speed-insights": "^1.2.0"
   }
 }
