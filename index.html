@@ -1,65 +1,82 @@
-<!doctype html>
+\boxed{```html
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script
-      src="https://js-de.sentry-cdn.com/d241b51fa2d2cf9ab5483d7c8601e678.min.js"
-      crossorigin="anonymous"
-    ></script>
-    <meta name="mobile-web-app-capable" content="yes" />
-<script>
-    Sentry.onLoad(function() {
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <script crossorigin="anonymous" src="https://js-de.sentry-cdn.com/d241b51fa2d2cf9ab5483d7c8601e678.min.js">
+  </script>
+  <meta content="yes" name="mobile-web-app-capable">
+  <script>
+   Sentry.onLoad(function() {
       Sentry.init({
         // Add any additional configuration here
       });
     });
   </script>
-<script defer src="/_vercel/speed-insights/script.js"></script>
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover"
-    />
-    <title>QuoVadis</title>
-    <link rel="stylesheet" type="text/css" href="styles/bootstrap.css" />
-    <link rel="stylesheet" type="text/css" href="styles/style.css" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i|Source+Sans+Pro:300,300i,400,400i,600,600i,700,700i,900,900i&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" type="text/css" href="fonts/css/fontawesome-all.min.css" />
-    <link rel="manifest" href="manifest.json" data-pwa-version="set_in_manifest_and_pwa_js" />
-    <link rel="apple-touch-icon" sizes="192x192" href="app/icons/icon-192x192.png" />
-    <meta name="theme-color" content="#1b1d21" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#1b1d21" media="(prefers-color-scheme: dark)" />
-  </head>
-
-  <body class="theme-dark" data-highlight="highlight-blue" data-gradient="body-default">
-    <div id="preloader">
-      <div class="spinner-border color-highlight" role="status"></div>
-    </div>
-
-    <div id="page">
-      <div id="footer-bar" class="footer-bar-1">
-        <a href="page-Vergleich.html"><i class="fa fa-chart-bar"></i><span>Vergleich</span></a>
-        <a href="page-profile-finley.html"><i class="fa fa-futbol"></i><span>Training</span></a>
-        <a href="index.html" class="active-nav"><i class="fa fa-home"></i><span>Home</span></a>
-        <a href="page-videos.html"><i class="fa fa-video"></i><span>Videos</span></a>
-        <a href="#" data-menu="menu-settings"><i class="fa fa-cog"></i><span>Settings</span></a>
-      </div>
-
-      <div class="page-content pb-0">
-        <div
-          class="card mb-0"
-          data-card-height="cover"
-          style="position: relative; overflow: hidden"
-          id="video-swiper"
-        >
-          <!-- Background Image Slides -->
-          <div id="bg-slideshow">
-            <div
-              class="bg-slide active"
-              style="
+  <script defer src="/_vercel/speed-insights/script.js">
+  </script>
+  <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+  <meta content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" name="viewport">
+  <title>
+   QuoVadis
+  </title>
+  <link href="styles/bootstrap.css" rel="stylesheet" type="text/css">
+  <link href="styles/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i|Source+Sans+Pro:300,300i,400,400i,600,600i,700,700i,900,900i&display=swap" rel="stylesheet">
+  <link href="fonts/css/fontawesome-all.min.css" rel="stylesheet" type="text/css">
+  <link data-pwa-version="set_in_manifest_and_pwa_js" href="manifest.json" rel="manifest">
+  <link href="app/icons/icon-192x192.png" rel="apple-touch-icon" sizes="192x192">
+  <meta content="#1b1d21" media="(prefers-color-scheme: light)" name="theme-color">
+  <meta content="#1b1d21" media="(prefers-color-scheme: dark)" name="theme-color">
+ </head>
+ <body class="theme-dark" data-gradient="body-default" data-highlight="highlight-blue">
+  <div id="preloader">
+   <div class="spinner-border color-highlight" role="status">
+   </div>
+  </div>
+  <div id="page">
+   <div class="footer-bar-1" id="footer-bar">
+    <a href="page-Vergleich.html">
+     <i class="fa fa-chart-bar">
+     </i>
+     <span>
+      Vergleich
+     </span>
+    </a>
+    <a href="page-profile-finley.html">
+     <i class="fa fa-futbol">
+     </i>
+     <span>
+      Training
+     </span>
+    </a>
+    <a class="active-nav" href="index.html">
+     <i class="fa fa-home">
+     </i>
+     <span>
+      Home
+     </span>
+    </a>
+    <a href="page-videos.html">
+     <i class="fa fa-video">
+     </i>
+     <span>
+      Videos
+     </span>
+    </a>
+    <a data-menu="menu-settings" href="#">
+     <i class="fa fa-cog">
+     </i>
+     <span>
+      Settings
+     </span>
+    </a>
+   </div>
+   <div class="page-content pb-0">
+    <div class="card mb-0" data-card-height="cover" id="video-swiper" style="position: relative; overflow: hidden">
+     <!-- Background Image Slides -->
+     <div id="bg-slideshow">
+      <div class="bg-slide active" style="
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -71,11 +88,9 @@
                 z-index: 1;
                 opacity: 1;
                 transition: opacity 1.5s ease-in-out;
-              "
-            ></div>
-            <div
-              class="bg-slide"
-              style="
+              ">
+      </div>
+      <div class="bg-slide" style="
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -87,11 +102,9 @@
                 z-index: 1;
                 opacity: 0;
                 transition: opacity 1.5s ease-in-out;
-              "
-            ></div>
-            <div
-              class="bg-slide"
-              style="
+              ">
+      </div>
+      <div class="bg-slide" style="
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -103,14 +116,11 @@
                 z-index: 1;
                 opacity: 0;
                 transition: opacity 1.5s ease-in-out;
-              "
-            ></div>
-          </div>
-
-          <!-- Indicators -->
-          <div
-            class="swipe-indicators"
-            style="
+              ">
+      </div>
+     </div>
+     <!-- Indicators -->
+     <div class="swipe-indicators" style="
               position: absolute;
               bottom: 20px;
               left: 50%;
@@ -118,49 +128,37 @@
               z-index: 4;
               display: flex;
               gap: 8px;
-            "
-          >
-            <div
-              class="indicator active"
-              data-slide="0"
-              style="
+            ">
+      <div class="indicator active" data-slide="0" style="
                 width: 8px;
                 height: 8px;
                 border-radius: 50%;
                 background: rgba(255, 255, 255, 0.8);
                 cursor: pointer;
-              "
-            ></div>
-            <div
-              class="indicator"
-              data-slide="1"
-              style="
+              ">
+      </div>
+      <div class="indicator" data-slide="1" style="
                 width: 8px;
                 height: 8px;
                 border-radius: 50%;
                 background: rgba(255, 255, 255, 0.3);
                 cursor: pointer;
-              "
-            ></div>
-            <div
-              class="indicator"
-              data-slide="2"
-              style="
+              ">
+      </div>
+      <div class="indicator" data-slide="2" style="
                 width: 8px;
                 height: 8px;
                 border-radius: 50%;
                 background: rgba(255, 255, 255, 0.3);
                 cursor: pointer;
-              "
-            ></div>
-          </div>
-
-          <div class="card-top pt-3" style="position: relative; z-index: 2">
-            <div class="header-clear"></div>
-          </div>
-          <div
-            class="card-bottom px-3"
-            style="
+              ">
+      </div>
+     </div>
+     <div class="card-top pt-3" style="position: relative; z-index: 2">
+      <div class="header-clear">
+      </div>
+     </div>
+     <div class="card-bottom px-3" style="
               position: absolute;
               top: 50%;
               left: 50%;
@@ -168,166 +166,231 @@
               z-index: 3;
               text-align: center;
               width: 100%;
-            "
-          >
-            <h1 class="color-white font-24 opacity-50">Charlier</h1>
-            <h1
-              class="color-white finley-animated-heading"
-              style="font-size: 4rem; font-weight: bold; margin: 15px 0 10px"
-            >
-              <span>F</span><span>i</span><span>n</span><span>l</span><span>e</span><span>y</span>
-            </h1>
-            <p class="color-white opacity-70 pt-2 pb-2">
-              <i class="fa fa-futbol me-2"></i>F.C. Hertha 03 Zehlendorf e.V.
-            </p>
-            <!-- Statistics Container -->
-            <div
-              class="statistics-container"
-              style="
+            ">
+      <h1 class="color-gray-dark font-24" style="opacity: 0;">
+       Charlier
+      </h1>
+      <h1 class="color-white finley-animated-heading" style="font-size: 4rem; font-weight: bold; margin: 15px 0 10px">
+       <span>
+        F
+       </span>
+       <span>
+        i
+       </span>
+       <span>
+        n
+       </span>
+       <span>
+        l
+       </span>
+       <span>
+        e
+       </span>
+       <span>
+        y
+       </span>
+      </h1>
+      <p class="color-white pt-2 pb-2 fade-in-club-name" style="opacity: 0;">
+       <i class="fa fa-futbol me-2">
+       </i>
+       F.C. Hertha 03 Zehlendorf e.V.
+      </p>
+      <!-- Statistics Container -->
+      <div class="statistics-container" style="
                 margin-top: 10px;
                 width: 90%;
                 max-width: 420px;
                 margin-left: auto;
                 margin-right: auto;
                 font-size: 0.9rem;
-              "
-            >
-              <!-- Statistics items will be populated by JavaScript -->
-            </div>
-          </div>
-          <div class="card-overlay bg-gradient" style="z-index: 2"></div>
-          <div class="card-overlay bg-gradient fa-rotate-180 opacity-50" style="z-index: 2"></div>
-        </div>
+              ">
+       <!-- Statistics items will be populated by JavaScript -->
       </div>
-      <!-- End of Page Content-->
-      <!-- All Menus, Action Sheets, Modals, Notifications, Toasts, Snackbars get Placed outside the <div class="page-content"> -->
-
-      <div id="menu-schedule" class="menu menu-box-modal menu-box-detached rounded-m">
-        <div class="menu-title">
-          <h1>Book a Photoshoot</h1>
-          <a href="#" class="close-menu mt-n2"><i class="fa fa-times font-16"></i></a>
-        </div>
-        <div class="divider divider-margins mt-3"></div>
-        <div class="content">
-          <div
-            class="input-style has-borders input-style-always-active has-icon validate-field mb-4"
-          >
-            <i class="fa fa-user"></i>
-            <input type="name" class="form-control validate-name" id="form1" placeholder="Name" />
-            <label for="form1" class="color-blue-dark">Name</label>
-            <i class="fa fa-times disabled invalid color-red-dark"></i>
-            <i class="fa fa-check disabled valid color-green-dark"></i>
-            <em>(required)</em>
-          </div>
-
-          <div
-            class="input-style has-borders input-style-always-active has-icon validate-field mb-4"
-          >
-            <i class="fa fa-phone"></i>
-            <input type="tel" class="form-control validate-text" id="form4" placeholder="Phone" />
-            <label for="form4" class="color-blue-dark">Phone</label>
-            <i class="fa fa-times disabled invalid color-red-dark"></i>
-            <i class="fa fa-check disabled valid color-green-dark"></i>
-            <em>(required)</em>
-          </div>
-
-          <div class="input-style has-borders input-style-always-active has-icon mb-4">
-            <i class="fa fa-calendar"></i>
-            <input
-              type="date"
-              value="2030-12-31"
-              max="2030-01-01"
-              min="2021-01-01"
-              class="form-control validate-text"
-              id="form6"
-              placeholder="Phone"
-            />
-            <label for="form6" class="color-blue-dark">Select Date</label>
-            <i class="fa fa-check disabled valid me-4 pe-3 font-12 color-green-dark"></i>
-            <i class="fa fa-check disabled invalid me-4 pe-3 font-12 color-red-dark"></i>
-          </div>
-          <a
-            href="#"
-            class="close-menu btn btn-m text-uppercase font-700 btn-full bg-blue-dark rounded-sm mt-4 mb-4"
-            >Call me for Booking</a
-          >
-        </div>
-      </div>
-
-      <div id="menu-settings" class="menu menu-box-bottom menu-box-detached">
-        <div class="menu-title mt-0 pt-0">
-          <h1>Settings</h1>
-          <p class="color-highlight">Flexible and Easy to Use</p>
-          <a href="#" class="close-menu"><i class="fa fa-times"></i></a>
-        </div>
-        <div class="divider divider-margins mb-n2"></div>
-        <div class="content">
-          <div class="list-group list-custom-small">
-            <a href="#" data-toggle-theme data-trigger-switch="switch-dark-mode" class="pb-2 ms-n1">
-              <i class="fa font-12 fa-moon rounded-s bg-highlight color-white me-3"></i>
-              <span>Dark Mode</span>
-              <div class="custom-control scale-switch ios-switch">
-                <input data-toggle-theme type="checkbox" class="ios-input" id="switch-dark-mode" />
-                <label class="custom-control-label" for="switch-dark-mode"></label>
-              </div>
-              <i class="fa fa-angle-right"></i>
-            </a>
-          </div>
-          <!-- Theme options removed for consistent blue dark theme -->
-        </div>
-      </div>
-      <!-- Highlight menu removed for consistent blue theme -->
-      <!-- Background menu removed for consistent default gradient -->
-      <!-- Menu Share -->
-      <div id="menu-share" class="menu menu-box-bottom menu-box-detached">
-        <div class="menu-title mt-n1">
-          <h1>Share the Love</h1>
-          <p class="color-highlight">Just Tap the Social Icon. We'll add the Link</p>
-          <a href="#" class="close-menu"><i class="fa fa-times"></i></a>
-        </div>
-        <div class="content mb-0">
-          <div class="divider mb-0"></div>
-          <div class="list-group list-custom-small list-icon-0">
-            <a href="auto_generated" class="shareToFacebook external-link">
-              <i class="font-18 fab fa-facebook-square color-facebook"></i>
-              <span class="font-13">Facebook</span>
-              <i class="fa fa-angle-right"></i>
-            </a>
-            <a href="auto_generated" class="shareToTwitter external-link">
-              <i class="font-18 fab fa-twitter-square color-twitter"></i>
-              <span class="font-13">Twitter</span>
-              <i class="fa fa-angle-right"></i>
-            </a>
-            <a href="auto_generated" class="shareToLinkedIn external-link">
-              <i class="font-18 fab fa-linkedin color-linkedin"></i>
-              <span class="font-13">LinkedIn</span>
-              <i class="fa fa-angle-right"></i>
-            </a>
-            <a href="auto_generated" class="shareToWhatsApp external-link">
-              <i class="font-18 fab fa-whatsapp-square color-whatsapp"></i>
-              <span class="font-13">WhatsApp</span>
-              <i class="fa fa-angle-right"></i>
-            </a>
-            <a href="auto_generated" class="shareToMail external-link border-0">
-              <i class="font-18 fa fa-envelope-square color-mail"></i>
-              <span class="font-13">Email</span>
-              <i class="fa fa-angle-right"></i>
-            </a>
-          </div>
-        </div>
-      </div>
+     </div>
+     <div class="card-overlay bg-gradient" style="z-index: 2">
+     </div>
+     <div class="card-overlay bg-gradient fa-rotate-180 opacity-50" style="z-index: 2">
+     </div>
     </div>
-
-    <script type="module" src="scripts/bootstrap.min.js"></script>
-    <script type="module" src="scripts/custom.js"></script>
-
-    <!-- ADD THESE NEW SCRIPT INCLUDES -->
-    <script type="module" src="js/homePageVideoSwiper.js"></script>
-    <script type="module" src="js/homePageHeroAnimations.js"></script>
-
-    <!-- Background image rotation script -->
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
+   </div>
+   <!-- End of Page Content-->
+   <!-- All Menus, Action Sheets, Modals, Notifications, Toasts, Snackbars get Placed outside the <div class="page-content"> -->
+   <div class="menu menu-box-modal menu-box-detached rounded-m" id="menu-schedule">
+    <div class="menu-title">
+     <h1>
+      Book a Photoshoot
+     </h1>
+     <a class="close-menu mt-n2" href="#">
+      <i class="fa fa-times font-16">
+      </i>
+     </a>
+    </div>
+    <div class="divider divider-margins mt-3">
+    </div>
+    <div class="content">
+     <div class="input-style has-borders input-style-always-active has-icon validate-field mb-4">
+      <i class="fa fa-user">
+      </i>
+      <input class="form-control validate-name" id="form1" placeholder="Name" type="name">
+      <label class="color-blue-dark" for="form1">
+       Name
+      </label>
+      <i class="fa fa-times disabled invalid color-red-dark">
+      </i>
+      <i class="fa fa-check disabled valid color-green-dark">
+      </i>
+      <em>
+       (required)
+      </em>
+     </div>
+     <div class="input-style has-borders input-style-always-active has-icon validate-field mb-4">
+      <i class="fa fa-phone">
+      </i>
+      <input class="form-control validate-text" id="form4" placeholder="Phone" type="tel">
+      <label class="color-blue-dark" for="form4">
+       Phone
+      </label>
+      <i class="fa fa-times disabled invalid color-red-dark">
+      </i>
+      <i class="fa fa-check disabled valid color-green-dark">
+      </i>
+      <em>
+       (required)
+      </em>
+     </div>
+     <div class="input-style has-borders input-style-always-active has-icon mb-4">
+      <i class="fa fa-calendar">
+      </i>
+      <input class="form-control validate-text" id="form6" max="2030-01-01" min="2021-01-01" placeholder="Phone" type="date" value="2030-12-31">
+      <label class="color-blue-dark" for="form6">
+       Select Date
+      </label>
+      <i class="fa fa-check disabled valid me-4 pe-3 font-12 color-green-dark">
+      </i>
+      <i class="fa fa-check disabled invalid me-4 pe-3 font-12 color-red-dark">
+      </i>
+     </div>
+     <a class="close-menu btn btn-m text-uppercase font-700 btn-full bg-blue-dark rounded-sm mt-4 mb-4" href="#">
+      Call me for Booking
+     </a>
+    </div>
+   </div>
+   <div class="menu menu-box-bottom menu-box-detached" id="menu-settings">
+    <div class="menu-title mt-0 pt-0">
+     <h1>
+      Settings
+     </h1>
+     <p class="color-highlight">
+      Flexible and Easy to Use
+     </p>
+     <a class="close-menu" href="#">
+      <i class="fa fa-times">
+      </i>
+     </a>
+    </div>
+    <div class="divider divider-margins mb-n2">
+    </div>
+    <div class="content">
+     <div class="list-group list-custom-small">
+      <a class="pb-2 ms-n1" data-toggle-theme data-trigger-switch="switch-dark-mode" href="#">
+       <i class="fa font-12 fa-moon rounded-s bg-highlight color-white me-3">
+       </i>
+       <span>
+        Dark Mode
+       </span>
+       <div class="custom-control scale-switch ios-switch">
+        <input class="ios-input" data-toggle-theme id="switch-dark-mode" type="checkbox">
+        <label class="custom-control-label" for="switch-dark-mode">
+        </label>
+       </div>
+       <i class="fa fa-angle-right">
+       </i>
+      </a>
+     </div>
+     <!-- Theme options removed for consistent blue dark theme -->
+    </div>
+   </div>
+   <!-- Highlight menu removed for consistent blue theme -->
+   <!-- Background menu removed for consistent default gradient -->
+   <!-- Menu Share -->
+   <div class="menu menu-box-bottom menu-box-detached" id="menu-share">
+    <div class="menu-title mt-n1">
+     <h1>
+      Share the Love
+     </h1>
+     <p class="color-highlight">
+      Just Tap the Social Icon. We'll add the Link
+     </p>
+     <a class="close-menu" href="#">
+      <i class="fa fa-times">
+      </i>
+     </a>
+    </div>
+    <div class="content mb-0">
+     <div class="divider mb-0">
+     </div>
+     <div class="list-group list-custom-small list-icon-0">
+      <a class="shareToFacebook external-link" href="auto_generated">
+       <i class="font-18 fab fa-facebook-square color-facebook">
+       </i>
+       <span class="font-13">
+        Facebook
+       </span>
+       <i class="fa fa-angle-right">
+       </i>
+      </a>
+      <a class="shareToTwitter external-link" href="auto_generated">
+       <i class="font-18 fab fa-twitter-square color-twitter">
+       </i>
+       <span class="font-13">
+        Twitter
+       </span>
+       <i class="fa fa-angle-right">
+       </i>
+      </a>
+      <a class="shareToLinkedIn external-link" href="auto_generated">
+       <i class="font-18 fab fa-linkedin color-linkedin">
+       </i>
+       <span class="font-13">
+        LinkedIn
+       </span>
+       <i class="fa fa-angle-right">
+       </i>
+      </a>
+      <a class="shareToWhatsApp external-link" href="auto_generated">
+       <i class="font-18 fab fa-whatsapp-square color-whatsapp">
+       </i>
+       <span class="font-13">
+        WhatsApp
+       </span>
+       <i class="fa fa-angle-right">
+       </i>
+      </a>
+      <a class="shareToMail external-link border-0" href="auto_generated">
+       <i class="font-18 fa fa-envelope-square color-mail">
+       </i>
+       <span class="font-13">
+        Email
+       </span>
+       <i class="fa fa-angle-right">
+       </i>
+      </a>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script src="scripts/bootstrap.min.js" type="module">
+  </script>
+  <script src="scripts/custom.js" type="module">
+  </script>
+  <!-- ADD THESE NEW SCRIPT INCLUDES -->
+  <script src="js/homePageVideoSwiper.js" type="module">
+  </script>
+  <script src="js/homePageHeroAnimations.js" type="module">
+  </script>
+  <!-- Background image rotation script -->
+  <script>
+   document.addEventListener('DOMContentLoaded', function () {
         // Auto background image rotation
         let currentSlide = 0;
         const slides = document.querySelectorAll('.bg-slide');
@@ -364,10 +427,9 @@
           });
         });
       });
-    </script>
-
-    <style>
-      /* Existing video swiper styles */
+  </script>
+  <style>
+   /* Existing video swiper styles */
       .video-slide {
         position: absolute;
         top: 0;
@@ -400,6 +462,19 @@
         to {
           opacity: 1;
         }
+      }
+
+      /* Club Name Fade-In Animation */
+      @keyframes fadeInClubAnimation {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 0.7; /* Target opacity, similar to original opacity-70 */
+        }
+      }
+      .fade-in-club-name.animate {
+        animation: fadeInClubAnimation 0.8s ease-out forwards;
       }
 
       /* Statistics Animation */
@@ -577,6 +652,7 @@
         padding: 6px 12px !important;
         /* More padding for emphasis */
       }
-    </style>
-  </body>
+  </style>
+ </body>
 </html>
+```}
