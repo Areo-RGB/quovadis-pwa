@@ -54,6 +54,20 @@
           <!-- Auswahl Tab Pane -->
           <div data-bs-parent="#main-tabs-container" class="collapse show" id="tab-auswahl">
 
+            <!-- Playlist Container -->
+            <div class="card card-style">
+              <div class="content">
+                <div id="playlist-container" class="mt-0 mb-3">
+                  <h5 class="font-700 text-uppercase opacity-70 mb-3 ps-1">Deine Playlist</h5>
+                  <div id="playlist-items" class="row gx-2">
+                    <!-- Selected exercises will be populated here -->
+                  </div>
+                  <p id="playlist-empty-message" class="text-center opacity-50 mb-0 pt-3 pb-3">Deine Playlist ist leer.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <!-- Main Preview Video Card for Auswahl -->
             <div class="card card-style">
               <div class="content">
@@ -85,90 +99,13 @@
                     <button id="auswahl-speed-toggle-btn" class="modern-control-btn speed-btn">
                       <span id="auswahl-speed-display">1x</span>
                     </button>
-                    <p class="control-label">Slow-Mo</p>
                   </div>
                   <div class="col-6 text-center">
                     <!-- Fullscreen Button -->
                     <button id="auswahl-fullscreen-btn" class="modern-control-btn">
                       <i id="auswahl-fullscreen-icon" class="fa fa-expand"></i>
                     </button>
-                    <p class="control-label">Fullscreen</p>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Workout Flow Setup Card -->
-            <div class="card card-style">
-              <div class="content pt-4 pb-4">
-                <h4 class="font-700 mb-4">Workout Flow erstellen</h4>
-
-                <!-- List of workout flow events -->
-                <div id="workout-flow-container" class="mb-3">
-                  <!-- Events will be added here by JS -->
-                </div>
-                <p id="workout-flow-empty-message" class="text-center opacity-50 mb-3">Dein Workout ist noch leer. Füge einen Schritt hinzu.</p>
-
-                <!-- Add Event Section -->
-                <div class="divider mb-3"></div>
-                <h5 class="font-600 mb-3">Neuen Schritt hinzufügen</h5>
-                <div class="row mb-3">
-                  <div class="col-6">
-                    <label for="event-type-select" class="form-label font-600 d-block" style="font-size: 0.8rem;">Event-Typ</label>
-                    <select id="event-type-select" class="form-select border-0 shadow-m rounded-m">
-                      <option value="video">Video hinzufügen</option>
-                      <option value="timer">Timer</option>
-                      <option value="pause">Pause</option>
-                    </select>
-                  </div>
-                  <div class="col-6">
-                    <div id="event-duration-container" style="display:none;">
-                      <label for="event-duration-select" class="form-label font-600 d-block" style="font-size: 0.8rem;">Dauer</label>
-                      <select id="event-duration-select" class="form-select border-0 shadow-m rounded-m">
-                        <option value="5">5s</option>
-                        <option value="10" selected>10s</option>
-                        <option value="15">15s</option>
-                        <option value="20">20s</option>
-                        <option value="30">30s</option>
-                        <option value="45">45s</option>
-                        <option value="60">60s</option>
-                        <option value="90">90s</option>
-                        <option value="120">2 min</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div id="event-video-select-container" class="mb-3">
-                    <label for="event-video-select" class="form-label font-600 d-block" style="font-size: 0.8rem;">Video auswählen</label>
-                    <select id="event-video-select" class="form-select border-0 shadow-m rounded-m">
-                      <!-- Video options populated by JS -->
-                    </select>
-                </div>
-                <div id="event-ziel-container" class="mb-3">
-                    <label for="event-ziel-input" class="form-label font-600 d-block" style="font-size: 0.8rem;">Ziel (z.B. Wiederholungen)</label>
-                    <input type="number" id="event-ziel-input" class="form-control border-0 shadow-m rounded-m" value="10" min="1">
-                </div>
-
-                <button id="add-event-btn" class="btn btn-s btn-full rounded-m text-uppercase font-700 shadow-s bg-blue-dark mb-2">
-                  <i class="fa fa-plus me-2"></i> Schritt hinzufügen
-                </button>
-                <button id="save-workout-btn" class="btn btn-s btn-full rounded-m text-uppercase font-700 shadow-s bg-green-dark">
-                  <i class="fa fa-save me-2"></i> Workout Speichern
-                </button>
-              </div>
-            </div>
-
-            <!-- Playlist Container -->
-            <div class="card card-style">
-              <div class="content">
-                <div id="playlist-container" class="mt-0 mb-3">
-                  <h5 class="font-700 text-uppercase opacity-70 mb-3 ps-1">Deine Playlist</h5>
-                  <div id="playlist-items" class="row gx-2">
-                    <!-- Selected exercises will be populated here -->
-                  </div>
-                  <p id="playlist-empty-message" class="text-center opacity-50 mb-0 pt-3 pb-3">Deine Playlist ist leer.
-                  </p>
                 </div>
               </div>
             </div>
@@ -1379,6 +1316,67 @@
                   </a>
                 </div>
 
+              </div>
+            </div>
+
+            <!-- Workout Flow Setup Card -->
+            <div class="card card-style">
+              <div class="content pt-4 pb-4">
+                <h4 class="font-700 mb-4">Workout Flow erstellen</h4>
+
+                <!-- List of workout flow events -->
+                <div id="workout-flow-container" class="mb-3">
+                  <!-- Events will be added here by JS -->
+                </div>
+                <p id="workout-flow-empty-message" class="text-center opacity-50 mb-3">Dein Workout ist noch leer. Füge einen Schritt hinzu.</p>
+
+                <!-- Add Event Section -->
+                <div class="divider mb-3"></div>
+                <h5 class="font-600 mb-3">Neuen Schritt hinzufügen</h5>
+                <div class="row mb-3">
+                  <div class="col-6">
+                    <label for="event-type-select" class="form-label font-600 d-block" style="font-size: 0.8rem;">Event-Typ</label>
+                    <select id="event-type-select" class="form-select border-0 shadow-m rounded-m">
+                      <option value="video">Video hinzufügen</option>
+                      <option value="timer">Timer</option>
+                      <option value="pause">Pause</option>
+                    </select>
+                  </div>
+                  <div class="col-6">
+                    <div id="event-duration-container" style="display:none;">
+                      <label for="event-duration-select" class="form-label font-600 d-block" style="font-size: 0.8rem;">Dauer</label>
+                      <select id="event-duration-select" class="form-select border-0 shadow-m rounded-m">
+                        <option value="5">5s</option>
+                        <option value="10" selected>10s</option>
+                        <option value="15">15s</option>
+                        <option value="20">20s</option>
+                        <option value="30">30s</option>
+                        <option value="45">45s</option>
+                        <option value="60">60s</option>
+                        <option value="90">90s</option>
+                        <option value="120">2 min</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="event-video-select-container" class="mb-3">
+                    <label for="event-video-select" class="form-label font-600 d-block" style="font-size: 0.8rem;">Video auswählen</label>
+                    <select id="event-video-select" class="form-select border-0 shadow-m rounded-m">
+                      <!-- Video options populated by JS -->
+                    </select>
+                </div>
+                <div id="event-ziel-container" class="mb-3">
+                    <label for="event-ziel-input" class="form-label font-600 d-block" style="font-size: 0.8rem;">Ziel (z.B. Wiederholungen)</label>
+                    <input type="number" id="event-ziel-input" class="form-control border-0 shadow-m rounded-m" value="10" min="1">
+                </div>
+
+                <button id="add-event-btn" class="btn btn-s btn-full rounded-m text-uppercase font-700 shadow-s bg-blue-dark mb-2">
+                  <i class="fa fa-plus me-2"></i> Schritt hinzufügen
+                </button>
+                <button id="save-workout-btn" class="btn btn-s btn-full rounded-m text-uppercase font-700 shadow-s bg-green-dark">
+                  <i class="fa fa-save me-2"></i> Workout Speichern
+                </button>
               </div>
             </div>
 
