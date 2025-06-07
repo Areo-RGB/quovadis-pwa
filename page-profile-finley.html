@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -2172,6 +2173,48 @@
             renderFlow(trainingFlowContainer, false, activeWorkout.flow);
         }
 
+        // --- AUDIO CUES ---
+        let audioCtx;
+        function initAudio() {
+            // Create AudioContext after a user gesture (e.g., click)
+            if (!audioCtx) {
+                try {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.error("Web Audio API is not supported in this browser.", e);
+                }
+            }
+        }
+
+        function playBeep(duration, frequency, volume) {
+            if (!audioCtx) return;
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            gainNode.gain.value = volume;
+            oscillator.frequency.value = frequency;
+            oscillator.type = 'sine';
+
+            oscillator.start(audioCtx.currentTime);
+            oscillator.stop(audioCtx.currentTime + duration / 1000);
+        }
+
+        function playSingleBeep() {
+            // Short, higher-pitched beep for start
+            playBeep(150, 880, 0.3);
+        }
+
+        function playDoubleBeep() {
+            // Two lower-pitched beeps for end
+            playBeep(150, 520, 0.3);
+            setTimeout(() => {
+                playBeep(150, 520, 0.3);
+            }, 200);
+        }
+
         // --- WORKOUT EXECUTION & TIMER LOGIC ---
         function updateToggleButton() {
             const isWorkoutActive = isPlaylistPlaybackActive;
@@ -2228,6 +2271,11 @@
             if (isTimerRunning) return;
             isTimerRunning = true; updateToggleButton();
             const step = activeWorkout.flow[currentFlowStepIndex];
+
+            if (step.type === 'timer') {
+                playSingleBeep();
+            }
+
             timerSeconds = step.duration;
             updateTimerDisplay(step);
             timerInterval = setInterval(() => {
@@ -2235,6 +2283,11 @@
                 updateTimerDisplay(step);
                 if (timerSeconds <= 0) {
                     clearInterval(timerInterval); isTimerRunning = false;
+
+                    if (step.type === 'timer') {
+                       playDoubleBeep();
+                    }
+
                     currentFlowStepIndex++;
                     runNextFlowStep();
                 }
@@ -2262,6 +2315,7 @@
             else if (isPlaylistPlaybackActive) resumeCountdown();
             else { // Start new workout
                 if (!activeWorkout || activeWorkout.flow.length === 0) { alert("Kein Workout zum Starten vorhanden. Bitte lade zuerst ein Workout im 'Auswahl' Tab."); return; }
+                initAudio(); // Initialize audio on first "start" click to comply with browser policies
                 isPlaylistPlaybackActive = true; currentFlowStepIndex = 0;
                 runNextFlowStep();
             }
