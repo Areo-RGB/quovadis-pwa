@@ -98,65 +98,64 @@
               </div>
             </div>
 
-            <!-- Workout Setup Card -->
+            <!-- Workout Flow Setup Card -->
             <div class="card card-style">
               <div class="content pt-4 pb-4">
-                <h4 class="font-700 mb-4">Workout Einstellungen</h4>
-                <!-- Configuration Row -->
-                <div class="row mb-4">
-                  <div class="col-4">
-                    <label class="form-label font-700 mb-2 text-center d-block"
-                      style="font-size: 0.8rem;">Dauer</label>
-                    <select id="timer-duration-select" class="form-select border-0 shadow-m rounded-m"
-                      style="color: #212529; background: #ffffff; font-weight: 600; font-size: 0.9rem;">
-                      <option value="10">10s</option>
-                      <option value="15" selected>15s</option>
-                      <option value="20">20s</option>
-                      <option value="30">30s</option>
-                      <option value="45">45s</option>
-                      <option value="60">60s</option>
-                      <option value="90">90s</option>
-                      <option value="120">2 min</option>
-                    </select>
-                  </div>
-                  <div class="col-4">
-                    <label class="form-label font-700 mb-2 text-center d-block"
-                      style="font-size: 0.8rem;">Pause</label>
-                    <select id="rest-duration-select" class="form-select border-0 shadow-m rounded-m"
-                      style="color: #212529; background: #ffffff; font-weight: 600; font-size: 0.9rem;">
-                      <option value="5">5s</option>
-                      <option value="10" selected>10s</option>
-                      <option value="15">15s</option>
-                      <option value="30">30s</option>
-                      <option value="60">1 min</option>
-                    </select>
-                  </div>
-                  <div class="col-4">
-                    <label class="form-label font-700 mb-2 text-center d-block"
-                      style="font-size: 0.8rem;">Loops</label>
-                    <select id="loop-count-select" class="form-select border-0 shadow-m rounded-m"
-                      style="color: #212529; background: #ffffff; font-weight: 600; font-size: 0.9rem;">
-                      <option value="1" selected>1x</option>
-                      <option value="2">2x</option>
-                      <option value="3">3x</option>
-                      <option value="4">4x</option>
-                      <option value="5">5x</option>
-                    </select>
-                  </div>
+                <h4 class="font-700 mb-4">Workout Flow erstellen</h4>
+
+                <!-- List of workout flow events -->
+                <div id="workout-flow-container" class="mb-3">
+                  <!-- Events will be added here by JS -->
                 </div>
-                <!-- Action Buttons -->
-                <div class="row mb-4">
+                <p id="workout-flow-empty-message" class="text-center opacity-50 mb-3">Dein Workout ist noch leer. Füge einen Schritt hinzu.</p>
+
+                <!-- Add Event Section -->
+                <div class="divider mb-3"></div>
+                <h5 class="font-600 mb-3">Neuen Schritt hinzufügen</h5>
+                <div class="row mb-3">
                   <div class="col-6">
-                    <button id="apply-workout-settings"
-                      class="btn btn-s btn-full rounded-m text-uppercase font-700 shadow-s bg-green-dark"
-                      style="font-size: 0.8rem;">Apply Settings</button>
+                    <label for="event-type-select" class="form-label font-600 d-block" style="font-size: 0.8rem;">Event-Typ</label>
+                    <select id="event-type-select" class="form-select border-0 shadow-m rounded-m">
+                      <option value="video">Video hinzufügen</option>
+                      <option value="timer">Timer</option>
+                      <option value="pause">Pause</option>
+                    </select>
                   </div>
                   <div class="col-6">
-                    <button id="reset-workout-settings"
-                      class="btn btn-s btn-full rounded-m text-uppercase font-600 shadow-s bg-gray-dark"
-                      style="font-size: 0.8rem;">Reset Default</button>
+                    <div id="event-duration-container" style="display:none;">
+                      <label for="event-duration-select" class="form-label font-600 d-block" style="font-size: 0.8rem;">Dauer</label>
+                      <select id="event-duration-select" class="form-select border-0 shadow-m rounded-m">
+                        <option value="5">5s</option>
+                        <option value="10" selected>10s</option>
+                        <option value="15">15s</option>
+                        <option value="20">20s</option>
+                        <option value="30">30s</option>
+                        <option value="45">45s</option>
+                        <option value="60">60s</option>
+                        <option value="90">90s</option>
+                        <option value="120">2 min</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
+
+                <div id="event-video-select-container" class="mb-3">
+                    <label for="event-video-select" class="form-label font-600 d-block" style="font-size: 0.8rem;">Video auswählen</label>
+                    <select id="event-video-select" class="form-select border-0 shadow-m rounded-m">
+                      <!-- Video options populated by JS -->
+                    </select>
+                </div>
+                <div id="event-ziel-container" class="mb-3">
+                    <label for="event-ziel-input" class="form-label font-600 d-block" style="font-size: 0.8rem;">Ziel (z.B. Wiederholungen)</label>
+                    <input type="number" id="event-ziel-input" class="form-control border-0 shadow-m rounded-m" value="10" min="1">
+                </div>
+
+                <button id="add-event-btn" class="btn btn-s btn-full rounded-m text-uppercase font-700 shadow-s bg-blue-dark mb-2">
+                  <i class="fa fa-plus me-2"></i> Schritt hinzufügen
+                </button>
+                <button id="save-workout-btn" class="btn btn-s btn-full rounded-m text-uppercase font-700 shadow-s bg-green-dark">
+                  <i class="fa fa-save me-2"></i> Workout Speichern
+                </button>
               </div>
             </div>
 
@@ -1392,17 +1391,15 @@
               <div class="content pt-4 pb-4">
                 <h4 class="text-center font-700 mb-4">Training Session</h4>
 
-                <!-- Playlist Container in Training Tab -->
-                <div id="training-playlist-container" class="mt-0 mb-3">
-                  <h5 class="font-700 text-uppercase opacity-70 mb-3 ps-1">Deine Playlist</h5>
-                  <div id="training-playlist-items" class="row gx-2">
-                    <!-- Selected exercises will be populated here -->
+                <!-- Loaded Workout Flow in Training Tab -->
+                <div id="training-flow-container-wrapper" class="mt-0 mb-3">
+                  <h5 class="font-700 text-uppercase opacity-70 mb-3 ps-1">Geladenes Workout</h5>
+                  <div id="training-flow-container">
+                    <!-- Loaded workout flow will be populated here -->
                   </div>
-                  <p id="training-playlist-empty-message" class="text-center opacity-50 mb-0 pt-3 pb-3">Deine Playlist
-                    ist leer.</p>
+                   <p id="training-flow-empty-message" class="text-center opacity-50 mb-0 pt-3 pb-3">Kein Workout gespeichert. Bitte erstelle und speichere zuerst ein Workout im "Auswahl" Tab.</p>
                 </div>
                 <div class="divider mb-4"></div>
-
 
                 <!-- Video Player Section with Overlays -->
                 <div class="custom-video-player mb-4" style="
@@ -1435,7 +1432,7 @@
                         font-weight: 700;
                         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
                       ">
-                    Übung 1
+                    Übung
                   </div>
 
                   <!-- Timer Overlay - Top Center -->
@@ -1454,7 +1451,7 @@
                           line-height: 1;
                           text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
                         ">
-                      15s
+                      0s
                     </div>
                     <p id="timer-label" style="
                           color: white;
@@ -1463,7 +1460,7 @@
                           font-size: 0.8rem;
                           text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
                         ">
-                      Session Timer
+                      Ready
                     </p>
                   </div>
 
@@ -1547,6 +1544,57 @@
 
     <!-- Exercise Card Styles -->
     <style>
+      .workout-flow-item {
+        background-color: rgba(255, 255, 255, 0.07);
+        transition: background-color 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px;
+        border-radius: 10px;
+        margin-bottom: 8px;
+      }
+      .workout-flow-item-info {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        overflow: hidden;
+      }
+      .workout-flow-item-thumbnail-container {
+        width: 40px;
+        height: 40px;
+        border-radius: 6px;
+        margin-right: 12px;
+        overflow: hidden;
+        position: relative;
+        flex-shrink: 0;
+      }
+      .workout-flow-item-thumbnail {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .workout-flow-item-text {
+          overflow: hidden;
+      }
+      .workout-flow-item-title {
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin: 0;
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .workout-flow-item-detail {
+        font-size: 0.7rem;
+        opacity: 0.8;
+        margin:0;
+      }
+
+      .theme-light .workout-flow-item {
+        background-color: #f1f1f1;
+      }
       /* Gradient Green for Workout Setup Card */
       .gradient-green {
         background: linear-gradient(135deg,
@@ -1572,65 +1620,38 @@
       }
 
       /* Fix dropdown styling for all cards */
-      .card .form-select {
+      .card .form-select, .card .form-control {
         background-color: #ffffff !important;
         color: #212529 !important;
         border: 1px solid #dee2e6 !important;
-        text-align: center !important;
       }
 
       .card .form-select option {
         background-color: #ffffff !important;
         color: #212529 !important;
         padding: 8px 12px !important;
-        text-align: center !important;
-      }
-
-      /* Ensure dropdown options have proper styling */
-      .card .form-select option:hover {
-        background-color: #f8f9fa !important;
-        color: #212529 !important;
-      }
-
-      .card .form-select option:checked {
-        background-color: #007bff !important;
-        color: #ffffff !important;
       }
 
       /* Fix form labels for both light and dark mode */
       .card .form-label {
         color: #495057 !important;
         background: none !important;
-        background-color: transparent !important;
-        padding: 0 !important;
-        border-radius: 0 !important;
-        border: none !important;
       }
 
       /* Dark mode specific fixes */
       .theme-dark .card .form-label {
         color: #ffffff !important;
-        background: none !important;
-        background-color: transparent !important;
       }
 
-      .theme-dark .card .form-select {
+      .theme-dark .card .form-select, .theme-dark .card .form-control {
         background-color: #343a40 !important;
         color: #ffffff !important;
         border: 1px solid #495057 !important;
-        text-align: center !important;
       }
 
       .theme-dark .card .form-select option {
         background-color: #343a40 !important;
         color: #ffffff !important;
-        text-align: center !important;
-      }
-
-      /* Ensure labels don't inherit unwanted styles */
-      .card .form-label * {
-        background: none !important;
-        background-color: transparent !important;
       }
 
       .exercise-card {
@@ -1661,31 +1682,6 @@
         justify-content: center;
       }
 
-      .custom-video-player:-moz-full-screen {
-        width: 100vw !important;
-        height: 100vh !important;
-        background: #000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .custom-video-player:fullscreen>*:not(video):not(.custom-controls),
-      .custom-video-player:-webkit-full-screen>*:not(video):not(.custom-controls),
-      .custom-video-player:-moz-full-screen>*:not(video):not(.custom-controls) {
-        display: none !important;
-      }
-
-      .custom-video-player:fullscreen video,
-      .custom-video-player:-webkit-full-screen video,
-      .custom-video-player:-moz-full-screen video {
-        width: 100% !important;
-        height: 100% !important;
-        max-width: 100vw;
-        max-height: 100vh;
-        object-fit: contain;
-      }
-
       /* Modern Control Buttons */
       .modern-control-btn {
         background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
@@ -1708,39 +1704,10 @@
         -webkit-backdrop-filter: blur(10px);
       }
 
-      .modern-control-btn::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
-        opacity: 0;
-        transition: opacity 0.25s ease;
-      }
-
       .modern-control-btn:hover {
         transform: translateY(-1px) scale(1.02);
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.15);
         border-color: rgba(0, 0, 0, 0.12);
-      }
-
-      .modern-control-btn:hover::before {
-        opacity: 1;
-      }
-
-      .modern-control-btn:active {
-        transform: translateY(0) scale(0.98);
-        transition: all 0.1s ease;
-      }
-
-      /* Speed button specific styling */
-      .speed-btn {
-        border-radius: 12px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        letter-spacing: 0.5px;
       }
 
       /* Control labels */
@@ -1759,16 +1726,6 @@
         background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
         color: #ecf0f1;
         border-color: rgba(255, 255, 255, 0.1);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.4);
-      }
-
-      .theme-dark .modern-control-btn::before {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%);
-      }
-
-      .theme-dark .modern-control-btn:hover {
-        border-color: rgba(255, 255, 255, 0.2);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.5);
       }
 
       .theme-dark .control-label {
@@ -1776,14 +1733,12 @@
       }
 
       /* Playlist Styles */
-      #playlist-container,
-      #training-playlist-container {
+      #playlist-container {
         border-top: 1px solid rgba(255, 255, 255, 0.1);
         padding-top: 20px;
       }
 
-      .theme-light #playlist-container,
-      .theme-light #training-playlist-container {
+      .theme-light #playlist-container {
         border-top: 1px solid rgba(0, 0, 0, 0.1);
       }
 
@@ -1800,15 +1755,6 @@
 
       .theme-light .playlist-item {
         background-color: #f0f0f0;
-      }
-
-      .playlist-item:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-        transform: translateY(-2px);
-      }
-
-      .theme-light .playlist-item:hover {
-        background-color: #e9e9e9;
       }
 
       .playlist-item-thumbnail-container {
@@ -1856,35 +1802,12 @@
         cursor: pointer;
         padding: 5px 8px;
         margin-left: 5px;
-        opacity: 0.7;
-        transition: opacity 0.2s ease;
-      }
-
-      .remove-from-playlist-btn:hover {
-        opacity: 1;
       }
 
       .select-exercise-btn.selected {
         background-color: #28a745 !important;
         border-color: #28a745 !important;
         color: white;
-      }
-
-      /* Responsive adjustments */
-      @media (max-width: 768px) {
-        .modern-control-btn {
-          width: 44px;
-          height: 44px;
-          font-size: 1rem;
-        }
-
-        .speed-btn {
-          font-size: 0.7rem;
-        }
-
-        .control-label {
-          font-size: 0.65rem;
-        }
       }
     </style>
 
@@ -1896,190 +1819,105 @@
 
         console.log("🎯 Finley Profile Page Loaded Successfully");
 
-        // Playlist state
-        let currentPlaylistIndex = -1;
-        let isPlaylistPlaybackActive = false;
+        // --- STATE MANAGEMENT ---
         let playlist = [];
+        let isPlaylistPlaybackActive = false;
+        let workoutFlow = []; // Holds the sequence of events {type, duration, url, ziel, etc.}
+        let currentFlowStepIndex = 0;
+        let timerInterval = null;
+        let isTimerRunning = false;
+        let timerSeconds = 0;
 
-        // Elements
+        // --- ELEMENT REFERENCES ---
         const auswahlPlaylistItems = document.getElementById("playlist-items");
         const auswahlPlaylistEmptyMsg = document.getElementById("playlist-empty-message");
-        const trainingPlaylistItems = document.getElementById("training-playlist-items");
-        const trainingPlaylistEmptyMsg = document.getElementById("training-playlist-empty-message");
-
         const exerciseCards = document.querySelectorAll(".exercise-card");
         const selectExerciseBtns = document.querySelectorAll(".select-exercise-btn");
-        const customControls = document.querySelectorAll(".custom-controls");
 
-        // Workout Video Player (Training Tab)
         const mainVideo = document.getElementById("main-video");
         const videoTitle = document.getElementById("video-title");
         const playPauseBtn = document.getElementById("play-pause-btn");
         const playPauseIcon = document.getElementById("play-pause-icon");
+        const timerDisplay = document.getElementById("timer-display");
+        const timerLabel = document.getElementById("timer-label");
+        const timerToggleBtn = document.getElementById("timer-toggle-btn");
+        const timerToggleIcon = document.getElementById("timer-toggle-icon");
 
-        // Preview Video Player (Auswahl Tab)
-        const auswahlVideoContainer = document.getElementById("auswahl-video-container");
         const auswahlVideo = document.getElementById("auswahl-video");
         const auswahlPlayPauseBtn = document.getElementById("auswahl-play-pause-btn");
         const auswahlPlayPauseIcon = document.getElementById("auswahl-play-pause-icon");
         const auswahlSpeedToggleBtn = document.getElementById("auswahl-speed-toggle-btn");
         const auswahlSpeedDisplay = document.getElementById("auswahl-speed-display");
         const auswahlFullscreenBtn = document.getElementById("auswahl-fullscreen-btn");
-        const auswahlFullscreenIcon = document.getElementById("auswahl-fullscreen-icon");
 
-        // Timer elements
-        const timerDisplay = document.getElementById("timer-display");
-        const timerLabel = document.getElementById("timer-label");
-        const timerToggleBtn = document.getElementById("timer-toggle-btn");
-        const timerToggleIcon = document.getElementById("timer-toggle-icon");
+        // Workout Flow Setup
+        const workoutFlowContainer = document.getElementById('workout-flow-container');
+        const workoutFlowEmptyMsg = document.getElementById('workout-flow-empty-message');
+        const eventTypeSelect = document.getElementById('event-type-select');
+        const eventDurationContainer = document.getElementById('event-duration-container');
+        const eventDurationSelect = document.getElementById('event-duration-select');
+        const eventVideoSelectContainer = document.getElementById('event-video-select-container');
+        const eventVideoSelect = document.getElementById('event-video-select');
+        const eventZielContainer = document.getElementById('event-ziel-container');
+        const eventZielInput = document.getElementById('event-ziel-input');
+        const addEventBtn = document.getElementById('add-event-btn');
+        const saveWorkoutBtn = document.getElementById('save-workout-btn');
 
-        // Workout setup elements
-        const timerDurationSelect = document.getElementById("timer-duration-select");
-        const restDurationSelect = document.getElementById("rest-duration-select");
-        const loopCountSelect = document.getElementById("loop-count-select");
-        const applySettingsBtn = document.getElementById("apply-workout-settings");
-        const resetSettingsBtn = document.getElementById("reset-workout-settings");
-
+        // Training Tab Flow Display
+        const trainingFlowContainer = document.getElementById('training-flow-container');
+        const trainingFlowEmptyMsg = document.getElementById('training-flow-empty-message');
 
         // --- PREVIEW PLAYER (AUSWAHL TAB) ---
-        let auswahlSpeedIndex = 2; // 1x speed
-        const speedOptions = [0.25, 0.5, 1, 1.5, 2];
-        let isAuswahlVideoFullscreen = false;
-
+        let auswahlSpeedIndex = 2; const speedOptions = [0.25, 0.5, 1, 1.5, 2];
         function updateAuswahlPlayPauseButton() {
-          if (auswahlVideo.paused) {
-            auswahlPlayPauseIcon.className = "fa fa-play";
-            auswahlPlayPauseIcon.style.marginLeft = "3px";
-          } else {
-            auswahlPlayPauseIcon.className = "fa fa-pause";
-            auswahlPlayPauseIcon.style.marginLeft = "0";
-          }
+            auswahlPlayPauseIcon.className = auswahlVideo.paused ? "fa fa-play" : "fa fa-pause";
+            auswahlPlayPauseIcon.style.marginLeft = auswahlVideo.paused ? "3px" : "0";
         }
-
-        function toggleAuswahlPlayPause() {
-          if (auswahlVideo.paused) {
-            auswahlVideo.play().catch(e => console.warn("Preview play prevented.", e));
-          } else {
-            auswahlVideo.pause();
-          }
-        }
-
+        function toggleAuswahlPlayPause() { auswahlVideo.paused ? auswahlVideo.play() : auswahlVideo.pause(); }
         function updateAuswahlSpeedDisplay() {
-          const speed = speedOptions[auswahlSpeedIndex];
-          auswahlSpeedDisplay.textContent = `${speed}x`;
-          if (auswahlVideo) {
-            auswahlVideo.playbackRate = speed;
-          }
+            const speed = speedOptions[auswahlSpeedIndex];
+            auswahlSpeedDisplay.textContent = `${speed}x`;
+            if (auswahlVideo) auswahlVideo.playbackRate = speed;
         }
-
         function toggleAuswahlSpeed() {
-          auswahlSpeedIndex = (auswahlSpeedIndex + 1) % speedOptions.length;
-          updateAuswahlSpeedDisplay();
+            auswahlSpeedIndex = (auswahlSpeedIndex + 1) % speedOptions.length;
+            updateAuswahlSpeedDisplay();
         }
-
-        function toggleAuswahlFullscreen() {
-          const videoContainer = auswahlVideoContainer;
-          if (!document.fullscreenElement) {
-            videoContainer.requestFullscreen().catch(err => alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`));
-          } else {
-            document.exitFullscreen();
-          }
-        }
-
-        document.addEventListener('fullscreenchange', () => {
-          isAuswahlVideoFullscreen = !!document.fullscreenElement;
-          auswahlFullscreenIcon.className = isAuswahlVideoFullscreen ? "fa fa-compress" : "fa fa-expand";
-        });
-
-        if (auswahlPlayPauseBtn) auswahlPlayPauseBtn.addEventListener("click", (e) => { e.stopPropagation(); toggleAuswahlPlayPause(); });
-        if (auswahlVideo) auswahlVideo.closest('.custom-controls')?.addEventListener("click", toggleAuswahlPlayPause);
-        if (auswahlVideo) auswahlVideo.addEventListener("play", updateAuswahlPlayPauseButton);
-        if (auswahlVideo) auswahlVideo.addEventListener("pause", updateAuswahlPlayPauseButton);
-        if (auswahlSpeedToggleBtn) auswahlSpeedToggleBtn.addEventListener("click", toggleAuswahlSpeed);
-        if (auswahlFullscreenBtn) auswahlFullscreenBtn.addEventListener("click", toggleAuswahlFullscreen);
-
-
-        // --- WORKOUT PLAYER (TRAINING TAB) ---
-        function updateMainPlayPauseButton() {
-          const mainPlayerControls = playPauseBtn.closest('.custom-controls');
-          if (mainVideo.paused && !isTimerRunning) {
-            playPauseIcon.className = "fa fa-play";
-            playPauseIcon.style.marginLeft = "4px";
-            if (mainPlayerControls) mainPlayerControls.style.opacity = "1";
-          } else {
-            playPauseIcon.className = "fa fa-pause";
-            playPauseIcon.style.marginLeft = "0";
-            if (mainPlayerControls) mainPlayerControls.style.opacity = "0";
-          }
-        }
-
-        function toggleMainPlayPause() {
-          if (mainVideo.paused) {
-            toggleTimer();
-          } else {
-            mainVideo.pause();
-          }
-        }
-
-        if (playPauseBtn) playPauseBtn.addEventListener("click", (e) => { e.stopPropagation(); toggleMainPlayPause(); });
-        if (mainVideo) mainVideo.closest('.custom-controls')?.addEventListener("click", toggleMainPlayPause);
-        if (mainVideo) mainVideo.addEventListener("play", updateMainPlayPauseButton);
-        if (mainVideo) mainVideo.addEventListener("pause", updateMainPlayPauseButton);
-
 
         // --- PLAYLIST & SELECTION LOGIC ---
-        function playVideoFromPlaylist(index) {
-          if (index >= 0 && index < playlist.length) {
-            currentPlaylistIndex = index;
-            isPlaylistPlaybackActive = true;
-            const item = playlist[index];
-
-            console.log(`▶️ Playing [Loop ${currentLoop}/${workoutConfig.loopCount}] [Ex ${currentExercise}/${totalExercises}]: ${item.title}`);
-
-            if (mainVideo) {
-              const source = mainVideo.querySelector("source");
-              if (source) {
-                source.src = item.url;
-                mainVideo.load();
-                mainVideo.play().catch(e => console.warn("Autoplay was prevented.", e));
-              }
+        function populateVideoSelect() {
+            eventVideoSelect.innerHTML = '';
+            if (playlist.length === 0) {
+                eventVideoSelect.innerHTML = '<option disabled>Zuerst Videos zur Playlist hinzufügen</option>';
+                return;
             }
-            if (videoTitle) {
-              videoTitle.textContent = `Loop ${currentLoop}: ${item.title}`;
-            }
-            timerSeconds = workoutConfig.timerDuration;
-            isRestPhase = false;
-            startTimer();
-          } else {
-            console.error("Attempted to play video with invalid index:", index);
-          }
+            playlist.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.url;
+                option.textContent = item.title;
+                eventVideoSelect.appendChild(option);
+            });
         }
 
         function renderPlaylist() {
           const playlistHTML = playlist.map((item) => `
-              <div class="col-12">
-                <div class="playlist-item" data-video-url="${item.url}" data-video-title="${item.title}">
-                    <div class="playlist-item-thumbnail-container">
-                        <video class="playlist-item-thumbnail" muted preload="metadata">
-                            <source src="${item.url}#t=0.5" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="playlist-item-info">
-                        <p class="playlist-item-title">${item.title}</p>
-                        <p class="playlist-item-subtitle">${item.subtitle}</p>
-                    </div>
-                    <button class="remove-from-playlist-btn" data-video-url="${item.url}"><i class="fa fa-times-circle"></i></button>
-                </div>
-              </div>`).join('');
+            <div class="col-12">
+              <div class="playlist-item" data-video-url="${item.url}" data-video-title="${item.title}">
+                  <div class="playlist-item-thumbnail-container">
+                      <video class="playlist-item-thumbnail" muted preload="metadata"><source src="${item.url}#t=0.5" type="video/mp4"></video>
+                  </div>
+                  <div class="playlist-item-info">
+                      <p class="playlist-item-title">${item.title}</p>
+                      <p class="playlist-item-subtitle">${item.subtitle}</p>
+                  </div>
+                  <button class="remove-from-playlist-btn" data-video-url="${item.url}"><i class="fa fa-times-circle"></i></button>
+              </div>
+            </div>`).join('');
 
-          if (auswahlPlaylistItems) auswahlPlaylistItems.innerHTML = playlistHTML;
-          if (trainingPlaylistItems) trainingPlaylistItems.innerHTML = playlistHTML;
-
-          const showEmpty = playlist.length === 0;
-          if (auswahlPlaylistEmptyMsg) auswahlPlaylistEmptyMsg.style.display = showEmpty ? "block" : "none";
-          if (trainingPlaylistEmptyMsg) trainingPlaylistEmptyMsg.style.display = showEmpty ? "block" : "none";
-
+          auswahlPlaylistItems.innerHTML = playlistHTML;
+          auswahlPlaylistEmptyMsg.style.display = playlist.length === 0 ? "block" : "none";
           addPlaylistEventListeners();
+          populateVideoSelect(); // Update dropdown when playlist changes
         }
 
         function addPlaylistEventListeners() {
@@ -2087,27 +1925,23 @@
             btn.addEventListener('click', e => {
               e.stopPropagation();
               const urlToRemove = btn.dataset.videoUrl;
-              playlist = playlist.filter(item => item.url !== urlToRemove);
-              renderPlaylist();
               const originalCard = document.querySelector(`.exercise-card[data-url="${urlToRemove}"]`);
               if (originalCard) {
                 const selectBtn = originalCard.querySelector('.select-exercise-btn');
                 selectBtn.classList.remove('selected');
                 selectBtn.textContent = "Select";
               }
+              playlist = playlist.filter(item => item.url !== urlToRemove);
+              renderPlaylist();
             });
           });
 
           document.querySelectorAll('.playlist-item').forEach(item => {
             item.addEventListener('click', () => {
-              const videoUrl = item.dataset.videoUrl;
               if (auswahlVideo) {
-                const source = auswahlVideo.querySelector("source");
-                if (source) {
-                  source.src = videoUrl;
-                  auswahlVideo.load();
-                  auswahlVideo.play().catch(e => console.warn("Preview play prevented.", e));
-                }
+                auswahlVideo.querySelector("source").src = item.dataset.videoUrl;
+                auswahlVideo.load();
+                auswahlVideo.play().catch(e => console.warn("Preview play prevented.", e));
               }
             });
           });
@@ -2118,172 +1952,241 @@
           e.stopPropagation();
           const button = e.currentTarget;
           const card = button.closest('.exercise-card');
-          if (!card) return;
-
           const exerciseData = {
-            url: card.dataset.url,
-            video: card.dataset.video,
+            url: card.dataset.url, video: card.dataset.video,
             title: card.querySelector('h5').textContent.trim(),
             subtitle: card.querySelector('span').textContent.trim()
           };
 
-          const isAlreadyInPlaylist = playlist.some(item => item.url === exerciseData.url);
-          if (isAlreadyInPlaylist) return;
-
+          if (playlist.some(item => item.url === exerciseData.url)) return;
           playlist.push(exerciseData);
           renderPlaylist();
-
           button.textContent = "Selected";
           button.classList.add('selected');
         }
 
-        selectExerciseBtns.forEach(btn => btn.addEventListener('click', handleSelectExercise));
+        // --- WORKOUT FLOW BUILDER ---
+        function renderFlow(container, isEditable) {
+            const flowHTML = workoutFlow.map((step, index) => {
+                let contentHTML = '';
+                const removeBtnHTML = isEditable ? `<button class="btn btn-xs bg-red-dark rounded-s font-900 remove-flow-step-btn" data-index="${index}">X</button>` : '';
 
+                switch (step.type) {
+                    case 'video':
+                        contentHTML = `
+                            <div class="workout-flow-item-info">
+                                <div class="workout-flow-item-thumbnail-container">
+                                    <video class="workout-flow-item-thumbnail" muted preload="metadata"><source src="${step.url}#t=0.5" type="video/mp4"></video>
+                                </div>
+                                <div class="workout-flow-item-text">
+                                    <p class="workout-flow-item-title">${step.title}</p>
+                                    <p class="workout-flow-item-detail">Ziel: ${step.ziel}</p>
+                                </div>
+                            </div>`;
+                        break;
+                    case 'timer':
+                        contentHTML = `<div class="workout-flow-item-info"><i class="fa fa-hourglass-half color-blue-dark me-3"></i><p class="workout-flow-item-title">Timer: ${step.duration}s</p></div>`;
+                        break;
+                    case 'pause':
+                        contentHTML = `<div class="workout-flow-item-info"><i class="fa fa-pause-circle color-yellow-dark me-3"></i><p class="workout-flow-item-title">Pause: ${step.duration}s</p></div>`;
+                        break;
+                }
+                return `<div class="workout-flow-item">${contentHTML}${removeBtnHTML}</div>`;
+            }).join('');
+
+            container.innerHTML = flowHTML;
+
+            if (isEditable) {
+                workoutFlowEmptyMsg.style.display = workoutFlow.length === 0 ? 'block' : 'none';
+                document.querySelectorAll('.remove-flow-step-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        workoutFlow.splice(parseInt(btn.dataset.index), 1);
+                        renderFlow(workoutFlowContainer, true);
+                    });
+                });
+            } else {
+                 trainingFlowEmptyMsg.style.display = workoutFlow.length === 0 ? 'block' : 'none';
+            }
+        }
+
+        function updateEventTypeInputs() {
+            const type = eventTypeSelect.value;
+            eventVideoSelectContainer.style.display = (type === 'video') ? 'block' : 'none';
+            eventZielContainer.style.display = (type === 'video') ? 'block' : 'none';
+            eventDurationContainer.style.display = (type === 'timer' || type === 'pause') ? 'block' : 'none';
+        }
+
+        function addEventToFlow() {
+          const type = eventTypeSelect.value;
+          let newStep = { type };
+
+          if (type === 'video') {
+              if (playlist.length === 0) { alert("Bitte füge zuerst Videos zur Playlist hinzu."); return; }
+              const selectedUrl = eventVideoSelect.value;
+              const videoData = playlist.find(v => v.url === selectedUrl);
+              if (!videoData) { alert("Fehler: Video nicht in Playlist gefunden."); return; }
+              newStep = { ...newStep, ...videoData, ziel: parseInt(eventZielInput.value) || 1 };
+          } else {
+              newStep.duration = parseInt(eventDurationSelect.value);
+          }
+          workoutFlow.push(newStep);
+          renderFlow(workoutFlowContainer, true);
+        }
+
+        // --- LOCAL STORAGE ---
+        function saveWorkoutFlow() {
+            const dataToSave = {
+                flow: workoutFlow,
+                playlist: playlist
+            };
+            localStorage.setItem('savedWorkout', JSON.stringify(dataToSave));
+            alert("Workout gespeichert!");
+            renderFlow(trainingFlowContainer, false); // Update training tab display
+        }
+
+        function loadWorkoutFlow() {
+            const savedData = localStorage.getItem('savedWorkout');
+            if (savedData) {
+                try {
+                    const parsedData = JSON.parse(savedData);
+                    workoutFlow = parsedData.flow || [];
+                    playlist = parsedData.playlist || [];
+                    console.log("Workout loaded from localStorage.");
+                } catch (e) {
+                    console.error("Failed to parse saved workout data.", e);
+                    workoutFlow = []; playlist = [];
+                }
+            }
+            renderFlow(workoutFlowContainer, true);
+            renderPlaylist();
+            renderFlow(trainingFlowContainer, false);
+        }
+
+        // --- WORKOUT EXECUTION & TIMER LOGIC ---
+        function updateToggleButton() {
+            const isWorkoutActive = isPlaylistPlaybackActive;
+            timerToggleIcon.className = (isWorkoutActive && isTimerRunning) ? "fa fa-pause me-2" : "fa fa-play me-2";
+            timerToggleBtn.childNodes[2].nodeValue = (isWorkoutActive && isTimerRunning) ? " Pause Workout" : " Start Workout";
+        }
+
+        function updateTimerDisplay(step) {
+            if (!isPlaylistPlaybackActive || !step) {
+                timerDisplay.textContent = '0s'; timerLabel.textContent = 'Ready';
+                timerDisplay.style.color = 'white'; videoTitle.textContent = 'Übung';
+                return;
+            }
+            timerDisplay.textContent = `${timerSeconds}s`;
+            switch (step.type) {
+                case 'video': timerLabel.textContent = `Ziel: ${step.ziel}`; break;
+                case 'timer': timerLabel.textContent = `Übung`; timerDisplay.style.color = 'white'; break;
+                case 'pause': timerLabel.textContent = 'Pause'; timerDisplay.style.color = '#ffa500'; break;
+            }
+        }
+
+        function runNextFlowStep() {
+            if (currentFlowStepIndex >= workoutFlow.length) {
+                isPlaylistPlaybackActive = false; isTimerRunning = false;
+                updateToggleButton();
+                timerDisplay.textContent = "Fertig!"; timerLabel.textContent = "Workout beendet";
+                return;
+            }
+            const step = workoutFlow[currentFlowStepIndex];
+            handleStep(step);
+        }
+
+        function handleStep(step) {
+            updateTimerDisplay(step);
+            switch (step.type) {
+                case 'video':
+                    videoTitle.textContent = step.title;
+                    mainVideo.querySelector("source").src = step.url;
+                    mainVideo.load();
+                    currentFlowStepIndex++;
+                    runNextFlowStep(); // Immediately move to next step (e.g., a timer)
+                    break;
+                case 'timer':
+                    mainVideo.play().catch(e => console.error(e));
+                    startCountdown();
+                    break;
+                case 'pause':
+                    mainVideo.pause();
+                    startCountdown();
+                    break;
+            }
+        }
+
+        function startCountdown() {
+            if (isTimerRunning) return;
+            isTimerRunning = true; updateToggleButton();
+            const step = workoutFlow[currentFlowStepIndex];
+            timerSeconds = step.duration;
+            updateTimerDisplay(step);
+
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                updateTimerDisplay(step);
+                if (timerSeconds <= 0) {
+                    clearInterval(timerInterval); isTimerRunning = false;
+                    currentFlowStepIndex++;
+                    runNextFlowStep();
+                }
+            }, 1000);
+        }
+
+        function pauseCountdown() {
+            if (!isTimerRunning) return;
+            clearInterval(timerInterval); isTimerRunning = false;
+            mainVideo.pause(); updateToggleButton();
+        }
+
+        function resumeCountdown() {
+            if (isTimerRunning || !isPlaylistPlaybackActive) return;
+            if (timerSeconds > 0) {
+                if (workoutFlow[currentFlowStepIndex].type === 'timer') mainVideo.play();
+                startCountdown();
+            } else {
+                currentFlowStepIndex++; runNextFlowStep();
+            }
+        }
+
+        function toggleTimer() {
+            if (isTimerRunning) pauseCountdown();
+            else if (isPlaylistPlaybackActive) resumeCountdown();
+            else { // Start new workout
+                if (workoutFlow.length === 0) { alert("Kein Workout zum Starten vorhanden. Bitte erstelle und speichere ein Workout."); return; }
+                isPlaylistPlaybackActive = true; currentFlowStepIndex = 0;
+                runNextFlowStep();
+            }
+        }
+
+        // --- EVENT LISTENERS & INITIALIZATION ---
+        addEventBtn.addEventListener('click', addEventToFlow);
+        saveWorkoutBtn.addEventListener('click', saveWorkoutFlow);
+        timerToggleBtn.addEventListener('click', toggleTimer);
+        eventTypeSelect.addEventListener('change', updateEventTypeInputs);
+
+        auswahlPlayPauseBtn.addEventListener("click", toggleAuswahlPlayPause);
+        auswahlVideo.addEventListener("play", updateAuswahlPlayPauseButton);
+        auswahlVideo.addEventListener("pause", updateAuswahlPlayPauseButton);
+        auswahlSpeedToggleBtn.addEventListener("click", toggleAuswahlSpeed);
+
+        selectExerciseBtns.forEach(btn => btn.addEventListener('click', handleSelectExercise));
         exerciseCards.forEach(card => {
           card.addEventListener("click", function (e) {
             if (e.target.closest('.select-exercise-btn')) return;
-            const videoUrl = this.getAttribute("data-url");
             if (auswahlVideo) {
-              const source = auswahlVideo.querySelector("source");
-              if (source) {
-                source.src = videoUrl;
+                auswahlVideo.querySelector("source").src = this.getAttribute("data-url");
                 auswahlVideo.load();
-                auswahlVideo.play().catch(err => console.warn("Preview autoplay failed:", err));
-              }
+                auswahlVideo.play();
             }
           });
         });
 
-        // --- TIMER & WORKOUT LOGIC ---
-        let workoutConfig = { timerDuration: 15, restDuration: 10, loopCount: 1 };
-        let timerSeconds = workoutConfig.timerDuration;
-        let timerInterval = null;
-        let isTimerRunning = false;
-        let isRestPhase = false;
-
-        let currentExercise = 1;
-        let totalExercises = 0;
-        let currentLoop = 1;
-
-        function updateTimerDisplay() {
-          timerDisplay.textContent = `${timerSeconds}s`;
-          if (timerLabel) {
-            timerLabel.textContent = isRestPhase ? "Pause" : `Übung ${currentExercise}/${totalExercises}`;
-            timerDisplay.style.color = isRestPhase ? "#ffa500" : "white";
-          }
-        }
-
-        function applyWorkoutSettings() {
-          workoutConfig.timerDuration = parseInt(timerDurationSelect.value);
-          workoutConfig.restDuration = parseInt(restDurationSelect.value);
-          workoutConfig.loopCount = parseInt(loopCountSelect.value);
-          isRestPhase = false;
-          timerSeconds = workoutConfig.timerDuration;
-          updateTimerDisplay();
-          console.log("⚙️ Workout settings applied:", workoutConfig);
-        }
-
-        function resetWorkoutSettings() {
-          workoutConfig = { timerDuration: 15, restDuration: 10, loopCount: 1 };
-          timerDurationSelect.value = workoutConfig.timerDuration;
-          restDurationSelect.value = workoutConfig.restDuration;
-          loopCountSelect.value = workoutConfig.loopCount;
-          applyWorkoutSettings();
-        }
-
-        function updateToggleButton() {
-          const isWorkoutActive = isTimerRunning || isPlaylistPlaybackActive;
-          timerToggleIcon.className = isWorkoutActive ? "fa fa-pause me-2" : "fa fa-play me-2";
-          timerToggleBtn.childNodes[2].nodeValue = isWorkoutActive ? " Pause Workout" : " Start Workout";
-        }
-
-        function startTimer() {
-          if (isTimerRunning) return; // Prevent multiple intervals
-          isTimerRunning = true;
-          updateToggleButton();
-          if (!isRestPhase) mainVideo.play().catch(e => console.error(e));
-
-          timerInterval = setInterval(() => {
-            timerSeconds--;
-            updateTimerDisplay();
-
-            if (timerSeconds <= 0) {
-              clearInterval(timerInterval);
-              isTimerRunning = false;
-              mainVideo.pause();
-
-              if (!isRestPhase) { // Exercise phase just ended
-                if (currentExercise < totalExercises) { // Not last exercise of loop
-                  isRestPhase = true;
-                  timerSeconds = workoutConfig.restDuration;
-                  startTimer(); // Start rest timer
-                } else { // Last exercise of loop
-                  if (currentLoop < workoutConfig.loopCount) {
-                    isRestPhase = true; // Use rest timer as break
-                    timerSeconds = workoutConfig.restDuration;
-                    startTimer(); // Start break timer
-                  } else {
-                    console.log("🎉 Workout completed!");
-                    isPlaylistPlaybackActive = false;
-                    currentExercise = 1;
-                    currentLoop = 1;
-                    updateToggleButton();
-                  }
-                }
-              } else { // Rest/break phase just ended
-                isRestPhase = false;
-                if (currentExercise < totalExercises) { // Was a rest between exercises
-                  currentExercise++;
-                  playVideoFromPlaylist(currentExercise - 1);
-                } else { // Was a break between loops
-                  currentLoop++;
-                  currentExercise = 1;
-                  playVideoFromPlaylist(0);
-                }
-              }
-            }
-          }, 1000);
-        }
-
-        function pauseTimer() {
-          if (isTimerRunning) {
-            clearInterval(timerInterval);
-            isTimerRunning = false;
-            mainVideo.pause();
-            updateToggleButton();
-          }
-        }
-
-        function toggleTimer() {
-          if (isTimerRunning) {
-            pauseTimer();
-          } else {
-            if (!isPlaylistPlaybackActive) { // Starting fresh
-              if (playlist.length === 0) {
-                alert("Bitte füge zuerst Übungen zu deiner Playlist hinzu.");
-                return;
-              }
-              totalExercises = playlist.length;
-              currentExercise = 1;
-              currentLoop = 1;
-              playVideoFromPlaylist(0);
-            } else { // Resuming from pause
-              startTimer();
-            }
-          }
-        }
-
-        // --- INITIALIZATION ---
-        if (applySettingsBtn) applySettingsBtn.addEventListener("click", applyWorkoutSettings);
-        if (resetSettingsBtn) resetSettingsBtn.addEventListener("click", resetWorkoutSettings);
-        if (timerToggleBtn) timerToggleBtn.addEventListener("click", toggleTimer);
-
         // Initial UI setup
-        applyWorkoutSettings();
+        loadWorkoutFlow();
         updateAuswahlPlayPauseButton();
-        updateMainPlayPauseButton();
         updateAuswahlSpeedDisplay();
-        renderPlaylist();
+        updateEventTypeInputs();
 
         console.log("🎯 All systems initialized.");
       });
