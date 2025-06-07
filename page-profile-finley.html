@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -1326,11 +1327,10 @@
 
                 <!-- Gespeicherte Workouts -->
                 <div class="divider mb-3"></div>
-                <h5 class="font-600 mb-3">Gespeicherte Workouts</h5>
+                <h5 class="font-600 mb-3">Workouts verwalten</h5>
+                 <button id="new-workflow-btn" class="btn btn-s btn-full rounded-m text-uppercase font-700 shadow-s bg-gray-dark mb-3">Neues Workout</button>
+                <select id="load-workflow-select" class="form-select border-0 shadow-m rounded-m mb-2"></select>
                 <div class="row mb-3">
-                    <div class="col-12">
-                        <select id="load-workflow-select" class="form-select border-0 shadow-m rounded-m mb-2"></select>
-                    </div>
                     <div class="col-6">
                         <button id="load-workflow-btn" class="btn btn-s btn-full rounded-m text-uppercase font-700 shadow-s bg-blue-dark">Laden</button>
                     </div>
@@ -1397,7 +1397,7 @@
                     <input class="form-control" type="text" id="workflow-name-input" placeholder="Name des Workouts">
                 </div>
                 <button id="save-workout-btn" class="btn btn-s btn-full rounded-m text-uppercase font-700 shadow-s bg-green-dark">
-                  <i class="fa fa-save me-2"></i> Workout Speichern
+                  <i class="fa fa-save me-2"></i> Workout Speichern / Aktualisieren
                 </button>
               </div>
             </div>
@@ -1831,17 +1831,38 @@
       }
     </style>
 
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
     <script type="text/javascript" src="scripts/bootstrap.min.js"></script>
     <script type="text/javascript" src="scripts/custom.js"></script>
     <script type="text/javascript">
       document.addEventListener("DOMContentLoaded", function () {
         "use strict";
 
-        console.log("🎯 Finley Profile Page Loaded Successfully");
+        // --- 1. FIREBASE SETUP ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyDJKC7unUKtqT4DE-i1HyBwre2mVrSBNs8",
+            authDomain: "new-standard-ba796.firebaseapp.com",
+            projectId: "new-standard-ba796",
+            storageBucket: "new-standard-ba796.firebasestorage.app",
+            messagingSenderId: "802503504810",
+            appId: "1:802503504810:web:000c739eddea7d2fb731d3"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        console.log("🔥 Firebase initialized and connected to Firestore.");
 
         // --- STATE MANAGEMENT ---
-        let playlist = [];
-        let workoutFlow = []; // Holds the sequence of events {type, duration, url, ziel, etc.}
+        const PUID = "anonymousUser"; // Placeholder User ID. Replace with actual auth user ID later.
+
+        let playlist = []; // Current playlist in the editor
+        let workoutFlow = []; // Current flow in the editor
+        let currentWorkoutId = null; // Firestore doc ID of the loaded workout
+
         let activeWorkout = { flow: [], playlist: [] }; // The workout loaded for the training tab
         let isPlaylistPlaybackActive = false;
         let currentFlowStepIndex = 0;
@@ -1870,6 +1891,7 @@
         const auswahlSpeedDisplay = document.getElementById("auswahl-speed-display");
 
         // Workout Flow Setup & Management
+        const newWorkflowBtn = document.getElementById('new-workflow-btn');
         const workflowNameInput = document.getElementById('workflow-name-input');
         const loadWorkflowSelect = document.getElementById('load-workflow-select');
         const loadWorkflowBtn = document.getElementById('load-workflow-btn');
@@ -1939,7 +1961,6 @@
 
           auswahlPlaylistItems.innerHTML = playlistHTML;
           auswahlPlaylistEmptyMsg.style.display = playlist.length === 0 ? "block" : "none";
-          // Update selected state of all video cards
           document.querySelectorAll('.select-exercise-btn').forEach(btn => {
               const cardUrl = btn.closest('.exercise-card').dataset.url;
               if (playlist.some(pItem => pItem.url === cardUrl)) {
@@ -1951,15 +1972,14 @@
               }
           });
           addPlaylistEventListeners();
-          populateVideoSelect(); // Update dropdown when playlist changes
+          populateVideoSelect();
         }
 
         function addPlaylistEventListeners() {
           document.querySelectorAll('.remove-from-playlist-btn').forEach(btn => {
             btn.addEventListener('click', e => {
               e.stopPropagation();
-              const urlToRemove = btn.dataset.videoUrl;
-              playlist = playlist.filter(item => item.url !== urlToRemove);
+              playlist = playlist.filter(item => item.url !== btn.dataset.videoUrl);
               renderPlaylist();
             });
           });
@@ -1975,10 +1995,8 @@
         }
 
         function handleSelectExercise(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          const button = e.currentTarget;
-          const card = button.closest('.exercise-card');
+          e.preventDefault(); e.stopPropagation();
+          const card = e.currentTarget.closest('.exercise-card');
           const exerciseData = {
             url: card.dataset.url, video: card.dataset.video,
             title: card.querySelector('h5').textContent.trim(),
@@ -1986,11 +2004,8 @@
           };
 
           const idx = playlist.findIndex(item => item.url === exerciseData.url);
-          if (idx > -1) {
-              playlist.splice(idx, 1); // Remove if already in playlist
-          } else {
-              playlist.push(exerciseData); // Add if not in playlist
-          }
+          if (idx > -1) { playlist.splice(idx, 1); }
+          else { playlist.push(exerciseData); }
           renderPlaylist();
         }
 
@@ -2039,8 +2054,7 @@
           let newStep = { type };
           if (type === 'video') {
               if (playlist.length === 0) { alert("Bitte füge zuerst Videos zur Playlist hinzu."); return; }
-              const selectedUrl = eventVideoSelect.value;
-              const videoData = playlist.find(v => v.url === selectedUrl);
+              const videoData = playlist.find(v => v.url === eventVideoSelect.value);
               if (!videoData) { alert("Fehler: Video nicht in Playlist gefunden."); return; }
               newStep = { ...newStep, ...videoData, ziel: parseInt(eventZielInput.value) || 1 };
           } else {
@@ -2050,84 +2064,112 @@
           renderFlow(workoutFlowContainer, true);
         }
 
-        // --- LOCAL STORAGE & WORKFLOW MANAGEMENT ---
-        function getSavedWorkflows() {
-            try { return JSON.parse(localStorage.getItem('allSavedWorkflows')) || {}; }
-            catch(e) { return {}; }
-        }
-
-        function populateLoadSelect() {
-            const allWorkflows = getSavedWorkflows();
-            const names = Object.keys(allWorkflows);
-            loadWorkflowSelect.innerHTML = '';
-            if (names.length === 0) {
-                loadWorkflowSelect.innerHTML = '<option disabled selected>Keine Workouts gespeichert</option>';
-            } else {
-                names.forEach(name => {
+        // --- FIRESTORE WORKFLOW MANAGEMENT ---
+        async function populateLoadSelect() {
+            loadWorkflowSelect.innerHTML = '<option disabled selected>Lade Workouts...</option>';
+            try {
+                const querySnapshot = await db.collection("workouts").where("userId", "==", PUID).orderBy("lastUpdated", "desc").get();
+                loadWorkflowSelect.innerHTML = '';
+                if (querySnapshot.empty) {
+                    loadWorkflowSelect.innerHTML = '<option disabled selected>Keine Workouts gespeichert</option>';
+                    return;
+                }
+                querySnapshot.forEach(doc => {
                     const option = document.createElement('option');
-                    option.value = name;
-                    option.textContent = name;
+                    option.value = doc.id;
+                    option.textContent = doc.data().name;
                     loadWorkflowSelect.appendChild(option);
                 });
+            } catch (error) {
+                console.error("Error getting workflows: ", error);
+                loadWorkflowSelect.innerHTML = '<option disabled selected>Fehler beim Laden</option>';
             }
         }
 
-        function handleSaveWorkout() {
+        async function handleSaveWorkout() {
             const name = workflowNameInput.value.trim();
             if (!name) { alert("Bitte gib einen Namen für das Workout ein."); return; }
 
-            const allWorkflows = getSavedWorkflows();
-            if (allWorkflows[name]) {
-                if (!confirm(`Ein Workout mit dem Namen "${name}" existiert bereits. Möchtest du es überschreiben?`)) {
-                    return;
+            const workoutData = {
+                name: name,
+                flow: workoutFlow,
+                playlist: playlist,
+                userId: PUID,
+                lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            try {
+                let docRef;
+                if (currentWorkoutId) {
+                    // Update existing document
+                    docRef = db.collection("workouts").doc(currentWorkoutId);
+                    await docRef.set(workoutData, { merge: true }); // Use set with merge to update or create if deleted
+                    alert(`Workout "${name}" aktualisiert!`);
+                } else {
+                    // Add new document
+                    docRef = await db.collection("workouts").add(workoutData);
+                    currentWorkoutId = docRef.id; // Store the new ID
+                    alert(`Workout "${name}" gespeichert!`);
                 }
-            }
-            allWorkflows[name] = { name: name, flow: workoutFlow, playlist: playlist };
-            localStorage.setItem('allSavedWorkflows', JSON.stringify(allWorkflows));
-            alert(`Workout "${name}" gespeichert!`);
-            populateLoadSelect();
-            loadWorkflowSelect.value = name;
-        }
-
-        function handleLoadWorkout() {
-            const name = loadWorkflowSelect.value;
-            if (!name) { alert("Kein Workout zum Laden ausgewählt."); return; }
-            const allWorkflows = getSavedWorkflows();
-            const loadedWorkout = allWorkflows[name];
-            if (loadedWorkout) {
-                workflowNameInput.value = loadedWorkout.name;
-                playlist = loadedWorkout.playlist || [];
-                workoutFlow = loadedWorkout.flow || [];
-                activeWorkout = loadedWorkout; // Set this as the workout for the training tab
-
-                renderPlaylist();
-                renderFlow(workoutFlowContainer, true);
-                renderFlow(trainingFlowContainer, false, activeWorkout.flow); // Update training tab
-                alert(`Workout "${name}" geladen.`);
+                await populateLoadSelect();
+                loadWorkflowSelect.value = currentWorkoutId; // Select the just-saved workout
+            } catch (error) {
+                console.error("Error saving workout: ", error);
+                alert("Fehler beim Speichern des Workouts.");
             }
         }
 
-        function handleDeleteWorkout() {
-            const name = loadWorkflowSelect.value;
-            if (!name) { alert("Kein Workout zum Löschen ausgewählt."); return; }
-            if (confirm(`Möchtest du das Workout "${name}" wirklich löschen?`)) {
-                const allWorkflows = getSavedWorkflows();
-                delete allWorkflows[name];
-                localStorage.setItem('allSavedWorkflows', JSON.stringify(allWorkflows));
-                alert(`Workout "${name}" gelöscht.`);
+        async function handleLoadWorkout() {
+            const docId = loadWorkflowSelect.value;
+            if (!docId) { alert("Kein Workout zum Laden ausgewählt."); return; }
+            try {
+                const doc = await db.collection("workouts").doc(docId).get();
+                if (doc.exists) {
+                    const loadedData = doc.data();
+                    currentWorkoutId = doc.id;
+                    workflowNameInput.value = loadedData.name;
+                    playlist = loadedData.playlist || [];
+                    workoutFlow = loadedData.flow || [];
+                    activeWorkout = loadedData;
 
-                // If the deleted workout was the one in the editor, clear the editor
-                if(workflowNameInput.value === name) {
-                    workflowNameInput.value = '';
-                    workoutFlow = [];
-                    playlist = [];
-                    activeWorkout = { flow: [], playlist: [] };
                     renderPlaylist();
                     renderFlow(workoutFlowContainer, true);
                     renderFlow(trainingFlowContainer, false, activeWorkout.flow);
+                    alert(`Workout "${loadedData.name}" geladen.`);
+                } else {
+                    alert("Fehler: Workout nicht gefunden.");
                 }
-                populateLoadSelect();
+            } catch (error) {
+                console.error("Error loading workout: ", error);
+                alert("Fehler beim Laden des Workouts.");
             }
+        }
+
+        async function handleDeleteWorkout() {
+            const docId = loadWorkflowSelect.value;
+            if (!docId) { alert("Kein Workout zum Löschen ausgewählt."); return; }
+            if (confirm(`Möchtest du das Workout "${loadWorkflowSelect.options[loadWorkflowSelect.selectedIndex].text}" wirklich löschen?`)) {
+                try {
+                    await db.collection("workouts").doc(docId).delete();
+                    alert("Workout gelöscht.");
+                    if(currentWorkoutId === docId) handleNewWorkout(); // Clear editor if active workout was deleted
+                    await populateLoadSelect();
+                } catch (error) {
+                    console.error("Error deleting workout: ", error);
+                    alert("Fehler beim Löschen des Workouts.");
+                }
+            }
+        }
+
+        function handleNewWorkout() {
+            currentWorkoutId = null;
+            playlist = [];
+            workoutFlow = [];
+            workflowNameInput.value = '';
+            activeWorkout = { flow: [], playlist: [] };
+            renderPlaylist();
+            renderFlow(workoutFlowContainer, true);
+            renderFlow(trainingFlowContainer, false, activeWorkout.flow);
         }
 
         // --- WORKOUT EXECUTION & TIMER LOGIC ---
@@ -2169,7 +2211,7 @@
                     mainVideo.querySelector("source").src = step.url;
                     mainVideo.load();
                     currentFlowStepIndex++;
-                    runNextFlowStep(); // Immediately move to next step (e.g., a timer)
+                    runNextFlowStep();
                     break;
                 case 'timer':
                     mainVideo.play().catch(e => console.error(e));
@@ -2230,6 +2272,7 @@
         saveWorkoutBtn.addEventListener('click', handleSaveWorkout);
         loadWorkflowBtn.addEventListener('click', handleLoadWorkout);
         deleteWorkflowBtn.addEventListener('click', handleDeleteWorkout);
+        newWorkflowBtn.addEventListener('click', handleNewWorkout);
         timerToggleBtn.addEventListener('click', toggleTimer);
         eventTypeSelect.addEventListener('change', updateEventTypeInputs);
 
@@ -2250,7 +2293,7 @@
           });
         });
 
-        // Initial UI setup
+        // --- INITIAL UI SETUP ---
         populateLoadSelect();
         renderPlaylist();
         renderFlow(workoutFlowContainer, true);
@@ -2258,11 +2301,9 @@
         updateAuswahlPlayPauseButton();
         updateAuswahlSpeedDisplay();
         updateEventTypeInputs();
-
-        console.log("🎯 All systems initialized.");
       });
     </script>
   </body>
 
 </html>
-```
+
