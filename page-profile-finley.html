@@ -2224,15 +2224,48 @@
 
         function updateTimerDisplay(step) {
             if (!isPlaylistPlaybackActive || !step) {
-                timerDisplay.textContent = '0s'; timerLabel.textContent = 'Ready';
-                timerDisplay.style.color = 'white'; videoTitle.textContent = 'Übung';
+                timerDisplay.textContent = '0s';
+                timerLabel.textContent = 'Ready';
+                videoTitle.textContent = 'Übung';
+                timerDisplay.style.color = 'white';
                 return;
             }
+
             timerDisplay.textContent = `${timerSeconds}s`;
+
+            // Get the previous step to find context for timers
+            const previousStep = (currentFlowStepIndex > 0) ? activeWorkout.flow[currentFlowStepIndex - 1] : null;
+
             switch (step.type) {
-                case 'video': timerLabel.textContent = `Ziel: ${step.ziel}`; videoTitle.textContent = step.title; break;
-                case 'timer': timerLabel.textContent = `Übung`; timerDisplay.style.color = 'white'; break;
-                case 'pause': timerLabel.textContent = 'Pause'; timerDisplay.style.color = '#ffa500'; break;
+                case 'video':
+                    // This step is transient and loads the video. We update the title in preparation.
+                    videoTitle.textContent = step.title;
+                    timerLabel.textContent = `Vorbereiten...`;
+                    break;
+
+                case 'timer':
+                    timerDisplay.style.color = 'white';
+                    // If the timer follows a video, use the video's info
+                    if (previousStep && previousStep.type === 'video') {
+                        videoTitle.textContent = previousStep.title;
+                        // Display Ziel if it exists, otherwise a generic label
+                        if (previousStep.ziel) {
+                            timerLabel.textContent = `Ziel: ${previousStep.ziel}`;
+                        } else {
+                            timerLabel.textContent = 'Übung';
+                        }
+                    } else {
+                        // Standalone timer (fallback)
+                        videoTitle.textContent = 'Übung';
+                        timerLabel.textContent = 'Timer läuft';
+                    }
+                    break;
+
+                case 'pause':
+                    timerDisplay.style.color = '#ffa500';
+                    videoTitle.textContent = 'Pause';
+                    timerLabel.textContent = 'Nächste Übung...';
+                    break;
             }
         }
 
