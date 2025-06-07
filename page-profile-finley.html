@@ -1,5 +1,3 @@
-
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -99,12 +97,14 @@
                     <button id="auswahl-speed-toggle-btn" class="modern-control-btn speed-btn">
                       <span id="auswahl-speed-display">1x</span>
                     </button>
+                    <p class="control-label">Slow-Mo</p>
                   </div>
                   <div class="col-6 text-center">
                     <!-- Fullscreen Button -->
                     <button id="auswahl-fullscreen-btn" class="modern-control-btn">
                       <i id="auswahl-fullscreen-icon" class="fa fa-expand"></i>
                     </button>
+                    <p class="control-label">Fullscreen</p>
                   </div>
                 </div>
               </div>
@@ -1324,11 +1324,26 @@
               <div class="content pt-4 pb-4">
                 <h4 class="font-700 mb-4">Workout Flow erstellen</h4>
 
+                <!-- Gespeicherte Workouts -->
+                <div class="divider mb-3"></div>
+                <h5 class="font-600 mb-3">Gespeicherte Workouts</h5>
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <select id="load-workflow-select" class="form-select border-0 shadow-m rounded-m mb-2"></select>
+                    </div>
+                    <div class="col-6">
+                        <button id="load-workflow-btn" class="btn btn-s btn-full rounded-m text-uppercase font-700 shadow-s bg-blue-dark">Laden</button>
+                    </div>
+                    <div class="col-6">
+                        <button id="delete-workflow-btn" class="btn btn-s btn-full rounded-m text-uppercase font-700 shadow-s bg-red-dark">Löschen</button>
+                    </div>
+                </div>
+
                 <!-- List of workout flow events -->
                 <div id="workout-flow-container" class="mb-3">
                   <!-- Events will be added here by JS -->
                 </div>
-                <p id="workout-flow-empty-message" class="text-center opacity-50 mb-3">Dein Workout ist noch leer. Füge einen Schritt hinzu.</p>
+                <p id="workout-flow-empty-message" class="text-center opacity-50 mb-3">Dein Workout ist noch leer. Lade ein Workout oder füge einen Schritt hinzu.</p>
 
                 <!-- Add Event Section -->
                 <div class="divider mb-3"></div>
@@ -1371,9 +1386,16 @@
                     <input type="number" id="event-ziel-input" class="form-control border-0 shadow-m rounded-m" value="10" min="1">
                 </div>
 
-                <button id="add-event-btn" class="btn btn-s btn-full rounded-m text-uppercase font-700 shadow-s bg-blue-dark mb-2">
+                <button id="add-event-btn" class="btn btn-s btn-full rounded-m text-uppercase font-700 shadow-s bg-blue-dark">
                   <i class="fa fa-plus me-2"></i> Schritt hinzufügen
                 </button>
+
+                <!-- New Name and Save Section -->
+                <div class="divider mt-4 mb-3"></div>
+                <h5 class="font-600 mb-3">Workout benennen & speichern</h5>
+                <div class="input-style input-style-2 input-required mb-3">
+                    <input class="form-control" type="text" id="workflow-name-input" placeholder="Name des Workouts">
+                </div>
                 <button id="save-workout-btn" class="btn btn-s btn-full rounded-m text-uppercase font-700 shadow-s bg-green-dark">
                   <i class="fa fa-save me-2"></i> Workout Speichern
                 </button>
@@ -1395,7 +1417,7 @@
                   <div id="training-flow-container">
                     <!-- Loaded workout flow will be populated here -->
                   </div>
-                   <p id="training-flow-empty-message" class="text-center opacity-50 mb-0 pt-3 pb-3">Kein Workout gespeichert. Bitte erstelle und speichere zuerst ein Workout im "Auswahl" Tab.</p>
+                   <p id="training-flow-empty-message" class="text-center opacity-50 mb-0 pt-3 pb-3">Kein Workout geladen. Bitte lade zuerst ein Workout im "Auswahl" Tab.</p>
                 </div>
                 <div class="divider mb-4"></div>
 
@@ -1819,8 +1841,9 @@
 
         // --- STATE MANAGEMENT ---
         let playlist = [];
-        let isPlaylistPlaybackActive = false;
         let workoutFlow = []; // Holds the sequence of events {type, duration, url, ziel, etc.}
+        let activeWorkout = { flow: [], playlist: [] }; // The workout loaded for the training tab
+        let isPlaylistPlaybackActive = false;
         let currentFlowStepIndex = 0;
         let timerInterval = null;
         let isTimerRunning = false;
@@ -1835,7 +1858,6 @@
         const mainVideo = document.getElementById("main-video");
         const videoTitle = document.getElementById("video-title");
         const playPauseBtn = document.getElementById("play-pause-btn");
-        const playPauseIcon = document.getElementById("play-pause-icon");
         const timerDisplay = document.getElementById("timer-display");
         const timerLabel = document.getElementById("timer-label");
         const timerToggleBtn = document.getElementById("timer-toggle-btn");
@@ -1846,9 +1868,12 @@
         const auswahlPlayPauseIcon = document.getElementById("auswahl-play-pause-icon");
         const auswahlSpeedToggleBtn = document.getElementById("auswahl-speed-toggle-btn");
         const auswahlSpeedDisplay = document.getElementById("auswahl-speed-display");
-        const auswahlFullscreenBtn = document.getElementById("auswahl-fullscreen-btn");
 
-        // Workout Flow Setup
+        // Workout Flow Setup & Management
+        const workflowNameInput = document.getElementById('workflow-name-input');
+        const loadWorkflowSelect = document.getElementById('load-workflow-select');
+        const loadWorkflowBtn = document.getElementById('load-workflow-btn');
+        const deleteWorkflowBtn = document.getElementById('delete-workflow-btn');
         const workoutFlowContainer = document.getElementById('workout-flow-container');
         const workoutFlowEmptyMsg = document.getElementById('workout-flow-empty-message');
         const eventTypeSelect = document.getElementById('event-type-select');
@@ -1886,7 +1911,7 @@
         function populateVideoSelect() {
             eventVideoSelect.innerHTML = '';
             if (playlist.length === 0) {
-                eventVideoSelect.innerHTML = '<option disabled>Zuerst Videos zur Playlist hinzufügen</option>';
+                eventVideoSelect.innerHTML = '<option disabled selected>Zuerst Videos zur Playlist hinzufügen</option>';
                 return;
             }
             playlist.forEach(item => {
@@ -1914,6 +1939,17 @@
 
           auswahlPlaylistItems.innerHTML = playlistHTML;
           auswahlPlaylistEmptyMsg.style.display = playlist.length === 0 ? "block" : "none";
+          // Update selected state of all video cards
+          document.querySelectorAll('.select-exercise-btn').forEach(btn => {
+              const cardUrl = btn.closest('.exercise-card').dataset.url;
+              if (playlist.some(pItem => pItem.url === cardUrl)) {
+                  btn.classList.add('selected');
+                  btn.textContent = 'Selected';
+              } else {
+                  btn.classList.remove('selected');
+                  btn.textContent = 'Select';
+              }
+          });
           addPlaylistEventListeners();
           populateVideoSelect(); // Update dropdown when playlist changes
         }
@@ -1923,17 +1959,10 @@
             btn.addEventListener('click', e => {
               e.stopPropagation();
               const urlToRemove = btn.dataset.videoUrl;
-              const originalCard = document.querySelector(`.exercise-card[data-url="${urlToRemove}"]`);
-              if (originalCard) {
-                const selectBtn = originalCard.querySelector('.select-exercise-btn');
-                selectBtn.classList.remove('selected');
-                selectBtn.textContent = "Select";
-              }
               playlist = playlist.filter(item => item.url !== urlToRemove);
               renderPlaylist();
             });
           });
-
           document.querySelectorAll('.playlist-item').forEach(item => {
             item.addEventListener('click', () => {
               if (auswahlVideo) {
@@ -1956,31 +1985,24 @@
             subtitle: card.querySelector('span').textContent.trim()
           };
 
-          if (playlist.some(item => item.url === exerciseData.url)) return;
-          playlist.push(exerciseData);
+          const idx = playlist.findIndex(item => item.url === exerciseData.url);
+          if (idx > -1) {
+              playlist.splice(idx, 1); // Remove if already in playlist
+          } else {
+              playlist.push(exerciseData); // Add if not in playlist
+          }
           renderPlaylist();
-          button.textContent = "Selected";
-          button.classList.add('selected');
         }
 
         // --- WORKOUT FLOW BUILDER ---
-        function renderFlow(container, isEditable) {
-            const flowHTML = workoutFlow.map((step, index) => {
+        function renderFlow(container, isEditable, flowData) {
+            const sourceFlow = flowData || workoutFlow;
+            const flowHTML = sourceFlow.map((step, index) => {
                 let contentHTML = '';
                 const removeBtnHTML = isEditable ? `<button class="btn btn-xs bg-red-dark rounded-s font-900 remove-flow-step-btn" data-index="${index}">X</button>` : '';
-
                 switch (step.type) {
                     case 'video':
-                        contentHTML = `
-                            <div class="workout-flow-item-info">
-                                <div class="workout-flow-item-thumbnail-container">
-                                    <video class="workout-flow-item-thumbnail" muted preload="metadata"><source src="${step.url}#t=0.5" type="video/mp4"></video>
-                                </div>
-                                <div class="workout-flow-item-text">
-                                    <p class="workout-flow-item-title">${step.title}</p>
-                                    <p class="workout-flow-item-detail">Ziel: ${step.ziel}</p>
-                                </div>
-                            </div>`;
+                        contentHTML = `<div class="workout-flow-item-info"><div class="workout-flow-item-thumbnail-container"><video class="workout-flow-item-thumbnail" muted preload="metadata"><source src="${step.url}#t=0.5" type="video/mp4"></video></div><div class="workout-flow-item-text"><p class="workout-flow-item-title">${step.title}</p><p class="workout-flow-item-detail">Ziel: ${step.ziel}</p></div></div>`;
                         break;
                     case 'timer':
                         contentHTML = `<div class="workout-flow-item-info"><i class="fa fa-hourglass-half color-blue-dark me-3"></i><p class="workout-flow-item-title">Timer: ${step.duration}s</p></div>`;
@@ -1991,11 +2013,9 @@
                 }
                 return `<div class="workout-flow-item">${contentHTML}${removeBtnHTML}</div>`;
             }).join('');
-
             container.innerHTML = flowHTML;
-
             if (isEditable) {
-                workoutFlowEmptyMsg.style.display = workoutFlow.length === 0 ? 'block' : 'none';
+                workoutFlowEmptyMsg.style.display = sourceFlow.length === 0 ? 'block' : 'none';
                 document.querySelectorAll('.remove-flow-step-btn').forEach(btn => {
                     btn.addEventListener('click', () => {
                         workoutFlow.splice(parseInt(btn.dataset.index), 1);
@@ -2003,7 +2023,7 @@
                     });
                 });
             } else {
-                 trainingFlowEmptyMsg.style.display = workoutFlow.length === 0 ? 'block' : 'none';
+                 trainingFlowEmptyMsg.style.display = sourceFlow.length === 0 ? 'block' : 'none';
             }
         }
 
@@ -2017,7 +2037,6 @@
         function addEventToFlow() {
           const type = eventTypeSelect.value;
           let newStep = { type };
-
           if (type === 'video') {
               if (playlist.length === 0) { alert("Bitte füge zuerst Videos zur Playlist hinzu."); return; }
               const selectedUrl = eventVideoSelect.value;
@@ -2031,33 +2050,84 @@
           renderFlow(workoutFlowContainer, true);
         }
 
-        // --- LOCAL STORAGE ---
-        function saveWorkoutFlow() {
-            const dataToSave = {
-                flow: workoutFlow,
-                playlist: playlist
-            };
-            localStorage.setItem('savedWorkout', JSON.stringify(dataToSave));
-            alert("Workout gespeichert!");
-            renderFlow(trainingFlowContainer, false); // Update training tab display
+        // --- LOCAL STORAGE & WORKFLOW MANAGEMENT ---
+        function getSavedWorkflows() {
+            try { return JSON.parse(localStorage.getItem('allSavedWorkflows')) || {}; }
+            catch(e) { return {}; }
         }
 
-        function loadWorkoutFlow() {
-            const savedData = localStorage.getItem('savedWorkout');
-            if (savedData) {
-                try {
-                    const parsedData = JSON.parse(savedData);
-                    workoutFlow = parsedData.flow || [];
-                    playlist = parsedData.playlist || [];
-                    console.log("Workout loaded from localStorage.");
-                } catch (e) {
-                    console.error("Failed to parse saved workout data.", e);
-                    workoutFlow = []; playlist = [];
+        function populateLoadSelect() {
+            const allWorkflows = getSavedWorkflows();
+            const names = Object.keys(allWorkflows);
+            loadWorkflowSelect.innerHTML = '';
+            if (names.length === 0) {
+                loadWorkflowSelect.innerHTML = '<option disabled selected>Keine Workouts gespeichert</option>';
+            } else {
+                names.forEach(name => {
+                    const option = document.createElement('option');
+                    option.value = name;
+                    option.textContent = name;
+                    loadWorkflowSelect.appendChild(option);
+                });
+            }
+        }
+
+        function handleSaveWorkout() {
+            const name = workflowNameInput.value.trim();
+            if (!name) { alert("Bitte gib einen Namen für das Workout ein."); return; }
+
+            const allWorkflows = getSavedWorkflows();
+            if (allWorkflows[name]) {
+                if (!confirm(`Ein Workout mit dem Namen "${name}" existiert bereits. Möchtest du es überschreiben?`)) {
+                    return;
                 }
             }
-            renderFlow(workoutFlowContainer, true);
-            renderPlaylist();
-            renderFlow(trainingFlowContainer, false);
+            allWorkflows[name] = { name: name, flow: workoutFlow, playlist: playlist };
+            localStorage.setItem('allSavedWorkflows', JSON.stringify(allWorkflows));
+            alert(`Workout "${name}" gespeichert!`);
+            populateLoadSelect();
+            loadWorkflowSelect.value = name;
+        }
+
+        function handleLoadWorkout() {
+            const name = loadWorkflowSelect.value;
+            if (!name) { alert("Kein Workout zum Laden ausgewählt."); return; }
+            const allWorkflows = getSavedWorkflows();
+            const loadedWorkout = allWorkflows[name];
+            if (loadedWorkout) {
+                workflowNameInput.value = loadedWorkout.name;
+                playlist = loadedWorkout.playlist || [];
+                workoutFlow = loadedWorkout.flow || [];
+                activeWorkout = loadedWorkout; // Set this as the workout for the training tab
+
+                renderPlaylist();
+                renderFlow(workoutFlowContainer, true);
+                renderFlow(trainingFlowContainer, false, activeWorkout.flow); // Update training tab
+                alert(`Workout "${name}" geladen.`);
+            }
+        }
+
+        function handleDeleteWorkout() {
+            const name = loadWorkflowSelect.value;
+            if (!name) { alert("Kein Workout zum Löschen ausgewählt."); return; }
+            if (confirm(`Möchtest du das Workout "${name}" wirklich löschen?`)) {
+                const allWorkflows = getSavedWorkflows();
+                delete allWorkflows[name];
+                localStorage.setItem('allSavedWorkflows', JSON.stringify(allWorkflows));
+                alert(`Workout "${name}" gelöscht.`);
+
+                // If the deleted workout was the one in the editor, clear the editor
+                if(workflowNameInput.value === name) {
+                    workflowNameInput.value = '';
+                    workoutFlow = [];
+                    playlist = [];
+                    activeWorkout = { flow: [], playlist: [] };
+                    renderPlaylist();
+                    renderFlow(workoutFlowContainer, true);
+                    renderFlow(trainingFlowContainer, false, activeWorkout.flow);
+                }
+                populateLoadSelect();
+            }
         }
 
         // --- WORKOUT EXECUTION & TIMER LOGIC ---
@@ -2075,20 +2145,20 @@
             }
             timerDisplay.textContent = `${timerSeconds}s`;
             switch (step.type) {
-                case 'video': timerLabel.textContent = `Ziel: ${step.ziel}`; break;
+                case 'video': timerLabel.textContent = `Ziel: ${step.ziel}`; videoTitle.textContent = step.title; break;
                 case 'timer': timerLabel.textContent = `Übung`; timerDisplay.style.color = 'white'; break;
                 case 'pause': timerLabel.textContent = 'Pause'; timerDisplay.style.color = '#ffa500'; break;
             }
         }
 
         function runNextFlowStep() {
-            if (currentFlowStepIndex >= workoutFlow.length) {
+            if (currentFlowStepIndex >= activeWorkout.flow.length) {
                 isPlaylistPlaybackActive = false; isTimerRunning = false;
                 updateToggleButton();
                 timerDisplay.textContent = "Fertig!"; timerLabel.textContent = "Workout beendet";
                 return;
             }
-            const step = workoutFlow[currentFlowStepIndex];
+            const step = activeWorkout.flow[currentFlowStepIndex];
             handleStep(step);
         }
 
@@ -2096,7 +2166,6 @@
             updateTimerDisplay(step);
             switch (step.type) {
                 case 'video':
-                    videoTitle.textContent = step.title;
                     mainVideo.querySelector("source").src = step.url;
                     mainVideo.load();
                     currentFlowStepIndex++;
@@ -2116,10 +2185,9 @@
         function startCountdown() {
             if (isTimerRunning) return;
             isTimerRunning = true; updateToggleButton();
-            const step = workoutFlow[currentFlowStepIndex];
+            const step = activeWorkout.flow[currentFlowStepIndex];
             timerSeconds = step.duration;
             updateTimerDisplay(step);
-
             timerInterval = setInterval(() => {
                 timerSeconds--;
                 updateTimerDisplay(step);
@@ -2140,7 +2208,7 @@
         function resumeCountdown() {
             if (isTimerRunning || !isPlaylistPlaybackActive) return;
             if (timerSeconds > 0) {
-                if (workoutFlow[currentFlowStepIndex].type === 'timer') mainVideo.play();
+                if (activeWorkout.flow[currentFlowStepIndex].type === 'timer') mainVideo.play();
                 startCountdown();
             } else {
                 currentFlowStepIndex++; runNextFlowStep();
@@ -2151,7 +2219,7 @@
             if (isTimerRunning) pauseCountdown();
             else if (isPlaylistPlaybackActive) resumeCountdown();
             else { // Start new workout
-                if (workoutFlow.length === 0) { alert("Kein Workout zum Starten vorhanden. Bitte erstelle und speichere ein Workout."); return; }
+                if (!activeWorkout || activeWorkout.flow.length === 0) { alert("Kein Workout zum Starten vorhanden. Bitte lade zuerst ein Workout im 'Auswahl' Tab."); return; }
                 isPlaylistPlaybackActive = true; currentFlowStepIndex = 0;
                 runNextFlowStep();
             }
@@ -2159,7 +2227,9 @@
 
         // --- EVENT LISTENERS & INITIALIZATION ---
         addEventBtn.addEventListener('click', addEventToFlow);
-        saveWorkoutBtn.addEventListener('click', saveWorkoutFlow);
+        saveWorkoutBtn.addEventListener('click', handleSaveWorkout);
+        loadWorkflowBtn.addEventListener('click', handleLoadWorkout);
+        deleteWorkflowBtn.addEventListener('click', handleDeleteWorkout);
         timerToggleBtn.addEventListener('click', toggleTimer);
         eventTypeSelect.addEventListener('change', updateEventTypeInputs);
 
@@ -2181,7 +2251,10 @@
         });
 
         // Initial UI setup
-        loadWorkoutFlow();
+        populateLoadSelect();
+        renderPlaylist();
+        renderFlow(workoutFlowContainer, true);
+        renderFlow(trainingFlowContainer, false, activeWorkout.flow);
         updateAuswahlPlayPauseButton();
         updateAuswahlSpeedDisplay();
         updateEventTypeInputs();
