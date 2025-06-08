@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fullscreen Reaction Trainer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -12,7 +15,7 @@
 
         /* --- Component Styles --- */
         #reaction-trainer-component {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Exo 2', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #f0f2f5;
             padding: 2vw;
             border-radius: 12px;
@@ -28,6 +31,7 @@
             margin-top: 0;
             font-size: clamp(1.5rem, 5vw, 2rem);
             color: #1c1e21;
+            font-weight: 700;
         }
 
         .trainer-grid {
@@ -59,7 +63,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: clamp(2.5em, 10vw, 4em);
-            font-weight: bold;
+            font-weight: 700;
             color: rgba(255, 255, 255, 0.9);
             user-select: none;
             transition: top 0.2s ease;
@@ -76,7 +80,7 @@
             left: 50%;
             transform: translateX(-50%);
             font-size: clamp(1rem, 3vw, 1.2rem);
-            font-weight: bold;
+            font-weight: 500;
             color: rgba(255, 255, 255, 0.95);
             background-color: rgba(0, 0, 0, 0.3);
             padding: 3px 8px;
@@ -123,13 +127,14 @@
         }
 
         .control-group { display: flex; flex-direction: column; align-items: center; }
-        .control-group label { font-size: clamp(0.8rem, 2.5vw, 0.9rem); color: #606770; margin-bottom: 5px; }
+        .control-group label { font-size: clamp(0.8rem, 2.5vw, 0.9rem); color: #606770; margin-bottom: 5px; font-weight: 500;}
         .settings-container input, .settings-container select {
             padding: 10px 14px; border-radius: 6px; border: 1px solid #ccc; font-size: clamp(0.9rem, 3vw, 1rem); background-color: #f5f6f7; width: 100%; box-sizing: border-box;
+            font-family: 'Exo 2', sans-serif;
         }
 
         .trainer-buttons { display: flex; flex-wrap: wrap; gap: 10px; width: 100%; justify-content: center; margin-top: 10px; }
-        .trainer-buttons button { padding: 12px 24px; font-size: clamp(1rem, 3.5vw, 1.1rem); font-weight: bold; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.2s ease, transform 0.1s ease; flex-grow: 1; max-width: 200px; }
+        .trainer-buttons button { padding: 12px 24px; font-size: clamp(1rem, 3.5vw, 1.1rem); font-weight: 700; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.2s ease, transform 0.1s ease; flex-grow: 1; max-width: 200px; }
         .trainer-buttons button:active { transform: scale(0.98); }
         #start-btn { background-color: #28a745; color: white; }
         #start-btn:disabled { background-color: #94d3a2; cursor: not-allowed; }
@@ -139,7 +144,7 @@
         #shuffle-btn:disabled { background-color: #c9c8f4; cursor: not-allowed; }
 
         .trainer-display { margin: 20px 0; padding: 15px; background-color: #fff; border-radius: 8px; }
-        #main-display { font-size: clamp(2rem, 8vw, 3rem); font-weight: bold; color: #1c1e21; font-variant-numeric: tabular-nums; transition: opacity 0.3s ease; }
+        #main-display { font-size: clamp(2rem, 8vw, 3rem); font-weight: 700; color: #1c1e21; font-variant-numeric: tabular-nums; transition: opacity 0.3s ease; }
         #main-display.idle { opacity: 0.5; }
 
         #results-display { font-size: clamp(1rem, 3vw, 1.1rem); color: #333; min-height: 24px; display: flex; align-items: center; justify-content: center; }
@@ -156,7 +161,7 @@
             display: none; /* Hidden by default */
             flex-wrap: wrap;
         }
-        .avg-time-display strong { margin: 0 4px; }
+        .avg-time-display strong { margin: 0 4px; font-weight: 700; }
         #missed-hits-display { color: #dc3545; margin-left: 8px; }
 
         .hidden {
@@ -199,6 +204,7 @@
         </div>
 
         <div class="settings-container">
+            <!-- Mode Selection -->
             <div class="mode-selection-area">
                 <div class="control-group">
                     <label for="mode-select">Mode</label>
@@ -209,18 +215,21 @@
                 </div>
             </div>
             <hr class="divider">
+            <!-- Common Settings -->
             <div class="settings-grid">
                 <div class="control-group"><label for="targets-select">Targets</label><select id="targets-select"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option></select></div>
-                <div class="control-group" id="control-group-interval"><label for="interval-select">Interval (ms)</label><select id="interval-select"><option value="250">250</option><option value="500">500</option><option value="750">750</option><option value="1000" selected>1000</option><option value="1250">1250</option><option value="1500">1500</option></select></div>
-                <div class="control-group" id="control-group-duration"><label for="session-duration">Duration (s)</label><input type="number" id="session-duration" value="30" min="5" step="5"></div>
-                <div class="control-group hidden" id="control-group-cards"><label for="card-amount-input">Cards to Press</label><input type="number" id="card-amount-input" value="10" min="5" step="1"></div>
-                <div class="control-group hidden" id="control-group-livetime"><label for="livetime-select">Card Livetime</label><select id="livetime-select"><option value="none" selected>No Limit</option><option value="750">750 ms</option><option value="1000">1000 ms</option><option value="1250">1250 ms</option><option value="1500">1500 ms</option><option value="2000">2000 ms</option></select></div>
-                <div class="control-group" id="control-group-shuffle">
-                    <label for="shuffle-select">Shuffle Mid-Game</label>
-                    <select id="shuffle-select">
-                        <option value="no" selected>No</option>
-                        <option value="yes">Yes</option>
-                    </select>
+                <div class="control-group"><label for="shuffle-select">Shuffle Mid-Game</label><select id="shuffle-select"><option value="no" selected>No</option><option value="yes">Yes</option></select></div>
+            </div>
+            <hr class="divider">
+            <!-- Mode-Specific Settings -->
+            <div id="mode-specific-settings">
+                <div id="automatic-settings-panel" class="settings-grid">
+                    <div class="control-group" id="control-group-interval"><label for="interval-select">Interval (ms)</label><select id="interval-select"><option value="250">250</option><option value="500">500</option><option value="750">750</option><option value="1000" selected>1000</option><option value="1250">1250</option><option value="1500">1500</option></select></div>
+                    <div class="control-group" id="control-group-duration"><label for="session-duration">Duration (s)</label><input type="number" id="session-duration" value="30" min="5" step="5"></div>
+                </div>
+                <div id="interactive-settings-panel" class="settings-grid hidden">
+                     <div class="control-group" id="control-group-cards"><label for="card-amount-input">Cards to Press</label><input type="number" id="card-amount-input" value="10" min="5" step="1"></div>
+                     <div class="control-group" id="control-group-livetime"><label for="livetime-select">Card Livetime</label><select id="livetime-select"><option value="none" selected>No Limit</option><option value="250">250 ms</option><option value="500">500 ms</option><option value="750">750 ms</option><option value="1000">1000 ms</option><option value="1250">1250 ms</option><option value="1500">1500 ms</option><option value="2000">2000 ms</option></select></div>
                 </div>
             </div>
         </div>
@@ -270,10 +279,8 @@
             const livetimeSelect = document.getElementById('livetime-select');
             const shuffleSelect = document.getElementById('shuffle-select');
 
-            const intervalGroup = document.getElementById('control-group-interval');
-            const durationGroup = document.getElementById('control-group-duration');
-            const cardsGroup = document.getElementById('control-group-cards');
-            const livetimeGroup = document.getElementById('control-group-livetime');
+            const automaticSettingsPanel = document.getElementById('automatic-settings-panel');
+            const interactiveSettingsPanel = document.getElementById('interactive-settings-panel');
 
             let activeSquareNumber = null, gameIntervalId = null, sessionTimerId = null, reactionTimerId = null, cardLivetimeId = null;
             let timeRemaining = 0, isRunning = false;
@@ -299,19 +306,20 @@
             const updateVisibleControls = () => {
                 const mode = modeSelect.value;
                 if (mode === 'automatic') {
-                    intervalGroup.classList.remove('hidden');
-                    durationGroup.classList.remove('hidden');
-                    cardsGroup.classList.add('hidden');
-                    livetimeGroup.classList.add('hidden');
+                    automaticSettingsPanel.classList.remove('hidden');
+                    interactiveSettingsPanel.classList.add('hidden');
                 } else { // interactive
-                    intervalGroup.classList.add('hidden');
-                    durationGroup.classList.add('hidden');
-                    cardsGroup.classList.remove('hidden');
-                    livetimeGroup.classList.remove('hidden');
+                    automaticSettingsPanel.classList.add('hidden');
+                    interactiveSettingsPanel.classList.remove('hidden');
                 }
             };
 
             const resetUI = () => {
+                // Clear all possible timers to prevent rogue calls
+                clearInterval(gameIntervalId); clearInterval(sessionTimerId);
+                clearInterval(reactionTimerId); clearTimeout(cardLivetimeId);
+                gameIntervalId = sessionTimerId = reactionTimerId = cardLivetimeId = null;
+
                 squares.forEach(sq => {
                     sq.classList.remove('active');
                     sq.querySelector('.reaction-time-display').textContent = '';
@@ -474,11 +482,11 @@
 
             const handleStop = () => {
                 isRunning = false;
-                clearInterval(gameIntervalId); clearInterval(sessionTimerId);
-                if (reactionTimerId) clearInterval(reactionTimerId);
-                clearTimeout(cardLivetimeId);
-                gameIntervalId = sessionTimerId = reactionTimerId = cardLivetimeId = null;
 
+                // Call the full reset function which handles clearing all timers
+                resetUI();
+
+                // Restore elements from overlay
                 mainDisplayPlaceholder.appendChild(mainDisplay);
                 avgTimePlaceholder.appendChild(avgTimeDisplay);
                 gridPlaceholder.appendChild(trainerGrid);
@@ -499,7 +507,6 @@
                     avgTimeDisplay.style.display = 'none';
                     resultsDisplay.innerHTML = '<span>Session stopped.</span>';
                 }
-                resetUI();
             };
 
             startBtn.addEventListener('click', handleStart);
@@ -507,7 +514,7 @@
             shuffleBtn.addEventListener('click', shuffleNumbers);
             squares.forEach(square => square.addEventListener('click', handleSquareClick));
             modeSelect.addEventListener('change', resetUI);
-            [durationInput, cardAmountInput, intervalSelect, livetimeSelect, shuffleSelect].forEach(input => input.addEventListener('change', resetUI));
+            [durationInput, cardAmountInput, intervalSelect, livetimeSelect, shuffleSelect, targetsSelect].forEach(input => input.addEventListener('change', resetUI));
 
             assignInitialNumbers();
             resetUI();

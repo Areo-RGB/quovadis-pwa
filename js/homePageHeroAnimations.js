@@ -2,141 +2,130 @@ export function initHomePageHeroAnimations() {
   console.log('Initializing Homepage Hero Animations');
 
   // Add initial delay to account for page loading
-  const initialDelay = 800; // 800ms delay before starting animations
+  const initialDelay = 2500; // 2500ms delay before starting animations
 
   // Get the first picture/hero image element - Updated to target background slides
   const firstPicture = document.querySelector(
     '.bg-slide.active, #bg-slideshow .bg-slide:first-child'
   );
 
-  // Create and add reveal animation styles
-  if (firstPicture) {
-    // Create scanline element
-    const scanline = document.createElement('div');
-    scanline.classList.add('scanline');
-    scanline.style.cssText = `
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
-      z-index: 10;
-      opacity: 0;
-      transform: translateY(-2px);
-    `;
 
-    // Create reveal mask container
-    const revealContainer = document.createElement('div');
-    revealContainer.classList.add('image-reveal-container');
-    revealContainer.style.cssText = `
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      overflow: hidden;
-      z-index: 5;
-      pointer-events: none;
-    `;
-
-    // Insert the reveal container into the bg-slideshow container
-    const bgSlideshow = document.querySelector('#bg-slideshow');
-    if (bgSlideshow) {
-      bgSlideshow.appendChild(revealContainer);
-      revealContainer.appendChild(scanline);
-    }
-
-    // Set initial state for reveal animation - create a reveal mask
-    const revealMask = document.createElement('div');
-    revealMask.classList.add('reveal-mask');
-    revealMask.style.cssText = `
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: #1b1d21;
-      transform: translateY(0%);
-      transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      z-index: 8;
-    `;
-    revealContainer.appendChild(revealMask);
-
-    // Add CSS animation keyframes to document head
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes scanlineMove {
-        0% {
-          transform: translateY(-2px);
-          opacity: 0;
-        }
-        10% {
-          opacity: 1;
-        }
-        90% {
-          opacity: 1;
-        }
-        100% {
-          transform: translateY(100vh);
-          opacity: 0;
-        }
-      }
-    `;
-    document.head.appendChild(style);
-  }
 
   // Get text elements for initial fade-in
-  const charlierText = document.querySelector('.card-bottom h1.font-24');
+  const logoContainer = document.querySelector('.logo-container');
   const finleyHeading = document.querySelector('.finley-animated-heading');
   const clubText = document.querySelector('.fade-in-club-name'); // Updated selector
 
-  // Set initial opacity for Charlier text (clubText is already 0 via inline style)
-  if (charlierText) charlierText.style.opacity = '0';
+  // Set initial opacity for logo (clubText is already 0 via inline style)
+  if (logoContainer) logoContainer.style.opacity = '0';
 
-  // Start image reveal animation immediately after initial delay
+
+
+          // Animate logo with clock sweep reveal after initial delay
   setTimeout(() => {
-    if (firstPicture) {
-      // Start image reveal by sliding the mask up
-      const revealMask = document.querySelector('.reveal-mask');
-      if (revealMask) {
-        revealMask.style.transform = 'translateY(-100%)';
-      }
+    if (logoContainer) {
+      const logo = logoContainer.querySelector('.club-logo');
+      if (logo) {
+        // Create SVG with arc clipPath
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.style.cssText = `
+          position: absolute;
+          width: 0;
+          height: 0;
+          pointer-events: none;
+        `;
 
-      // Start scanline animation
-      const scanline = document.querySelector('.scanline');
-      if (scanline) {
-        scanline.style.animation = 'scanlineMove 1.5s ease-out';
+        const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+        const clipPath = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
+        clipPath.id = 'logoClipArc';
 
-        // Remove scanline after animation completes
-        setTimeout(() => {
-          if (scanline.parentNode) {
-            scanline.parentNode.removeChild(scanline);
+        const arcPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        arcPath.id = 'logoArcPath';
+
+        clipPath.appendChild(arcPath);
+        defs.appendChild(clipPath);
+        svg.appendChild(defs);
+        document.body.appendChild(svg);
+
+        // Arc animation variables (based on CodePen)
+        const RAD = Math.PI / 180;
+        const PI_2 = Math.PI / 2;
+        const arc = {
+          start: 0,
+          end: 0,
+          cx: 50,
+          cy: 50,
+          r: 60
+        };
+
+        // getPath function from CodePen
+        function getPath(cx, cy, r, a1, a2) {
+          const delta = a2 - a1;
+
+          if (delta === 360) {
+            return "M " + (cx - r) + " " + cy + " a " + r + " " + r + " 0 1 0 " + r * 2 + " 0 a " + r + " " + r + " 0 1 0 " + -r * 2 + " 0z";
           }
-        }, 1500);
-      }
 
-      // Remove reveal mask after animation completes
-      setTimeout(() => {
-        if (revealMask && revealMask.parentNode) {
-          revealMask.parentNode.removeChild(revealMask);
+          const largeArc = delta > 180 ? 1 : 0;
+          a1 = a1 * RAD - PI_2;
+          a2 = a2 * RAD - PI_2;
+
+          const x1 = cx + r * Math.cos(a2);
+          const y1 = cy + r * Math.sin(a2);
+          const x2 = cx + r * Math.cos(a1);
+          const y2 = cy + r * Math.sin(a1);
+
+          return "M " + x1 + " " + y1 + " A " + r + " " + r + " 0 " + largeArc + " 0 " + x2 + " " + y2 + " L " + cx + " " + cy + "z";
         }
-      }, 1500);
+
+        // updatePath function from CodePen
+        function updatePath() {
+          arcPath.setAttribute("d", getPath(arc.cx, arc.cy, arc.r, arc.start, arc.end));
+        }
+
+        // Apply clipPath and start animation
+        logoContainer.style.transition = 'opacity 0.3s ease-in-out';
+        logoContainer.style.opacity = '1';
+        logo.style.clipPath = 'url(#logoClipArc)';
+
+        // Start with empty path
+        updatePath();
+
+        // Animate the arc from 0 to 360 degrees over 2 seconds
+        const startTime = Date.now();
+        const duration = 2000;
+
+        function animate() {
+          const elapsed = Date.now() - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          arc.end = progress * 360;
+          updatePath();
+
+          if (progress < 1) {
+            requestAnimationFrame(animate);
+          } else {
+            // Cleanup after animation
+            setTimeout(() => {
+              logo.style.clipPath = 'none';
+              if (svg.parentNode) {
+                svg.parentNode.removeChild(svg);
+              }
+            }, 100);
+          }
+        }
+
+        // Start animation after a small delay
+        setTimeout(() => {
+          animate();
+        }, 50);
+      }
     }
   }, initialDelay);
-
-  // Fade in Charlier text slightly after image starts revealing
-  setTimeout(() => {
-    if (charlierText) {
-      charlierText.style.transition = 'opacity 0.8s ease-in-out';
-      charlierText.style.opacity = '1';
-    }
-  }, initialDelay + 200);
 
   // Then animate Finley letters with terminal effect
   if (finleyHeading) {
     const finleyLetters = finleyHeading.querySelectorAll('span');
-    let finleyAnimationEndTime = initialDelay + 800; // Base time for Finley animation start
+    let finleyAnimationEndTime = initialDelay + 1500; // Base time for Finley animation start (after logo completes)
 
     // Create blinking cursor
     const cursor = document.createElement('span');
@@ -188,13 +177,13 @@ export function initHomePageHeroAnimations() {
             span.style.setProperty('font-weight', '900', 'important');
           }
         },
-        initialDelay + 800 + letterDelay
+        initialDelay + 700 + letterDelay
       );
 
       // Calculate when the last letter's animation will end
       finleyAnimationEndTime = Math.max(
         finleyAnimationEndTime,
-        initialDelay + 800 + letterDelay + 300
+        initialDelay + 700 + letterDelay + 300
       );
     });
 
@@ -205,15 +194,15 @@ export function initHomePageHeroAnimations() {
       }
     }, finleyAnimationEndTime + 500);
 
-    // Animate Club Name after Finley animation completes
-    const clubNameAnimationStartTime = finleyAnimationEndTime + 100; // Start 100ms after Finley
+    // Animate Club Name at the same time as logo
+    const clubNameAnimationStartTime = initialDelay; // Start same time as logo
     setTimeout(() => {
       if (clubText) {
         clubText.classList.add('animate'); // Add .animate class to trigger CSS animation
       }
     }, clubNameAnimationStartTime);
 
-    const clubNameAnimationDuration = 800; // Duration of club name fade-in (from CSS)
+    const clubNameAnimationDuration = 2000; // Duration of club name fade-in (from CSS)
 
     const initialStatsData = [
       { name: '10m Sprint', value: '2.00s', label: 'AUSGEZEICHNET' },
@@ -327,17 +316,17 @@ export function initHomePageHeroAnimations() {
           statsContainer.style.transition = 'opacity 1s ease-in-out';
           statsContainer.style.opacity = '0';
 
-          // Get the text elements
-          const charlierText = document.querySelector('.card-bottom h1.font-24');
+          // Get the text and logo elements
+          const logoContainer = document.querySelector('.logo-container');
           const finleyHeading = document.querySelector('.finley-animated-heading');
           // Club text already selected as clubText
 
-          // Add animation to move text up and out - synchronized
-          if (charlierText) {
-            charlierText.style.transition = 'transform 1.2s ease-in-out, opacity 1s ease-in-out';
-            charlierText.style.transform = 'translateY(-100px)';
-            charlierText.style.opacity = '0';
-            setTimeout(() => (charlierText.style.visibility = 'hidden'), 1200);
+          // Add animation to move logo up and out - synchronized
+          if (logoContainer) {
+            logoContainer.style.transition = 'transform 1.2s ease-in-out, opacity 1s ease-in-out';
+            logoContainer.style.transform = 'translateY(-100px)';
+            logoContainer.style.opacity = '0';
+            setTimeout(() => (logoContainer.style.visibility = 'hidden'), 1200);
           }
 
           if (finleyHeading) {
