@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+  <!-- Development cache-busting -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="theme-color" content="#1b1d21" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <title>Tools - QuoVadis</title>
+  <link rel="stylesheet" type="text/css" href="styles/bootstrap.css" />
+  <link rel="stylesheet" type="text/css" href="styles/style.css" />
+  <link
+    href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i|Source+Sans+Pro:300,300i,400,400i,600,600i,700,700i,900,900i&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="fonts/css/fontawesome-all.min.css" />
+  <link rel="manifest" href="manifest.json" data-pwa-version="set_in_manifest_and_pwa_js" />
+
+  <!-- Favicon -->
+  <link href="app/icons/favicon.ico" rel="icon" type="image/x-icon">
+  <link href="app/icons/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="app/icons/favicon-16x16.png" rel="icon" type="image/png" sizes="16x16">
+  <link href="app/icons/favicon-32x32.png" rel="icon" type="image/png" sizes="32x32">
+
+  <!-- Apple Touch Icon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="app/icons/icon-192x192.png" />
+  <!-- Development cache clearing -->
+  <script src="scripts/cache-clear.js"></script>
+</head>
+
+<body class="theme-dark" data-highlight="highlight-blue" data-gradient="body-default">
+  <div id="preloader">
+    <div class="spinner-border color-highlight" role="status"></div>
+  </div>
+
+  <div id="page">
+    <div class="header header-fixed header-logo-center">
+      <a href="index.html" class="header-title" style="font-weight: 900; font-size: 1.4em;">TOOLS</a>
+      <a href="#" data-back-button class="header-icon header-icon-1"
+        ><i class="fas fa-arrow-left"></i
+      ></a>
+      <a href="#" data-toggle-theme class="header-icon header-icon-4"
+        ><i class="fas fa-lightbulb"></i
+      ></a>
+      <a href="#" data-menu="menu-settings" class="header-icon header-icon-3"
+        ><i class="fa fa-cog"></i
+      ></a>
+    </div>
+
+    <!-- Footer Navigation -->
+    <div id="footer-bar" class="footer-bar-1">
+      <a href="page-Vergleich.html"><i class="fa fa-chart-bar"></i><span>Vergleich</span></a>
+      <a href="page-profile-finley.html"><i class="fa fa-futbol"></i><span>Training</span></a>
+      <a href="index.html"><i class="fa fa-home" style="font-size: 1.3em;"></i><span>Home</span></a>
+      <a href="page-videos.html"><i class="fa fa-video"></i><span>Videos</span></a>
+      <a href="page-tools.html" class="active-nav"><i class="fa fa-tools"></i><span>Tools</span></a>
+    </div>
+
+        <!-- Page Content -->
+    <div class="page-content" style="padding-top: 80px;">
+      <div class="page-content header-clear-small">
+
+        <!-- 2x3 Grid Layout -->
+        <div class="card card-style">
+          <div class="content">
+            <div class="row gx-3 gy-3">
+              <!-- Row 1 -->
+              <div class="col-6">
+                <div class="card card-style m-0" data-card-height="150">
+                  <div class="card-center text-center">
+                    <i class="fa fa-calculator color-blue-dark" style="font-size: 2rem;"></i>
+                    <h6 class="font-600 mt-2 mb-1">Rechner</h6>
+                    <p class="font-11 opacity-60 mb-0">Berechnungen</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="card card-style m-0" data-card-height="150">
+                  <div class="card-center text-center">
+                    <i class="fa fa-clock color-green-dark" style="font-size: 2rem;"></i>
+                    <h6 class="font-600 mt-2 mb-1">Timer</h6>
+                    <p class="font-11 opacity-60 mb-0">Stoppuhr</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Row 2 -->
+              <div class="col-6">
+                <div class="card card-style m-0" data-card-height="150">
+                  <div class="card-center text-center">
+                    <i class="fa fa-chart-line color-red-dark" style="font-size: 2rem;"></i>
+                    <h6 class="font-600 mt-2 mb-1">Statistik</h6>
+                    <p class="font-11 opacity-60 mb-0">Auswertung</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <a href="page-reaktion.html" class="text-decoration-none">
+                  <div class="card card-style m-0" data-card-height="150">
+                    <div class="card-center text-center">
+                      <i class="fa fa-bolt color-yellow-dark" style="font-size: 2rem;"></i>
+                      <h6 class="font-600 mt-2 mb-1">Reaktion</h6>
+                      <p class="font-11 opacity-60 mb-0">Reaktionszeit</p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <!-- Row 3 -->
+              <div class="col-6">
+                <div class="card card-style m-0" data-card-height="150">
+                  <div class="card-center text-center">
+                    <i class="fa fa-share-alt color-purple-dark" style="font-size: 2rem;"></i>
+                    <h6 class="font-600 mt-2 mb-1">Teilen</h6>
+                    <p class="font-11 opacity-60 mb-0">Export</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="card card-style m-0" data-card-height="150">
+                  <div class="card-center text-center">
+                    <i class="fa fa-cogs color-orange-dark" style="font-size: 2rem;"></i>
+                    <h6 class="font-600 mt-2 mb-1">Einstellungen</h6>
+                    <p class="font-11 opacity-60 mb-0">Konfiguration</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Menu -->
+    <div id="menu-settings" class="menu menu-box-bottom menu-box-detached">
+      <div class="menu-title">
+        <h1>Settings</h1>
+        <a href="#" class="close-menu"><i class="fa fa-times"></i></a>
+      </div>
+      <div class="content">
+        <div class="list-group list-custom-small">
+          <a href="#" data-toggle-theme class="pb-2 ms-n1">
+            <i class="fa font-12 fa-moon rounded-s bg-highlight color-white me-3"></i>
+            <span>Dark Mode</span>
+            <div class="custom-control scale-switch ios-switch">
+              <input data-toggle-theme type="checkbox" class="ios-input" id="switch-dark-mode" />
+              <label class="custom-control-label" for="switch-dark-mode"></label>
+            </div>
+            <i class="fa fa-angle-right"></i>
+          </a>
+          <a href="#" id="fullscreen-toggle" class="pb-2 ms-n1">
+            <i class="fa font-12 fa-expand rounded-s bg-blue-dark color-white me-3"></i>
+            <span>Fullscreen Mode</span>
+            <div class="custom-control scale-switch ios-switch">
+              <input type="checkbox" class="ios-input" id="switch-fullscreen-mode" />
+              <label class="custom-control-label" for="switch-fullscreen-mode"></label>
+            </div>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Files -->
+  <script type="text/javascript" src="scripts/bootstrap.min.js"></script>
+  <script type="text/javascript" src="scripts/custom.js"></script>
+</body>
+
+</html>

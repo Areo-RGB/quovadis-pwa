@@ -9,8 +9,6 @@ export function initHomePageHeroAnimations() {
     '.bg-slide.active, #bg-slideshow .bg-slide:first-child'
   );
 
-
-
   // Get text elements for initial fade-in
   const logoContainer = document.querySelector('.logo-container');
   const finleyHeading = document.querySelector('.finley-animated-heading');
@@ -19,9 +17,7 @@ export function initHomePageHeroAnimations() {
   // Set initial opacity for logo (clubText is already 0 via inline style)
   if (logoContainer) logoContainer.style.opacity = '0';
 
-
-
-          // Animate logo with clock sweep reveal after initial delay
+  // Animate logo with clock sweep reveal after initial delay
   setTimeout(() => {
     if (logoContainer) {
       const logo = logoContainer.querySelector('.club-logo');
@@ -55,7 +51,7 @@ export function initHomePageHeroAnimations() {
           end: 0,
           cx: 50,
           cy: 50,
-          r: 60
+          r: 60,
         };
 
         // getPath function from CodePen
@@ -63,7 +59,25 @@ export function initHomePageHeroAnimations() {
           const delta = a2 - a1;
 
           if (delta === 360) {
-            return "M " + (cx - r) + " " + cy + " a " + r + " " + r + " 0 1 0 " + r * 2 + " 0 a " + r + " " + r + " 0 1 0 " + -r * 2 + " 0z";
+            return (
+              'M ' +
+              (cx - r) +
+              ' ' +
+              cy +
+              ' a ' +
+              r +
+              ' ' +
+              r +
+              ' 0 1 0 ' +
+              r * 2 +
+              ' 0 a ' +
+              r +
+              ' ' +
+              r +
+              ' 0 1 0 ' +
+              -r * 2 +
+              ' 0z'
+            );
           }
 
           const largeArc = delta > 180 ? 1 : 0;
@@ -75,12 +89,32 @@ export function initHomePageHeroAnimations() {
           const x2 = cx + r * Math.cos(a1);
           const y2 = cy + r * Math.sin(a1);
 
-          return "M " + x1 + " " + y1 + " A " + r + " " + r + " 0 " + largeArc + " 0 " + x2 + " " + y2 + " L " + cx + " " + cy + "z";
+          return (
+            'M ' +
+            x1 +
+            ' ' +
+            y1 +
+            ' A ' +
+            r +
+            ' ' +
+            r +
+            ' 0 ' +
+            largeArc +
+            ' 0 ' +
+            x2 +
+            ' ' +
+            y2 +
+            ' L ' +
+            cx +
+            ' ' +
+            cy +
+            'z'
+          );
         }
 
         // updatePath function from CodePen
         function updatePath() {
-          arcPath.setAttribute("d", getPath(arc.cx, arc.cy, arc.r, arc.start, arc.end));
+          arcPath.setAttribute('d', getPath(arc.cx, arc.cy, arc.r, arc.start, arc.end));
         }
 
         // Apply clipPath and start animation
