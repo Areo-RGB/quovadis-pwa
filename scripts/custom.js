@@ -589,7 +589,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //Activating Dark Mode
     const darkModeSwitch = document.querySelectorAll('[data-toggle-theme]');
     darkModeSwitch.forEach(el =>
-      el.addEventListener('click', e => {
+      el.addEventListener('click', () => {
         if (document.body.className == 'theme-light') {
           removeTransitions();
           activateDarkMode();
@@ -597,11 +597,10 @@ document.addEventListener('DOMContentLoaded', () => {
           removeTransitions();
           activateLightMode();
         }
-        setTimeout(function () {
-          addTransitions();
-        }, 350);
       })
     );
+
+    activateDarkMode();
 
     //Set Color Based on Remembered Preference.
     if (localStorage.getItem(pwaName + '-Theme') == 'dark-mode') {
@@ -2057,4 +2056,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 30000);
 
   console.log('🚀 Cache Manager loaded. Use window.cacheManager.getStorageInfo() to check usage');
+
+  //Add To Home Banners
+  var addToHome = document.querySelectorAll('.add-to-home');
+  if (addToHome.length) {
+    addToHome.forEach(el => {
+      el.addEventListener('click', () => {
+        if (document.body.className == 'theme-light') {
+          removeTransitions();
+          activateDarkMode();
+        } else if (document.body.className == 'theme-dark') {
+          removeTransitions();
+          activateLightMode();
+        }
+      });
+    });
+  }
 });

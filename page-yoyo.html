@@ -1,0 +1,2258 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+<title>Yo-Yo</title>
+<link rel="stylesheet" type="text/css" href="styles/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="styles/style.css">
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i|Source+Sans+Pro:300,300i,400,400i,600,600i,700,700i,900,900i&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="fonts/css/fontawesome-all.min.css">
+<body class="theme-dark" data-highlight="highlight-blue" data-gradient="body-default">
+
+<style>
+/* Dark mode dropdown contrast improvements */
+.theme-dark .input-style select {
+    background-color: #21252a !important;
+    color: #FFF !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.theme-dark .input-style select option {
+    background-color: #21252a !important;
+    color: #FFF !important;
+}
+
+.theme-dark .input-style select:focus {
+    background-color: #21252a !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Improve dropdown arrow visibility in dark mode */
+.theme-dark .input-style.has-borders span i {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Better border contrast for dark mode */
+.theme-dark .border-bottom.border-light {
+    border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Ensure proper text contrast for athlete names in dark mode */
+.theme-dark h6 {
+    color: #FFF !important;
+}
+
+/* Warning Card States */
+.warning-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+/* Initial state - Grey */
+.warning-card.state-grey {
+    border-color: #6c757d;
+    background-color: rgba(108, 117, 125, 0.1);
+}
+
+.warning-card.state-grey #warningIcon,
+.warning-card.state-grey #warningText {
+    color: #6c757d;
+}
+
+/* Orange state */
+.warning-card.state-orange {
+    border-color: #fd7e14;
+    background-color: rgba(253, 126, 20, 0.1);
+}
+
+.warning-card.state-orange #warningIcon,
+.warning-card.state-orange #warningText {
+    color: #fd7e14;
+}
+
+/* Red state */
+.warning-card.state-red {
+    border-color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+.warning-card.state-red #warningIcon,
+.warning-card.state-red #warningText {
+    color: #dc3545;
+}
+
+/* Dark mode adjustments for warning card */
+.theme-dark .warning-card.state-grey {
+    background-color: rgba(108, 117, 125, 0.2);
+}
+
+.theme-dark .warning-card.state-orange {
+    background-color: rgba(253, 126, 20, 0.2);
+}
+
+.theme-dark .warning-card.state-red {
+    background-color: rgba(220, 53, 69, 0.2);
+}
+
+/* Hover effects */
+.warning-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Athlete name warning states */
+.athlete-name {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+}
+
+.athlete-name:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Athlete warning states - Improved Contrast */
+.athlete-row[data-state="0"] .athlete-name {
+    color: #495057 !important;
+    border-color: #495057;
+    background-color: rgba(73, 80, 87, 0.15);
+    font-weight: 600;
+}
+
+.athlete-row[data-state="1"] .athlete-name {
+    color: #e65100 !important;
+    border-color: #e65100;
+    background-color: rgba(230, 81, 0, 0.15);
+    font-weight: 600;
+}
+
+.athlete-row[data-state="2"] .athlete-name {
+    color: #c62828 !important;
+    border-color: #c62828;
+    background-color: rgba(198, 40, 40, 0.15);
+    font-weight: 600;
+}
+
+/* Dark mode adjustments for athlete names - Better Contrast */
+.theme-dark .athlete-row[data-state="0"] .athlete-name {
+    color: #adb5bd !important;
+    border-color: #adb5bd;
+    background-color: rgba(173, 181, 189, 0.25);
+}
+
+.theme-dark .athlete-row[data-state="1"] .athlete-name {
+    color: #ffb74d !important;
+    border-color: #ffb74d;
+    background-color: rgba(255, 183, 77, 0.25);
+}
+
+.theme-dark .athlete-row[data-state="2"] .athlete-name {
+    color: #ef5350 !important;
+    border-color: #ef5350;
+    background-color: rgba(239, 83, 80, 0.25);
+}
+
+.theme-dark .athlete-name:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Player selection styles */
+.athlete-checkbox {
+    margin-right: 10px;
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.athlete-row.unselected {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.athlete-row.unselected .athlete-name {
+    color: #999 !important;
+    background-color: rgba(153, 153, 153, 0.1) !important;
+    border-color: #999 !important;
+    cursor: pointer !important;
+    opacity: 0.6;
+    transition: all 0.3s ease;
+}
+
+.athlete-row.unselected .athlete-name:hover {
+    opacity: 0.8 !important;
+    background-color: rgba(153, 153, 153, 0.2) !important;
+    transform: translateY(-1px);
+}
+
+.athlete-row.unselected select {
+    opacity: 0.3;
+    cursor: not-allowed;
+    background-color: #f5f5f5 !important;
+}
+
+/* Selected athlete names - better contrast */
+.athlete-row:not(.unselected) .athlete-name {
+    color: #ffffff !important;
+}
+
+.theme-dark .athlete-row.unselected .athlete-name {
+    color: #666 !important;
+    background-color: rgba(102, 102, 102, 0.2) !important;
+    cursor: pointer !important;
+    opacity: 0.6;
+}
+
+.theme-dark .athlete-row.unselected .athlete-name:hover {
+    opacity: 0.8 !important;
+    background-color: rgba(102, 102, 102, 0.3) !important;
+    color: #888 !important;
+}
+
+.theme-dark .athlete-row.unselected select {
+    background-color: #2a2a2a !important;
+    color: #666 !important;
+}
+
+/* Selected athlete names in dark mode - ensure white text */
+.theme-dark .athlete-row:not(.unselected) .athlete-name {
+    color: #ffffff !important;
+}
+
+/* Checkbox styling */
+.athlete-checkbox:checked {
+    accent-color: var(--highlight-color, #007bff);
+}
+
+/* Selection controls */
+.selection-controls {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: rgba(0, 123, 255, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 123, 255, 0.2);
+}
+
+.theme-dark .selection-controls {
+    background-color: rgba(0, 123, 255, 0.2);
+    border-color: rgba(0, 123, 255, 0.3);
+}
+
+/* Warning system disabled state - names are clickable for selection */
+.warning-system-disabled .athlete-name {
+    cursor: pointer !important;
+    opacity: 0.9;
+    color: #0056b3 !important;
+    background-color: rgba(0, 86, 179, 0.1) !important;
+    border-color: rgba(0, 86, 179, 0.3) !important;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.warning-system-disabled .athlete-name:hover {
+    color: #004085 !important;
+    background-color: rgba(0, 64, 133, 0.15) !important;
+    transform: translateY(-1px);
+    border-color: rgba(0, 64, 133, 0.4) !important;
+}
+
+.theme-dark .warning-system-disabled .athlete-name {
+    color: #66b3ff !important;
+    background-color: rgba(102, 179, 255, 0.15) !important;
+    border-color: rgba(102, 179, 255, 0.3) !important;
+}
+
+.theme-dark .warning-system-disabled .athlete-name:hover {
+    color: #80c7ff !important;
+    background-color: rgba(128, 199, 255, 0.2) !important;
+    border-color: rgba(128, 199, 255, 0.4) !important;
+}
+
+/* Toast animations */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* Disabled distance dropdown styling */
+.athlete-row[data-state="2"] select {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f8f9fa;
+}
+
+.theme-dark .athlete-row[data-state="2"] select {
+    background-color: #2c2c2c;
+    color: #6c757d;
+}
+
+.athlete-row[data-state="2"] .input-style {
+    opacity: 0.6;
+}
+
+
+</style>
+<link rel="manifest" href="_manifest.json" data-pwa-version="set_in_manifest_and_pwa_js">
+<link rel="apple-touch-icon" sizes="180x180" href="app/icons/icon-192x192.png">
+</head>
+
+<body class="theme-dark" data-highlight="highlight-blue" data-gradient="body-default">
+
+<div id="preloader"><div class="spinner-border color-highlight" role="status"></div></div>
+
+<div id="page">
+
+    <div class="header header-fixed header-logo-center">
+        <a href="index.html" class="header-title">QuoVadis</a>
+        <a href="#" data-back-button class="header-icon header-icon-1"><i class="fas fa-arrow-left"></i></a>
+        <a href="#" data-toggle-theme class="header-icon header-icon-4"><i class="fas fa-lightbulb"></i></a>
+    </div>
+    <div id="footer-bar" class="footer-bar-1">
+        <a href="page-Vergleich.html">
+            <i class="fa fa-chart-bar"></i>
+            <span>Vergleich</span>
+        </a>
+        <a href="page-profile-finley.html">
+            <i class="fa fa-futbol"></i>
+            <span>Training</span>
+        </a>
+        <a href="index.html">
+            <i class="fa fa-home" style="font-size: 1.3em;"></i>
+            <span>Home</span>
+        </a>
+        <a href="page-videos.html">
+            <i class="fa fa-video"></i>
+            <span>Videos</span>
+        </a>
+        <a class="active-nav" href="page-tools.html">
+            <i class="fa fa-tools"></i>
+            <span>Tools</span>
+        </a>
+    </div>
+
+    <div class="page-content header-clear-medium">
+
+        <!-- Athletes Distance List -->
+        <div class="card card-style">
+            <div class="content">
+                <h4 class="mb-3"><i class="fa fa-users me-2 color-highlight"></i>Athletes Distance Records</h4>
+
+                <!-- Player Selection Controls -->
+                <div class="selection-controls">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h6 class="mb-0 font-600"><i class="fa fa-check-square me-2 color-highlight"></i>Player Selection</h6>
+                        <div>
+                            <a href="#" class="btn btn-xs rounded-s bg-highlight text-white me-1" onclick="selectAllPlayers()">
+                                <i class="fa fa-check-double fa-xs me-1"></i>All
+                            </a>
+                            <a href="#" class="btn btn-xs rounded-s bg-red-dark text-white" onclick="deselectAllPlayers()">
+                                <i class="fa fa-times fa-xs me-1"></i>None
+                            </a>
+                        </div>
+                    </div>
+                    <p class="font-10 opacity-70 mb-0">Select players to participate in the YoYo test. Click player names or use checkboxes to select/deselect.</p>
+                </div>
+
+                <!-- Finley -->
+                <div class="d-flex align-items-center mb-3 pb-2 athlete-row" id="athlete-finley" data-state="0">
+                    <input type="checkbox" class="athlete-checkbox" id="checkbox-finley" checked onchange="togglePlayerSelection('finley')">
+                    <div class="flex-grow-1">
+                        <h6 class="mb-0 font-600 athlete-name" onclick="toggleAthleteWarning('finley')">Finley</h6>
+                    </div>
+                    <div class="ms-3" style="min-width: 120px;">
+                        <div class="input-style has-borders no-icon mb-0">
+                            <select id="distance-finley" class="form-select-sm distance-dropdown">
+                            </select>
+                            <span><i class="fa fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Workflow Control Buttons -->
+        <div class="card card-style">
+            <div class="content text-center">
+                <h4 class="mb-3"><i class="fa fa-list-ol me-2 color-highlight"></i>Test Workflow</h4>
+
+                <!-- Step 1: Start Session -->
+                <div class="mb-3" id="step1">
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="input-style input-style-always-active has-borders no-icon mb-3">
+                                <input type="text" class="form-control" id="sessionName" placeholder="e.g., Pre-season Test" value="YoYo Test">
+                                <label for="sessionName" class="color-highlight font-10 font-900">SESSION NAME</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="input-style input-style-always-active has-borders no-icon">
+                                <input type="date" class="form-control" id="sessionDate" value="">
+                                <label for="sessionDate" class="color-highlight font-10 font-900">TEST DATE</label>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="btn btn-full btn-l rounded-s bg-blue-dark shadow-xl text-uppercase font-900 mb-2" onclick="startSession()" id="startSessionBtn">
+                        <i class="fa fa-users me-2"></i>1. Start Session
+                    </a>
+                    <p class="font-10 opacity-70 mb-0">Initialize session with selected players</p>
+                </div>
+
+                <!-- Step 2: Start Test -->
+                <div class="mb-3" id="step2" style="display: none;">
+                    <a href="#" class="btn btn-full btn-l rounded-s bg-green-dark shadow-xl text-uppercase font-900 mb-2" onclick="startYoYoTest()" id="startTestBtn">
+                        <i class="fa fa-play me-2"></i>2. Start Test
+                    </a>
+                    <p class="font-10 opacity-70 mb-0">Begin YoYo test and start timer</p>
+                </div>
+
+                <!-- Step 3: Finish Test -->
+                <div class="mb-3" id="step3" style="display: none;">
+                    <a href="#" class="btn btn-full btn-l rounded-s bg-orange-dark shadow-xl text-uppercase font-900 mb-2" onclick="finishYoYoTest()" id="finishTestBtn">
+                        <i class="fa fa-flag-checkered me-2"></i>3. Finish & Save
+                    </a>
+                    <p class="font-10 opacity-70 mb-0">Complete test and save all data</p>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-6">
+                        <a href="#" class="btn btn-s rounded-s bg-red-dark text-uppercase font-900" onclick="resetWorkflow()">
+                            <i class="fa fa-redo me-2"></i>Reset
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="#" class="btn btn-s rounded-s bg-yellow-dark text-uppercase font-900" onclick="resetDatabase()">
+                            <i class="fa fa-trash me-2"></i>Reset DB
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timer Card (Hidden by default) -->
+        <div class="card card-style" id="timerCard" style="display: none;">
+            <div class="content text-center">
+                <div class="mb-3">
+                    <i class="fa fa-stopwatch color-highlight fa-3x mb-2"></i>
+                    <h3 class="mb-1 font-700">Test Duration</h3>
+                </div>
+                <div class="row text-center mb-3">
+                    <div class="col-4">
+                        <h1 class="mb-n1 color-highlight font-32" id="timerMinutes">00</h1>
+                        <p class="font-9 mb-0 pb-0 opacity-70">MINUTES</p>
+                    </div>
+                    <div class="col-4">
+                        <h1 class="mb-n1 color-highlight font-32" id="timerSeconds">00</h1>
+                        <p class="font-9 mb-0 pb-0 opacity-70">SECONDS</p>
+                    </div>
+                    <div class="col-4">
+                        <h1 class="mb-n1 color-highlight font-32" id="timerMilliseconds">0</h1>
+                        <p class="font-9 mb-0 pb-0 opacity-70">TENTHS</p>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <a href="#" id="pauseResumeBtn" class="btn btn-s rounded-s bg-yellow-dark text-uppercase font-900 me-2" onclick="togglePauseYoYoTest()">
+                        <i class="fa fa-pause me-2"></i><span class="btn-text">Pause</span>
+                    </a>
+                    <a href="#" class="btn btn-s rounded-s bg-red-dark text-uppercase font-900" onclick="resetYoYoTest()">
+                        <i class="fa fa-redo me-2"></i>Reset
+                    </a>
+                </div>
+
+                <!-- New Timer Info Display -->
+                <div class="divider mt-4"></div>
+                <div class="row mb-0 text-center">
+                    <div class="col-4">
+                        <h5 class="mb-0" id="yoyoLevel">--</h5>
+                        <p class="font-10 opacity-70 mb-0">Level</p>
+                    </div>
+                    <div class="col-4">
+                        <h5 class="mb-0" id="yoyoLeg">--</h5>
+                        <p class="font-10 opacity-70 mb-0">Leg</p>
+                    </div>
+                    <div class="col-4">
+                        <h5 class="mb-0" id="yoyoDistance">0m</h5>
+                        <p class="font-10 opacity-70 mb-0">Distance</p>
+                    </div>
+                </div>
+                <div class="row mb-0 mt-3 text-center">
+                    <div class="col-6">
+                        <h5 class="mb-0" id="nextAction">--</h5>
+                        <p class="font-10 opacity-70 mb-0">Next Action</p>
+                    </div>
+                    <div class="col-6">
+                        <h5 class="mb-0" id="timeToNextAction">--</h5>
+                        <p class="font-10 opacity-70 mb-0">Time to Next</p>
+                    </div>
+                </div>
+                <p class="font-10 opacity-50 mb-0 mt-3">Test started at <span id="testStartTimeDisplay">--:--</span></p>
+
+            </div>
+        </div>
+
+        <!-- YoYo Test Ranking List -->
+        <div class="card card-style">
+            <div class="content">
+                <h4 class="mb-3"><i class="fa fa-trophy me-2 color-highlight"></i>All-Time Best Rankings</h4>
+                <p class="font-11 opacity-70 mb-3">Top 15 personal best distances from all sessions</p>
+
+                <!-- All-Time Best Rankings -->
+                <div id="allTimeBestRankings">
+                    <div id="allTimeBestList">
+                        <p class="text-center opacity-50 font-11">Loading all-time best rankings...</p>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <!-- Total Career Distances -->
+                <div id="totalCareerDistances">
+                    <h5 class="mb-3 font-600"><i class="fa fa-route me-2 color-green-dark"></i>Total Career Distances</h5>
+                    <div id="totalDistancesList">
+                        <p class="text-center opacity-50 font-11">Loading total distances...</p>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <!-- Current Session Progress -->
+                <div id="currentSessionProgress">
+                    <h5 class="mb-2 font-600">Current Session Progress</h5>
+                    <div id="currentSessionList">
+                        <p class="text-center opacity-50 font-11">No active session. Start a session to see live progress.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Audio Cues -->
+<audio id="startSound" src="https://ecxhdxqzpay9hjqn.public.blob.vercel-storage.com/start-8H7AUAmYvpZthDt9cej6fq7uChFO4t.mp3" preload="auto"></audio>
+<audio id="backSound" src="https://ecxhdxqzpay9hjqn.public.blob.vercel-storage.com/back-Q0OR06szytaY3LOoNjCyUqnKObhENI.mp3" preload="auto"></audio>
+<audio id="recoverySound" src="https://ecxhdxqzpay9hjqn.public.blob.vercel-storage.com/recovery-Pf7P0N3WFLixcFBuSjjyaPkewcd9O2.wav" preload="auto"></audio>
+
+<script type="text/javascript" src="scripts/bootstrap.min.js"></script>
+<script type="text/javascript" src="scripts/custom.js"></script>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+// Supabase Configuration
+const supabaseUrl = 'https://qfngdawbbzisdwqvogxs.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFmbmdkYXdiYnppc2R3cXZvZ3hzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg2MDc2MzMsImV4cCI6MjA2NDE4MzYzM30.wrBZ8lfn2dNmOlX8v4mTJ1eaTcYzC7SUKb0tmhzqsIU';
+
+// Initialize Supabase client
+let supabaseClient;
+
+// YoYo Test Schedule Data
+const yoyoScheduleData = [
+  { "leg": 0, "level": null, "speed_kmh": null, "total_time_seconds": 0.0, "total_time_formatted": "00:00.0", "total_distance_m": 0, "action": "start", "is_recovery": false },
+  { "leg": 1, "level": 5, "speed_kmh": 10.0, "total_time_seconds": 7.2, "total_time_formatted": "00:07.2", "total_distance_m": 20, "action": "out", "is_recovery": false },
+  { "leg": 2, "level": 5, "speed_kmh": 10.0, "total_time_seconds": 14.4, "total_time_formatted": "00:14.4", "total_distance_m": 40, "action": "back", "is_recovery": false },
+  { "leg": null, "level": null, "speed_kmh": null, "total_time_seconds": 24.4, "total_time_formatted": "00:24.4", "total_distance_m": 40, "action": "recovery", "is_recovery": true },
+  { "leg": 3, "level": 9, "speed_kmh": 12.0, "total_time_seconds": 30.4, "total_time_formatted": "00:30.4", "total_distance_m": 60, "action": "out", "is_recovery": false },
+  { "leg": 4, "level": 9, "speed_kmh": 12.0, "total_time_seconds": 36.4, "total_time_formatted": "00:36.4", "total_distance_m": 80, "action": "back", "is_recovery": false },
+  { "leg": null, "level": null, "speed_kmh": null, "total_time_seconds": 46.4, "total_time_formatted": "00:46.4", "total_distance_m": 80, "action": "recovery", "is_recovery": true },
+  { "leg": 5, "level": 11, "speed_kmh": 13.0, "total_time_seconds": 52.0, "total_time_formatted": "00:52.0", "total_distance_m": 100, "action": "out", "is_recovery": false },
+  { "leg": 6, "level": 11, "speed_kmh": 13.0, "total_time_seconds": 57.5, "total_time_formatted": "00:57.5", "total_distance_m": 120, "action": "back", "is_recovery": false },
+  { "leg": null, "level": null, "speed_kmh": null, "total_time_seconds": 67.5, "total_time_formatted": "01:07.5", "total_distance_m": 120, "action": "recovery", "is_recovery": true },
+  { "leg": 7, "level": 11, "speed_kmh": 13.0, "total_time_seconds": 73.1, "total_time_formatted": "01:13.1", "total_distance_m": 140, "action": "out", "is_recovery": false },
+  { "leg": 8, "level": 11, "speed_kmh": 13.0, "total_time_seconds": 78.6, "total_time_formatted": "01:18.6", "total_distance_m": 160, "action": "back", "is_recovery": false },
+  { "leg": null, "level": null, "speed_kmh": null, "total_time_seconds": 88.6, "total_time_formatted": "01:28.6", "total_distance_m": 160, "action": "recovery", "is_recovery": true },
+  { "leg": 9, "level": 12, "speed_kmh": 13.5, "total_time_seconds": 93.9, "total_time_formatted": "01:33.9", "total_distance_m": 180, "action": "out", "is_recovery": false },
+  { "leg": 10, "level": 12, "speed_kmh": 13.5, "total_time_seconds": 99.3, "total_time_formatted": "01:39.3", "total_distance_m": 200, "action": "back", "is_recovery": false },
+  { "leg": null, "level": null, "speed_kmh": null, "total_time_seconds": 109.3, "total_time_formatted": "01:49.3", "total_distance_m": 200, "action": "recovery", "is_recovery": true },
+  { "leg": 11, "level": 12, "speed_kmh": 13.5, "total_time_seconds": 114.6, "total_time_formatted": "01:54.6", "total_distance_m": 220, "action": "out", "is_recovery": false },
+  { "leg": 12, "level": 12, "speed_kmh": 13.5, "total_time_seconds": 120.0, "total_time_formatted": "02:00.0", "total_distance_m": 240, "action": "back", "is_recovery": false },
+  { "leg": null, "level": null, "speed_kmh": null, "total_time_seconds": 130.0, "total_time_formatted": "02:10.0", "total_distance_m": 240, "action": "recovery", "is_recovery": true },
+  { "leg": 13, "level": 12, "speed_kmh": 13.5, "total_time_seconds": 135.3, "total_time_formatted": "02:15.3", "total_distance_m": 260, "action": "out", "is_recovery": false },
+  { "leg": 14, "level": 12, "speed_kmh": 13.5, "total_time_seconds": 140.7, "total_time_formatted": "02:20.7", "total_distance_m": 280, "action": "back", "is_recovery": false },
+  { "leg": null, "level": null, "speed_kmh": null, "total_time_seconds": 150.7, "total_time_formatted": "02:30.7", "total_distance_m": 280, "action": "recovery", "is_recovery": true },
+  { "leg": 15, "level": 13, "speed_kmh": 14.0, "total_time_seconds": 155.8, "total_time_formatted": "02:35.8", "total_distance_m": 300, "action": "out", "is_recovery": false },
+  { "leg": 16, "level": 13, "speed_kmh": 14.0, "total_time_seconds": 160.9, "total_time_formatted": "02:40.9", "total_distance_m": 320, "action": "back", "is_recovery": false },
+  { "leg": null, "level": null, "speed_kmh": null, "total_time_seconds": 170.9, "total_time_formatted": "02:50.9", "total_distance_m": 320, "action": "recovery", "is_recovery": true },
+  { "leg": 17, "level": 13, "speed_kmh": 14.0, "total_time_seconds": 176.1, "total_time_formatted": "02:56.1", "total_distance_m": 340, "action": "out", "is_recovery": false },
+  { "leg": 18, "level": 13, "speed_kmh": 14.0, "total_time_seconds": 181.2, "total_time_formatted": "03:01.2", "total_distance_m": 360, "action": "back", "is_recovery": false },
+  { "leg": null, "level": null, "speed_kmh": null, "total_time_seconds": 191.2, "total_time_formatted": "03:11.2", "total_distance_m": 360, "action": "recovery", "is_recovery": true },
+  { "leg": 19, "level": 13, "speed_kmh": 14.0, "total_time_seconds": 196.4, "total_time_formatted": "03:16.4", "total_distance_m": 380, "action": "out", "is_recovery": false },
+  { "leg": 20, "level": 13, "speed_kmh": 14.0, "total_time_seconds": 201.5, "total_time_formatted": "03:21.5", "total_distance_m": 400, "action": "back", "is_recovery": false },
+  { "leg": null, "level": null, "speed_kmh": null, "total_time_seconds": 211.5, "total_time_formatted": "03:31.5", "total_distance_m": 400, "action": "recovery", "is_recovery": true },
+  { "leg": 21, "level": 13, "speed_kmh": 14.0, "total_time_seconds": 216.7, "total_time_formatted": "03:36.7", "total_distance_m": 420, "action": "out", "is_recovery": false },
+  { "leg": 22, "level": 13, "speed_kmh": 14.0, "total_time_seconds": 221.8, "total_time_formatted": "03:41.8", "total_distance_m": 440, "action": "back", "is_recovery": false },
+  { "leg": null, "level": null, "speed_kmh": null, "total_time_seconds": 231.8, "total_time_formatted": "03:51.8", "total_distance_m": 440, "action": "recovery", "is_recovery": true },
+  { "leg": 23, "level": 14, "speed_kmh": 14.5, "total_time_seconds": 236.8, "total_time_formatted": "03:56.8", "total_distance_m": 460, "action": "out", "is_recovery": false },
+  { "leg": 24, "level": 14, "speed_kmh": 14.5, "total_time_seconds": 241.7, "total_time_formatted": "04:01.7", "total_distance_m": 480, "action": "back", "is_recovery": false },
+  { "leg": null, "level": null, "speed_kmh": null, "total_time_seconds": 251.7, "total_time_formatted": "04:11.7", "total_distance_m": 480, "action": "recovery", "is_recovery": true },
+  { "leg": 25, "level": 14, "speed_kmh": 14.5, "total_time_seconds": 256.7, "total_time_formatted": "04:16.7", "total_distance_m": 500, "action": "out", "is_recovery": false },
+  { "leg": 26, "level": 14, "speed_kmh": 14.5, "total_time_seconds": 261.6, "total_time_formatted": "04:21.6", "total_distance_m": 520, "action": "back", "is_recovery": false },
+  { "leg": null, "level": null, "speed_kmh": null, "total_time_seconds": 271.6, "total_time_formatted": "04:31.6", "total_distance_m": 520, "action": "recovery", "is_recovery": true },
+  { "leg": 27, "level": 14, "speed_kmh": 14.5, "total_time_seconds": 276.6, "total_time_formatted": "04:36.6", "total_distance_m": 540, "action": "out", "is_recovery": false },
+  { "leg": 28, "level": 14, "speed_kmh": 14.5, "total_time_seconds": 281.5, "total_time_formatted": "04:41.5", "total_distance_m": 560, "action": "back", "is_recovery": false },
+  { "leg": null, "level": null, "speed_kmh": null, "total_time_seconds": 291.5, "total_time_formatted": "04:51.5", "total_distance_m": 560, "action": "recovery", "is_recovery": true },
+  { "leg": 29, "level": 14, "speed_kmh": 14.5, "total_time_seconds": 296.5, "total_time_formatted": "04:56.5", "total_distance_m": 580, "action": "out", "is_recovery": false },
+  { "leg": 30, "level": 14, "speed_kmh": 14.5, "total_time_seconds": 301.4, "total_time_formatted": "05:01.4", "total_distance_m": 600, "action": "back", "is_recovery": false },
+  { "leg": null, "level": null, "speed_kmh": null, "total_time_seconds": 311.4, "total_time_formatted": "05:11.4", "total_distance_m": 600, "action": "recovery", "is_recovery": true },
+  { "leg": 31, "level": 14, "speed_kmh": 14.5, "total_time_seconds": 316.4, "total_time_formatted": "05:16.4", "total_distance_m": 620, "action": "out", "is_recovery": false },
+  { "leg": 32, "level": 14, "speed_kmh": 14.5, "total_time_seconds": 321.3, "total_time_formatted": "05:21.3", "total_distance_m": 640, "action": "back", "is_recovery": false },
+  { "leg": null, "level": null, "speed_kmh": null, "total_time_seconds": 331.3, "total_time_formatted": "05:31.3", "total_distance_m": 640, "action": "recovery", "is_recovery": true },
+  { "leg": 33, "level": 14, "speed_kmh": 14.5, "total_time_seconds": 336.3, "total_time_formatted": "05:36.3", "total_distance_m": 660, "action": "out", "is_recovery": false },
+  { "leg": 34, "level": 14, "speed_kmh": 14.5, "total_time_seconds": 341.2, "total_time_formatted": "05:41.2", "total_distance_m": 680, "action": "back", "is_recovery": false },
+  { "leg": null, "level": null, "speed_kmh": null, "total_time_seconds": 351.2, "total_time_formatted": "05:51.2", "total_distance_m": 680, "action": "recovery", "is_recovery": true },
+  { "leg": 35, "level": 14, "speed_kmh": 14.5, "total_time_seconds": 356.2, "total_time_formatted": "05:56.2", "total_distance_m": 700, "action": "out", "is_recovery": false },
+  { "leg": 36, "level": 14, "speed_kmh": 14.5, "total_time_seconds": 361.1, "total_time_formatted": "06:01.1", "total_distance_m": 720, "action": "back", "is_recovery": false }
+];
+
+function initializeSupabase() {
+    try {
+        if (typeof supabase !== 'undefined' && supabase.createClient) {
+            const { createClient } = supabase;
+            supabaseClient = createClient(supabaseUrl, supabaseKey);
+
+            // Test the connection by making a simple query
+            testDatabaseConnection();
+
+            console.log('Supabase client initialized successfully');
+            return supabaseClient;
+        } else {
+            throw new Error('Supabase SDK not loaded');
+        }
+    } catch (error) {
+        console.error('Error initializing Supabase:', error);
+        showToast('Database Error', 'Failed to initialize database connection. Please refresh the page.', 'error');
+        return null;
+    }
+}
+
+async function testDatabaseConnection() {
+    try {
+        // Test connection with a simple query
+        const { data, error } = await supabaseClient
+            .from('yoyo_sessions')
+            .select('id')
+            .limit(1);
+
+        if (error) {
+            // Don't throw for permission errors on a non-existent table in a fresh setup
+            if (error.code !== '42P01') {
+                 throw error;
+            }
+        }
+
+        // Show success toast
+        showToast('Database Connected', 'YoYo database initialized and ready!', 'success');
+
+    } catch (error) {
+        console.error('Database connection test failed:', error);
+        showToast('Database Warning', 'Database connected but may have issues. Check console for details.', 'warning');
+    }
+}
+
+// Global variables
+let currentSession = {
+    name: '',
+    athletes: {},
+    rankings: [],
+    sessionId: null,
+    testDate: null
+};
+
+// Test state management
+let sessionStarted = false;
+let yoyoTestStarted = false;
+let testStartTime = null;
+let timerInterval = null;
+let nextEventIndex = 0;
+let isPaused = false;
+let timeWhenPaused = 0;
+
+// Audio elements
+let startSound, backSound, recoverySound;
+
+// Active session from database
+let activeSessionData = null;
+
+// Warning card state management
+let warningState = 0; // 0 = grey, 1 = orange, 2 = red
+
+// Toast notification function
+function showToast(title, message, type = 'info') {
+    // Create toast container if it doesn't exist
+    let toastContainer = document.getElementById('toast-container');
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.id = 'toast-container';
+        toastContainer.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 350px;
+        `;
+        document.body.appendChild(toastContainer);
+    }
+
+    // Create toast element
+    const toast = document.createElement('div');
+    const toastId = 'toast-' + Date.now();
+    toast.id = toastId;
+
+    // Set toast colors based on type
+    let bgColor, iconClass, iconColor;
+    switch(type) {
+        case 'success':
+            bgColor = 'bg-green-dark';
+            iconClass = 'fa-check-circle';
+            iconColor = 'color-green-light';
+            break;
+        case 'error':
+            bgColor = 'bg-red-dark';
+            iconClass = 'fa-exclamation-circle';
+            iconColor = 'color-red-light';
+            break;
+        case 'warning':
+            bgColor = 'bg-yellow-dark';
+            iconClass = 'fa-exclamation-triangle';
+            iconColor = 'color-yellow-light';
+            break;
+        default:
+            bgColor = 'bg-highlight';
+            iconClass = 'fa-info-circle';
+            iconColor = 'color-blue-light';
+    }
+
+    toast.className = `card card-style ${bgColor} shadow-xl mb-3`;
+    toast.style.cssText = `
+        animation: slideInRight 0.3s ease-out;
+        margin-bottom: 10px;
+    `;
+
+    toast.innerHTML = `
+        <div class="content">
+            <div class="d-flex align-items-center">
+                <div class="me-3">
+                    <i class="fa ${iconClass} ${iconColor} fa-lg"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <h6 class="mb-1 font-600 color-white">${title}</h6>
+                    <p class="mb-0 font-11 color-white opacity-80">${message}</p>
+                </div>
+                <div class="ms-2">
+                    <a href="#" onclick="removeToast('${toastId}')" class="color-white opacity-50">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Add toast to container
+    toastContainer.appendChild(toast);
+
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        removeToast(toastId);
+    }, 5000);
+}
+
+function removeToast(toastId) {
+    const toast = document.getElementById(toastId);
+    if (toast) {
+        toast.style.animation = 'slideOutRight 0.3s ease-in';
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 300);
+    }
+}
+
+// New YoYo Test Event Logic
+function checkYoYoEvents(elapsedMilliseconds) {
+    if (nextEventIndex >= yoyoScheduleData.length) {
+        return; // Test is over
+    }
+
+    const elapsedSeconds = elapsedMilliseconds / 1000;
+    const nextEvent = yoyoScheduleData[nextEventIndex];
+
+    if (elapsedSeconds >= nextEvent.total_time_seconds) {
+        const event = nextEvent;
+
+        // 1. Play sound
+        if (event.action === 'start' && startSound) startSound.play();
+        else if (event.action === 'out' && backSound) backSound.play(); // Shuttle beep
+        else if (event.action === 'back' && backSound) backSound.play(); // Shuttle beep
+        else if (event.action === 'recovery' && recoverySound) recoverySound.play();
+
+        // 2. Update main GUI display
+        document.getElementById('yoyoLevel').textContent = event.level !== null ? event.level : '--';
+        document.getElementById('yoyoLeg').textContent = event.leg !== null ? event.leg : '--';
+        document.getElementById('yoyoDistance').textContent = `${event.total_distance_m}m`;
+
+        // 3. Synchronize player distances if it's a running leg with distance
+        if (!event.is_recovery && event.total_distance_m > 0) {
+            synchronizeAllPlayerDistances(event.total_distance_m);
+        }
+
+        // 4. Advance to the next event
+        nextEventIndex++;
+    }
+}
+
+function updateNextActionTimer(elapsedMilliseconds) {
+    if (nextEventIndex >= yoyoScheduleData.length) {
+        document.getElementById('nextAction').textContent = 'Test End';
+        document.getElementById('timeToNextAction').textContent = '0.0s';
+        return;
+    }
+
+    const elapsedSeconds = elapsedMilliseconds / 1000;
+    const nextEvent = yoyoScheduleData[nextEventIndex];
+
+    // Update Next Action Text
+    let actionText = nextEvent.action.charAt(0).toUpperCase() + nextEvent.action.slice(1);
+    if (actionText === 'Out' || actionText === 'Back') {
+        actionText = `Shuttle (${nextEvent.total_distance_m}m)`;
+    }
+    document.getElementById('nextAction').textContent = actionText;
+
+
+    // Update Time to Next Action
+    const timeRemaining = nextEvent.total_time_seconds - elapsedSeconds;
+    document.getElementById('timeToNextAction').textContent = timeRemaining > 0 ? `${timeRemaining.toFixed(1)}s` : '0.0s';
+}
+
+
+function synchronizeAllPlayerDistances(newDistance) {
+    const athleteRows = document.querySelectorAll('.athlete-row');
+
+    athleteRows.forEach(row => {
+        const athleteId = row.id.replace('athlete-', '');
+        const checkbox = document.getElementById('checkbox-' + athleteId);
+        const distanceSelect = document.getElementById('distance-' + athleteId);
+        const warningState = parseInt(row.getAttribute('data-state'));
+
+        // Only update selected players who are not eliminated (warning state 2)
+        if (checkbox && checkbox.checked && distanceSelect && warningState !== 2) {
+            // Check if the new distance exists as an option
+            if ([...distanceSelect.options].some(option => option.value == newDistance)) {
+                 distanceSelect.value = newDistance.toString();
+            }
+
+            // Update database if session is active
+            if (activeSessionData) {
+                const athleteName = athleteId.charAt(0).toUpperCase() + athleteId.slice(1);
+                updatePlayerState(athleteName, newDistance, warningState, false);
+            }
+        }
+    });
+    updateCurrentSessionProgress();
+    updateDropdownOptions();
+}
+
+
+function toggleWarning() {
+    const warningCard = document.getElementById('warningCard');
+    const warningText = document.getElementById('warningText');
+    const warningIcon = document.getElementById('warningIcon');
+
+    // Remove all state classes
+    warningCard.classList.remove('state-grey', 'state-orange', 'state-red');
+
+    // Cycle through states
+    warningState = (warningState + 1) % 3;
+
+    switch(warningState) {
+        case 0: // Grey state
+            warningCard.classList.add('state-grey');
+            warningText.textContent = 'Warnung';
+            warningIcon.className = 'fa fa-exclamation-triangle fa-2x';
+            break;
+        case 1: // Orange state
+            warningCard.classList.add('state-orange');
+            warningText.textContent = 'Warnung';
+            warningIcon.className = 'fa fa-exclamation-triangle fa-2x';
+            break;
+        case 2: // Red state
+            warningCard.classList.add('state-red');
+            warningText.textContent = 'Raus!';
+            warningIcon.className = 'fa fa-times-circle fa-2x';
+            break;
+    }
+}
+
+// Function to get the minimum locked distance from all "Raus!" players
+function getMinimumLockedDistance() {
+    const lockedAthletes = document.querySelectorAll('.athlete-row[data-state="2"]');
+    let minDistance = null;
+
+    lockedAthletes.forEach(row => {
+        const athleteId = row.id.replace('athlete-', '');
+        const distanceSelect = document.getElementById('distance-' + athleteId);
+        if (distanceSelect) {
+            const currentDistance = parseInt(distanceSelect.value);
+            if (minDistance === null || currentDistance < minDistance) {
+                minDistance = currentDistance;
+            }
+        }
+    });
+
+    return minDistance;
+}
+
+// Function to update all dropdowns based on minimum locked distance
+function updateDropdownOptions() {
+    const minLockedDistance = getMinimumLockedDistance();
+    const allAthleteRows = document.querySelectorAll('.athlete-row');
+
+    allAthleteRows.forEach(row => {
+        const athleteId = row.id.replace('athlete-', '');
+        const distanceSelect = document.getElementById('distance-' + athleteId);
+        const isLocked = row.getAttribute('data-state') === '2';
+
+        if (distanceSelect && !isLocked) {
+            const options = distanceSelect.querySelectorAll('option');
+            options.forEach(option => {
+                const optionValue = parseInt(option.value);
+                if (minLockedDistance !== null && optionValue < minLockedDistance) {
+                    // Hide options below minimum locked distance
+                    option.style.display = 'none';
+                } else {
+                    // Show options at or above minimum locked distance
+                    option.style.display = '';
+                }
+            });
+
+            // If current selection is below minimum, reset to minimum or first available
+            const currentValue = parseInt(distanceSelect.value);
+            if (minLockedDistance !== null && currentValue < minLockedDistance) {
+                // Find the first available option at or above minimum
+                const availableOption = Array.from(options).find(opt =>
+                    parseInt(opt.value) >= minLockedDistance && opt.style.display !== 'none'
+                );
+                if (availableOption) {
+                    distanceSelect.value = availableOption.value;
+                }
+            }
+        }
+    });
+}
+
+// Athlete name click handler - handles both selection and warning states
+function toggleAthleteWarning(athleteName) {
+    // If no session started, handle player selection
+    if (!sessionStarted) {
+        const checkbox = document.getElementById('checkbox-' + athleteName);
+        if (checkbox) {
+            // Toggle checkbox state (ignore disabled state for name clicks)
+            checkbox.checked = !checkbox.checked;
+            // Trigger the selection change
+            togglePlayerSelection(athleteName);
+            // Trigger change event to update any listeners
+            checkbox.dispatchEvent(new Event('change'));
+        }
+        return;
+    }
+
+    // If session started but test not started, prevent changes
+    if (sessionStarted && !yoyoTestStarted) {
+        alert('Please start the test first before changing athlete warning states.');
+        return;
+    }
+
+    // Check if player is selected
+    const checkbox = document.getElementById('checkbox-' + athleteName);
+    if (!checkbox || !checkbox.checked) {
+        alert('This player is not selected for the current test.');
+        return;
+    }
+
+    const athleteRow = document.getElementById('athlete-' + athleteName);
+    const athleteNameElement = athleteRow.querySelector('.athlete-name');
+    const distanceSelect = document.getElementById('distance-' + athleteName);
+
+    // Get current state
+    let currentState = parseInt(athleteRow.getAttribute('data-state'));
+
+    // Cycle through states: 0 (grey) -> 1 (orange) -> 2 (red) -> 0
+    currentState = (currentState + 1) % 3;
+
+    // Update state
+    athleteRow.setAttribute('data-state', currentState);
+
+    // Update text content and distance dropdown based on state
+    switch(currentState) {
+        case 0: // Grey state
+            athleteNameElement.textContent = athleteName.charAt(0).toUpperCase() + athleteName.slice(1);
+            distanceSelect.disabled = false;
+            break;
+        case 1: // Orange state
+            athleteNameElement.textContent = athleteName.charAt(0).toUpperCase() + athleteName.slice(1);
+            distanceSelect.disabled = false;
+            break;
+        case 2: // Red state - "Raus!"
+            athleteNameElement.textContent = 'Raus!';
+            distanceSelect.disabled = true;
+            break;
+    }
+
+    // Update all dropdown options based on new locking state
+    updateDropdownOptions();
+
+    // Update database player state if session is active
+    if (activeSessionData) {
+        updatePlayerState(athleteName, distanceSelect.value, currentState, currentState === 2);
+    }
+
+    // Update current session data
+    updateCurrentSession();
+
+    // Update current session progress display
+    updateCurrentSessionProgress();
+
+    // If athlete reached "Raus!" state, add to rankings and save data
+    if (currentState === 2) {
+        addToRankings(athleteName, distanceSelect.value);
+
+        // Update all other active players' dropdowns to this distance
+        updateOtherPlayersDistance(athleteName, distanceSelect.value);
+
+        // Save data immediately when player reaches "Raus!" state
+        saveAthleteData(athleteName, distanceSelect.value, currentState, currentSession.name, currentSession.testDate)
+            .then(success => {
+                if (success) {
+                    const capitalizedAthleteName = athleteName.charAt(0).toUpperCase() + athleteName.slice(1);
+                    showToast('Player Eliminated', `${capitalizedAthleteName} eliminated at ${distanceSelect.value}m - Data saved!`, 'warning');
+                    // Refresh all-time rankings to show updated data
+                    loadAllTimeBestRankings();
+                }
+            });
+    }
+}
+
+// Function to update all other active players' distances when someone is eliminated
+function updateOtherPlayersDistance(eliminatedPlayerName, eliminatedDistance) {
+    const athleteRows = document.querySelectorAll('.athlete-row');
+
+    athleteRows.forEach(row => {
+        const athleteId = row.id.replace('athlete-', '');
+        const checkbox = document.getElementById('checkbox-' + athleteId);
+        const distanceSelect = document.getElementById('distance-' + athleteId);
+        const warningState = parseInt(row.getAttribute('data-state'));
+
+        // Only update other selected players who are still active (not eliminated and not the eliminated player)
+        if (checkbox && checkbox.checked &&
+            athleteId !== eliminatedPlayerName &&
+            warningState !== 2 &&
+            distanceSelect &&
+            !distanceSelect.disabled) {
+
+            // Set their distance to the same as the eliminated player
+            if ([...distanceSelect.options].some(option => option.value == eliminatedDistance)) {
+                distanceSelect.value = eliminatedDistance;
+            }
+
+            // Trigger a visual indication that the distance was updated
+            distanceSelect.style.backgroundColor = '#fff3cd'; // Light yellow background
+            distanceSelect.style.border = '2px solid #ffc107'; // Yellow border
+
+            // Remove the visual indication after 2 seconds
+            setTimeout(() => {
+                distanceSelect.style.backgroundColor = '';
+                distanceSelect.style.border = '';
+            }, 2000);
+        }
+    });
+
+    // Update current session progress to reflect the new distances
+    updateCurrentSessionProgress();
+}
+
+// Database Functions
+async function saveAthleteData(athleteName, distance, warningState, sessionName = '', testDate = null) {
+    try {
+        const sessionDateInput = document.getElementById('sessionDate');
+        const selectedDate = testDate || sessionDateInput?.value || new Date().toISOString().split('T')[0];
+
+        const { data, error } = await supabaseClient
+            .from('yoyo_sessions')
+            .insert({
+                athlete_name: athleteName.charAt(0).toUpperCase() + athleteName.slice(1),
+                distance_meters: parseInt(distance),
+                warning_state: warningState,
+                session_name: sessionName || currentSession.name || 'Default Session',
+                test_date: selectedDate
+            });
+
+        if (error) {
+            console.error('Error saving athlete data:', error);
+            return false;
+        }
+
+        console.log('Athlete data saved successfully:', data);
+        return true;
+    } catch (error) {
+        console.error('Error saving athlete data:', error);
+        return false;
+    }
+}
+
+async function loadSessionData(sessionName) {
+    try {
+        const { data, error } = await supabaseClient
+            .from('yoyo_sessions')
+            .select('*')
+            .eq('session_name', sessionName)
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Error loading session data:', error);
+            return null;
+        }
+
+        return data;
+    } catch (error) {
+        console.error('Error loading session data:', error);
+        return null;
+    }
+}
+
+async function getAllSessions() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('yoyo_sessions')
+            .select('session_name, created_at')
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Error loading sessions:', error);
+            return [];
+        }
+
+        // Get unique session names
+        const uniqueSessions = [...new Set(data.map(item => item.session_name))];
+        return uniqueSessions;
+    } catch (error) {
+        console.error('Error loading sessions:', error);
+        return [];
+    }
+}
+
+// Database Session Management Functions
+async function checkForActiveSession() {
+    try {
+        // Check for any active sessions in the database
+        const { data, error } = await supabaseClient
+            .from('active_sessions')
+            .select(`
+                *,
+                session_player_states (
+                    athlete_name,
+                    current_distance,
+                    warning_state,
+                    is_eliminated,
+                    elimination_time
+                )
+            `)
+            .in('session_status', ['started', 'test_running'])
+            .order('created_at', { ascending: false })
+            .limit(1);
+
+        if (error) {
+            console.error('Error checking for active session:', error);
+            return null;
+        }
+
+        if (data && data.length > 0) {
+            activeSessionData = data[0];
+            return activeSessionData;
+        }
+
+        return null;
+    } catch (error) {
+        console.error('Error checking for active session:', error);
+        return null;
+    }
+}
+
+async function restoreActiveSession(sessionData) {
+    try {
+        // Set global session state
+        activeSessionData = sessionData;
+        currentSession.sessionId = sessionData.session_id;
+        currentSession.name = sessionData.session_name;
+        currentSession.testDate = sessionData.test_date;
+
+        // Set session flags based on status
+        sessionStarted = true;
+        yoyoTestStarted = sessionData.session_status === 'test_running';
+
+        // Restore test start time if test is running
+        if (yoyoTestStarted && sessionData.test_start_time) {
+            testStartTime = new Date(sessionData.test_start_time);
+            const elapsedMilliseconds = new Date() - testStartTime;
+            const elapsedSeconds = elapsedMilliseconds / 1000;
+
+            // Find the correct nextEventIndex based on restored time
+            nextEventIndex = 0;
+            for (let i = 0; i < yoyoScheduleData.length; i++) {
+                if (yoyoScheduleData[i].total_time_seconds > elapsedSeconds) {
+                    nextEventIndex = i;
+                    break;
+                }
+                if (i === yoyoScheduleData.length - 1) { // Test finished
+                    nextEventIndex = yoyoScheduleData.length;
+                }
+            }
+            // Manually trigger the last event before the current time to update the state
+            if (nextEventIndex > 0) {
+                const lastEvent = yoyoScheduleData[nextEventIndex - 1];
+                document.getElementById('yoyoLevel').textContent = lastEvent.level !== null ? lastEvent.level : '--';
+                document.getElementById('yoyoLeg').textContent = lastEvent.leg !== null ? lastEvent.leg : '--';
+                document.getElementById('yoyoDistance').textContent = `${lastEvent.total_distance_m}m`;
+                // Do not synchronize all players, just restore individual states below
+            }
+        }
+
+        // Restore player selections
+        const selectedPlayers = sessionData.selected_players || [];
+        document.querySelectorAll('.athlete-checkbox').forEach(cb => { cb.checked = false; });
+        selectedPlayers.forEach(playerName => {
+            const checkbox = document.getElementById('checkbox-' + playerName.toLowerCase());
+            if (checkbox) checkbox.checked = true;
+        });
+
+        // Restore player states
+        if (sessionData.session_player_states) {
+            sessionData.session_player_states.forEach(playerState => {
+                const athleteId = playerState.athlete_name.toLowerCase();
+                const athleteRow = document.getElementById('athlete-' + athleteId);
+                const distanceSelect = document.getElementById('distance-' + athleteId);
+                const athleteNameElement = athleteRow?.querySelector('.athlete-name');
+
+                if (athleteRow && distanceSelect && athleteNameElement) {
+                    athleteRow.setAttribute('data-state', playerState.warning_state.toString());
+                    distanceSelect.value = playerState.current_distance.toString();
+                    if (playerState.warning_state === 2) {
+                        athleteNameElement.textContent = 'Raus!';
+                        distanceSelect.disabled = true;
+                    } else {
+                        athleteNameElement.textContent = playerState.athlete_name;
+                        distanceSelect.disabled = false;
+                    }
+                }
+            });
+        }
+
+        // Update UI based on selection
+        document.querySelectorAll('.athlete-row').forEach(row => {
+            const athleteId = row.id.replace('athlete-', '');
+            const checkbox = document.getElementById('checkbox-' + athleteId);
+            row.classList.toggle('unselected', !(checkbox && checkbox.checked));
+        });
+
+        // Restore session name/date inputs
+        const baseName = sessionData.session_name.split(' - ')[0];
+        document.getElementById('sessionName').value = baseName;
+        document.getElementById('sessionDate').value = sessionData.test_date;
+
+        // Update UI
+        updateDropdownOptions();
+        updateWorkflowUI();
+        updateCurrentSessionProgress();
+        setWarningSystemState(yoyoTestStarted);
+        disablePlayerSelection();
+
+        // Start timer if test is running
+        if (yoyoTestStarted && testStartTime) {
+            document.getElementById('timerCard').style.display = 'block';
+            document.getElementById('testStartTimeDisplay').textContent = testStartTime.toLocaleTimeString();
+            timerInterval = setInterval(updateTimer, 100);
+            updateTimer(); // Initial call to show time immediately
+        }
+
+        showToast('Session Restored', `Active session "${sessionData.session_name}" restored`, 'success');
+        return true;
+    } catch (error) {
+        console.error('Error restoring active session:', error);
+        showToast('Restore Error', 'Failed to restore active session', 'error');
+        resetWorkflow();
+        return false;
+    }
+}
+
+
+async function createDatabaseSession(sessionName, testDate, selectedPlayers) {
+    try {
+        // Create new active session
+        const { data: sessionData, error: sessionError } = await supabaseClient
+            .from('active_sessions')
+            .insert({
+                session_name: sessionName,
+                test_date: testDate,
+                session_status: 'started',
+                selected_players: selectedPlayers
+            })
+            .select()
+            .single();
+
+        if (sessionError) {
+            throw sessionError;
+        }
+
+        // Create player state records
+        const playerStates = selectedPlayers.map(playerName => ({
+            session_id: sessionData.session_id,
+            athlete_name: playerName.charAt(0).toUpperCase() + playerName.slice(1),
+            current_distance: 0, // Initial distance is 0
+            warning_state: 0,
+            is_eliminated: false
+        }));
+
+        const { error: statesError } = await supabaseClient
+            .from('session_player_states')
+            .insert(playerStates);
+
+        if (statesError) {
+            throw statesError;
+        }
+
+        // Update global session data
+        activeSessionData = sessionData;
+        currentSession.sessionId = sessionData.session_id;
+        currentSession.name = sessionName;
+        currentSession.testDate = testDate;
+
+        return sessionData;
+    } catch (error) {
+        console.error('Error creating database session:', error);
+        throw error;
+    }
+}
+
+async function updateSessionStatus(status, testStartTime = null) {
+    if (!activeSessionData) return;
+
+    try {
+        const updateData = {
+            session_status: status,
+            updated_at: new Date().toISOString()
+        };
+
+        if (testStartTime) {
+            updateData.test_start_time = testStartTime.toISOString();
+        }
+
+        const { error } = await supabaseClient
+            .from('active_sessions')
+            .update(updateData)
+            .eq('session_id', activeSessionData.session_id);
+
+        if (error) {
+            throw error;
+        }
+
+        // Update local data
+        activeSessionData.session_status = status;
+        if (testStartTime) {
+            activeSessionData.test_start_time = testStartTime.toISOString();
+        }
+
+    } catch (error) {
+        console.error('Error updating session status:', error);
+        throw error;
+    }
+}
+
+async function updatePlayerState(athleteName, distance, warningState, isEliminated = false) {
+    if (!activeSessionData) return;
+    const capitalizedAthleteName = athleteName.charAt(0).toUpperCase() + athleteName.slice(1);
+
+    try {
+        const updateData = {
+            current_distance: parseInt(distance),
+            warning_state: warningState,
+            is_eliminated: isEliminated,
+            updated_at: new Date().toISOString()
+        };
+
+        if (isEliminated) {
+            updateData.elimination_time = new Date().toISOString();
+        }
+
+        const { error } = await supabaseClient
+            .from('session_player_states')
+            .update(updateData)
+            .eq('session_id', activeSessionData.session_id)
+            .eq('athlete_name', capitalizedAthleteName);
+
+        if (error) {
+            throw error;
+        }
+
+    } catch (error) {
+        console.error('Error updating player state:', error);
+        throw error;
+    }
+}
+
+async function completeSession() {
+    if (!activeSessionData) return;
+
+    try {
+        // Update session status to completed
+        await updateSessionStatus('completed');
+
+        // Clear active session data
+        activeSessionData = null;
+        currentSession.sessionId = null;
+
+    } catch (error) {
+        console.error('Error completing session:', error);
+        throw error;
+    }
+}
+
+async function deleteActiveSession() {
+    if (!activeSessionData) return;
+
+    try {
+        // Delete the active session (cascade will delete player states)
+        const { error } = await supabaseClient
+            .from('active_sessions')
+            .delete()
+            .eq('session_id', activeSessionData.session_id);
+
+        if (error) {
+            throw error;
+        }
+
+        // Clear active session data
+        activeSessionData = null;
+        currentSession.sessionId = null;
+
+    } catch (error) {
+        console.error('Error deleting active session:', error);
+        throw error;
+    }
+}
+
+// Session Management Functions
+function updateCurrentSession() {
+    const athleteRows = document.querySelectorAll('.athlete-row');
+    currentSession.athletes = {};
+
+    athleteRows.forEach(row => {
+        const athleteId = row.id.replace('athlete-', '');
+        const athleteName = athleteId.charAt(0).toUpperCase() + athleteId.slice(1);
+        const distanceSelect = document.getElementById('distance-' + athleteId);
+        const warningState = parseInt(row.getAttribute('data-state'));
+
+        currentSession.athletes[athleteName] = {
+            distance: distanceSelect ? parseInt(distanceSelect.value) : 0,
+            warningState: warningState
+        };
+    });
+}
+
+function addToRankings(athleteName, distance) {
+    const timestamp = new Date().toLocaleTimeString();
+    const ranking = {
+        athlete: athleteName,
+        distance: parseInt(distance),
+        timestamp: timestamp,
+        position: currentSession.rankings.length + 1
+    };
+
+    currentSession.rankings.push(ranking);
+    updateRankingsDisplay();
+}
+
+// Update current session progress when athlete states change
+function updateRankingsDisplay() {
+    updateCurrentSessionProgress();
+}
+
+async function saveCurrentSession() {
+    const sessionNameInput = document.getElementById('sessionName');
+    const sessionName = sessionNameInput.value.trim();
+
+    if (!sessionName) {
+        alert('Please enter a session name before saving.');
+        return;
+    }
+
+    currentSession.name = sessionName;
+
+    // Save all current athlete data
+    const athleteRows = document.querySelectorAll('.athlete-row');
+    let savePromises = [];
+
+    athleteRows.forEach(row => {
+        const athleteId = row.id.replace('athlete-', '');
+        const athleteName = athleteId.charAt(0).toUpperCase() + athleteId.slice(1);
+        const distanceSelect = document.getElementById('distance-' + athleteId);
+        const warningState = parseInt(row.getAttribute('data-state'));
+
+        if (distanceSelect) {
+            savePromises.push(saveAthleteData(athleteName, distanceSelect.value, warningState, sessionName));
+        }
+    });
+
+    try {
+        await Promise.all(savePromises);
+        alert('Session saved successfully!');
+        loadAllTimeBestRankings(); // Refresh historical data
+    } catch (error) {
+        console.error('Error saving session:', error);
+        alert('Error saving session. Please try again.');
+    }
+}
+
+async function loadAllTimeBestRankings() {
+    const allTimeBestList = document.getElementById('allTimeBestList');
+    const totalDistancesList = document.getElementById('totalDistancesList');
+
+    try {
+        // Get all YoYo session data
+        const { data, error } = await supabaseClient
+            .from('yoyo_sessions')
+            .select('athlete_name, distance_meters, session_name, test_date')
+            .order('distance_meters', { ascending: false });
+
+        if (error) {
+            throw error;
+        }
+
+        if (!data || data.length === 0) {
+            allTimeBestList.innerHTML = '<p class="text-center opacity-50 font-11">No YoYo test data found.</p>';
+            totalDistancesList.innerHTML = '<p class="text-center opacity-50 font-11">No distance data available.</p>';
+            return;
+        }
+
+        // --- 1. Calculate and Display Personal Bests (Top 15) ---
+        const athleteBests = {};
+        data.forEach(record => {
+            const athlete = record.athlete_name;
+            if (!athleteBests[athlete] || record.distance_meters > athleteBests[athlete].distance_meters) {
+                athleteBests[athlete] = {
+                    athlete_name: athlete,
+                    distance_meters: record.distance_meters,
+                    session_name: record.session_name,
+                    test_date: record.test_date
+                };
+            }
+        });
+
+        const sortedBests = Object.values(athleteBests)
+            .sort((a, b) => b.distance_meters - a.distance_meters)
+            .slice(0, 15); // Top 15
+
+        if (sortedBests.length === 0) {
+            allTimeBestList.innerHTML = '<p class="text-center opacity-50 font-11">No personal best data available.</p>';
+        } else {
+            let rankingsHTML = '';
+            sortedBests.forEach((record, index) => {
+                const position = index + 1;
+                let medalIcon, medalColor;
+
+                if (position === 1) { medalIcon = 'fa-trophy'; medalColor = 'color-yellow-dark'; }
+                else if (position === 2) { medalIcon = 'fa-medal'; medalColor = 'color-grey'; }
+                else if (position === 3) { medalIcon = 'fa-award'; medalColor = 'color-brown-dark'; }
+                else { medalIcon = 'fa-circle'; medalColor = 'color-highlight'; }
+
+                const sessionDate = new Date(record.test_date).toLocaleDateString();
+
+                rankingsHTML += `
+                    <div class="d-flex align-items-center mb-2 pb-2 border-bottom border-light">
+                        <div class="me-3 text-center" style="min-width: 30px;">
+                            <span class="badge bg-highlight color-white font-10">${position}</span>
+                        </div>
+                        <div class="me-3">
+                            <i class="fa ${medalIcon} ${medalColor} fa-lg"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0 font-600">${record.athlete_name}</h6>
+                            <p class="font-10 opacity-70 mb-0">${record.session_name} - ${sessionDate}</p>
+                        </div>
+                        <div class="text-end">
+                            <h5 class="mb-0 font-700 color-highlight">${record.distance_meters}m</h5>
+                        </div>
+                    </div>
+                `;
+            });
+            allTimeBestList.innerHTML = rankingsHTML;
+        }
+
+        // --- 2. Calculate and Display Total Career Distances ---
+        const totalDistances = {};
+        data.forEach(record => {
+            const athlete = record.athlete_name;
+            totalDistances[athlete] = (totalDistances[athlete] || 0) + record.distance_meters;
+        });
+
+        const sortedTotals = Object.entries(totalDistances)
+            .map(([athlete_name, total_distance]) => ({ athlete_name, total_distance }))
+            .sort((a, b) => b.total_distance - a.total_distance);
+
+        if (sortedTotals.length === 0) {
+            totalDistancesList.innerHTML = '<p class="text-center opacity-50 font-11">No total distance data available.</p>';
+        } else {
+            let totalsHTML = '';
+            sortedTotals.forEach((record, index) => {
+                const position = index + 1;
+                totalsHTML += `
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="me-3" style="min-width: 25px;">
+                            <span class="badge bg-green-dark color-white font-9">${position}</span>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="font-13 font-600 mb-0">${record.athlete_name}</h6>
+                        </div>
+                        <div class="text-end">
+                            <span class="font-12 font-700 color-green-dark">${record.total_distance.toLocaleString()}m</span>
+                        </div>
+                    </div>
+                `;
+            });
+            totalDistancesList.innerHTML = totalsHTML;
+        }
+
+
+    } catch (error) {
+        console.error('Error loading historical rankings:', error);
+        allTimeBestList.innerHTML = '<p class="text-center opacity-50 font-11">Error loading rankings data.</p>';
+        totalDistancesList.innerHTML = '<p class="text-center opacity-50 font-11">Error loading total distances.</p>';
+    }
+}
+
+async function updateCurrentSessionProgress() {
+    const currentSessionList = document.getElementById('currentSessionList');
+
+    if (!sessionStarted) {
+        currentSessionList.innerHTML = '<p class="text-center opacity-50 font-11">No active session. Start a session to see live progress.</p>';
+        return;
+    }
+
+    const selectedPlayers = getSelectedPlayers();
+
+    if (selectedPlayers.length === 0) {
+        currentSessionList.innerHTML = '<p class="text-center opacity-50 font-11">No players selected for current session.</p>';
+        return;
+    }
+
+    let progressHTML = '';
+    const athleteRows = document.querySelectorAll('.athlete-row');
+
+    athleteRows.forEach(row => {
+        const athleteId = row.id.replace('athlete-', '');
+        const athleteName = athleteId.charAt(0).toUpperCase() + athleteId.slice(1);
+        const checkbox = document.getElementById('checkbox-' + athleteId);
+
+        if (checkbox && checkbox.checked) {
+            const distanceSelect = document.getElementById('distance-' + athleteId);
+            const warningState = parseInt(row.getAttribute('data-state'));
+            const distance = distanceSelect ? distanceSelect.value : '0';
+
+            let statusIcon, statusColor, statusText;
+            switch(warningState) {
+                case 0:
+                    statusIcon = 'fa-circle';
+                    statusColor = 'color-grey';
+                    statusText = 'Active';
+                    break;
+                case 1:
+                    statusIcon = 'fa-exclamation-triangle';
+                    statusColor = 'color-orange-dark';
+                    statusText = 'Warning';
+                    break;
+                case 2:
+                    statusIcon = 'fa-times-circle';
+                    statusColor = 'color-red-dark';
+                    statusText = 'Eliminated';
+                    break;
+            }
+
+            progressHTML += `
+                <div class="d-flex align-items-center mb-2 pb-1">
+                    <div class="me-3">
+                        <i class="fa ${statusIcon} ${statusColor}"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <span class="font-11 font-600">${athleteName}</span>
+                    </div>
+                    <div class="text-center me-3">
+                        <span class="font-10 opacity-70">${distance}m</span>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge bg-${warningState === 0 ? 'grey' : warningState === 1 ? 'orange' : 'red'}-dark color-white font-9">${statusText}</span>
+                    </div>
+                </div>
+            `;
+        }
+    });
+
+    if (progressHTML) {
+        currentSessionList.innerHTML = progressHTML;
+    } else {
+        currentSessionList.innerHTML = '<p class="text-center opacity-50 font-11">No active players in current session.</p>';
+    }
+}
+
+// New Workflow Functions
+
+async function startSession() {
+    // Check if there's already an active session
+    if (sessionStarted || activeSessionData) {
+        alert('A session is already active. Please finish the current session before starting a new one.');
+        return;
+    }
+
+    const selectedPlayers = getSelectedPlayers();
+    const sessionNameInput = document.getElementById('sessionName');
+    const sessionDateInput = document.getElementById('sessionDate');
+    const sessionName = sessionNameInput.value.trim();
+    const sessionDate = sessionDateInput.value;
+
+    if (selectedPlayers.length === 0) {
+        alert('Please select at least one player before starting the session.');
+        return;
+    }
+
+    if (!sessionName) {
+        alert('Please enter a session name before starting.');
+        return;
+    }
+
+    if (!sessionDate) {
+        alert('Please select a test date before starting.');
+        return;
+    }
+
+    try {
+        // Combine session name with date for unique identification
+        const formattedDate = new Date(sessionDate).toLocaleDateString('en-GB', {
+            day: '2-digit', month: '2-digit', year: 'numeric'
+        });
+        const fullSessionName = `${sessionName.trim()} - ${formattedDate}`;
+
+        // Create database session
+        await createDatabaseSession(fullSessionName, sessionDate, selectedPlayers);
+
+        // Set session state
+        sessionStarted = true;
+        currentSession.name = fullSessionName;
+        currentSession.testDate = sessionDate;
+
+        // Reset only selected athletes to initial state
+        document.querySelectorAll('.athlete-row').forEach(row => {
+            const athleteId = row.id.replace('athlete-', '');
+            const athleteName = athleteId.charAt(0).toUpperCase() + athleteId.slice(1);
+            const athleteNameElement = row.querySelector('.athlete-name');
+            const distanceSelect = document.getElementById('distance-' + athleteId);
+            const checkbox = document.getElementById('checkbox-' + athleteId);
+
+            if (checkbox && checkbox.checked) {
+                row.setAttribute('data-state', '0');
+                athleteNameElement.textContent = athleteName;
+                if (distanceSelect) {
+                    distanceSelect.disabled = false;
+                    distanceSelect.value = '0'; // Reset to 0 distance
+                }
+                row.classList.remove('unselected');
+            } else {
+                row.classList.add('unselected');
+            }
+        });
+
+        currentSession.rankings = [];
+        updateRankingsDisplay();
+        updateDropdownOptions();
+        updateWorkflowUI();
+        disablePlayerSelection();
+
+        showToast('Session Started', `Session "${currentSession.name}" initialized with ${selectedPlayers.length} players`, 'success');
+
+    } catch (error) {
+        console.error('Error starting session:', error);
+        showToast('Session Error', 'Failed to start session. Please try again.', 'error');
+    }
+}
+
+async function startYoYoTest() {
+    if (!sessionStarted) {
+        alert('Please start a session first.');
+        return;
+    }
+
+    try {
+        // Update database session status
+        testStartTime = new Date();
+        await updateSessionStatus('test_running', testStartTime);
+
+        // Enable warning system
+        yoyoTestStarted = true;
+        setWarningSystemState(true);
+
+        // Start the timer
+        startTimer();
+
+        // Update workflow UI
+        updateWorkflowUI();
+
+        showToast('Test Started', 'YoYo test is now running. Click player names to change warning states.', 'success');
+
+    } catch (error) {
+        console.error('Error starting test:', error);
+        showToast('Test Error', 'Failed to start test. Please try again.', 'error');
+    }
+}
+
+async function finishYoYoTest() {
+    if (!sessionStarted) {
+        alert('No session is currently active.');
+        return;
+    }
+
+    const confirmed = confirm('Are you sure you want to finish the test?\n\nThis will stop the timer, save all current player data, and end the session.');
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+        // Stop the timer
+        stopTimer(true);
+
+        // Save data for players who didn't reach "Raus!" state (not already saved)
+        const savePromises = getSelectedPlayers().map(playerName => {
+            const row = document.getElementById('athlete-' + playerName);
+            const distanceSelect = document.getElementById('distance-' + playerName);
+            const warningState = parseInt(row.getAttribute('data-state'));
+
+            if (distanceSelect && warningState !== 2) {
+                const capitalizedPlayerName = playerName.charAt(0).toUpperCase() + playerName.slice(1);
+                return saveAthleteData(capitalizedPlayerName, distanceSelect.value, warningState, currentSession.name, currentSession.testDate);
+            }
+            return Promise.resolve();
+        });
+
+        await Promise.all(savePromises);
+
+        // Complete the database session
+        await completeSession();
+        showToast('Test Completed', `Session "${currentSession.name}" finished and saved successfully!`, 'success');
+
+        // Reset states
+        resetTimer();
+        yoyoTestStarted = false;
+        sessionStarted = false;
+        setWarningSystemState(false);
+        activeSessionData = null;
+        currentSession.sessionId = null;
+        currentSession.name = '';
+        currentSession.testDate = null;
+        updateWorkflowUI();
+        enablePlayerSelection();
+        loadAllTimeBestRankings();
+
+    } catch (error) {
+        console.error('Error finishing test:', error);
+        showToast('Save Error', 'Error finishing test. Please try again.', 'error');
+    }
+}
+
+async function resetWorkflow() {
+    const confirmed = confirm('Are you sure you want to reset the workflow?\n\nThis will ABORT any running test and discard unsaved progress for the current session.');
+
+    if (confirmed) {
+        try {
+            // Delete active session from database if it exists
+            if (activeSessionData) {
+                await deleteActiveSession();
+            }
+
+            // Reset states
+            sessionStarted = false;
+            yoyoTestStarted = false;
+            setWarningSystemState(false);
+            activeSessionData = null;
+            currentSession.sessionId = null;
+            currentSession.name = '';
+
+            resetTimer();
+
+            // Reset all athletes to initial state
+            document.querySelectorAll('.athlete-row').forEach(row => {
+                const athleteId = row.id.replace('athlete-', '');
+                const athleteName = athleteId.charAt(0).toUpperCase() + athleteId.slice(1);
+                row.setAttribute('data-state', '0');
+                row.querySelector('.athlete-name').textContent = athleteName;
+                const distanceSelect = document.getElementById('distance-' + athleteId);
+                if (distanceSelect) {
+                    distanceSelect.disabled = false;
+                    distanceSelect.value = '0';
+                }
+            });
+
+            selectAllPlayers();
+            deselectAllPlayers(); // Let user re-select
+
+            updateCurrentSessionProgress();
+            updateDropdownOptions();
+            updateWorkflowUI();
+            enablePlayerSelection();
+
+            showToast('Workflow Reset', 'Active session aborted. Ready to start a new session.', 'warning');
+
+        } catch (error) {
+            console.error('Error resetting workflow:', error);
+            showToast('Reset Error', 'Error resetting workflow. Please try again.', 'error');
+        }
+    }
+}
+
+// Player Selection Functions
+function togglePlayerSelection(athleteName) {
+    const athleteRow = document.getElementById('athlete-' + athleteName);
+    const checkbox = document.getElementById('checkbox-' + athleteName);
+    athleteRow.classList.toggle('unselected', !checkbox.checked);
+}
+
+// Timer Functions
+function startTimer() {
+    testStartTime = new Date();
+    nextEventIndex = 0; // Reset event index
+    isPaused = false;
+    timeWhenPaused = 0;
+
+    document.getElementById('testStartTimeDisplay').textContent = testStartTime.toLocaleTimeString();
+    document.getElementById('timerCard').style.display = 'block';
+
+    // Reset pause button to initial state
+    const pauseResumeBtn = document.getElementById('pauseResumeBtn');
+    if (pauseResumeBtn) {
+        const icon = pauseResumeBtn.querySelector('i');
+        const text = pauseResumeBtn.querySelector('.btn-text');
+        pauseResumeBtn.classList.remove('bg-green-dark');
+        pauseResumeBtn.classList.add('bg-yellow-dark');
+        icon.className = 'fa fa-pause me-2';
+        if (text) text.textContent = 'Pause';
+    }
+
+
+    // Immediately trigger the first event (time 0) and update UI
+    checkYoYoEvents(0);
+    updateNextActionTimer(0);
+
+    timerInterval = setInterval(updateTimer, 100);
+}
+
+function updateTimer() {
+    if (!testStartTime) return;
+
+    const elapsed = new Date() - testStartTime;
+
+    const minutes = Math.floor(elapsed / 60000);
+    const seconds = Math.floor((elapsed % 60000) / 1000);
+    const tenths = Math.floor((elapsed % 1000) / 100);
+
+    document.getElementById('timerMinutes').textContent = minutes.toString().padStart(2, '0');
+    document.getElementById('timerSeconds').textContent = seconds.toString().padStart(2, '0');
+    document.getElementById('timerMilliseconds').textContent = tenths.toString();
+
+    // Check for YoYo events and update the next action timer
+    checkYoYoEvents(elapsed);
+    updateNextActionTimer(elapsed);
+}
+
+function stopTimer(hardStop = false) {
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+    [startSound, backSound, recoverySound].forEach(sound => {
+        if(sound) {
+            sound.pause();
+            if (hardStop) {
+                sound.currentTime = 0;
+            }
+        }
+    });
+}
+
+// Workflow UI Management
+function updateWorkflowUI() {
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
+    const startSessionBtn = document.getElementById('startSessionBtn');
+    const sessionNameInput = document.getElementById('sessionName');
+    const sessionDateInput = document.getElementById('sessionDate');
+
+    const disableInputs = sessionStarted || yoyoTestStarted;
+    startSessionBtn.classList.toggle('disabled', disableInputs);
+    startSessionBtn.style.opacity = disableInputs ? '0.5' : '1';
+    startSessionBtn.style.pointerEvents = disableInputs ? 'none' : 'auto';
+    sessionNameInput.disabled = disableInputs;
+    sessionDateInput.disabled = disableInputs;
+
+    step1.style.display = !sessionStarted ? 'block' : 'none';
+    step2.style.display = sessionStarted && !yoyoTestStarted ? 'block' : 'none';
+    step3.style.display = sessionStarted && yoyoTestStarted ? 'block' : 'none';
+}
+
+function disablePlayerSelection() {
+    document.querySelectorAll('.athlete-checkbox').forEach(cb => { cb.disabled = true; });
+    const selectionControls = document.querySelector('.selection-controls');
+    if (selectionControls) {
+        selectionControls.style.opacity = '0.5';
+        selectionControls.style.pointerEvents = 'none';
+    }
+}
+
+function enablePlayerSelection() {
+    document.querySelectorAll('.athlete-checkbox').forEach(cb => { cb.disabled = false; });
+    const selectionControls = document.querySelector('.selection-controls');
+    if (selectionControls) {
+        selectionControls.style.opacity = '1';
+        selectionControls.style.pointerEvents = 'auto';
+    }
+}
+
+function resetTimer() {
+    stopTimer(true);
+    testStartTime = null;
+    nextEventIndex = 0;
+    isPaused = false;
+    timeWhenPaused = 0;
+
+    // Reset display
+    document.getElementById('timerMinutes').textContent = '00';
+    document.getElementById('timerSeconds').textContent = '00';
+    document.getElementById('timerMilliseconds').textContent = '0';
+    document.getElementById('testStartTimeDisplay').textContent = '--:--';
+
+    // Reset new GUI elements
+    document.getElementById('yoyoLevel').textContent = '--';
+    document.getElementById('yoyoLeg').textContent = '--';
+    document.getElementById('yoyoDistance').textContent = '0m';
+    document.getElementById('nextAction').textContent = '--';
+    document.getElementById('timeToNextAction').textContent = '--';
+
+    document.getElementById('timerCard').style.display = 'none';
+}
+
+function togglePauseYoYoTest() {
+    const pauseResumeBtn = document.getElementById('pauseResumeBtn');
+    if (!pauseResumeBtn) return;
+    const icon = pauseResumeBtn.querySelector('i');
+    const text = pauseResumeBtn.querySelector('.btn-text');
+
+    if (!isPaused) { // Action: PAUSE
+        if (!timerInterval) return; // Can't pause if not running
+
+        isPaused = true;
+        timeWhenPaused = new Date() - testStartTime;
+        stopTimer(); // This is a soft stop, just pauses timer and sounds
+
+        pauseResumeBtn.classList.remove('bg-yellow-dark');
+        pauseResumeBtn.classList.add('bg-green-dark');
+        icon.className = 'fa fa-play me-2';
+        if (text) text.textContent = 'Resume';
+        showToast('Test Paused', 'Timer has been paused.', 'info');
+    } else { // Action: RESUME
+        isPaused = false;
+        // Adjust start time to account for the pause
+        testStartTime = new Date() - timeWhenPaused;
+        timeWhenPaused = 0;
+
+        // resume timer
+        timerInterval = setInterval(updateTimer, 100);
+
+        pauseResumeBtn.classList.remove('bg-green-dark');
+        pauseResumeBtn.classList.add('bg-yellow-dark');
+        icon.className = 'fa fa-pause me-2';
+        if (text) text.textContent = 'Pause';
+        showToast('Test Resumed', 'Timer is running again.', 'success');
+    }
+}
+
+function resetYoYoTest() {
+    if (confirm('Are you sure you want to reset the YoYo test? This will reset the timer and all athlete states but keep the session active.')) {
+        resetTimer();
+        yoyoTestStarted = false;
+        setWarningSystemState(false);
+        updateWorkflowUI();
+
+        // Reset all athletes to initial state
+        document.querySelectorAll('.athlete-row').forEach(row => {
+            const checkbox = row.querySelector('.athlete-checkbox');
+            if (checkbox && checkbox.checked) {
+                const athleteId = row.id.replace('athlete-', '');
+                const athleteName = athleteId.charAt(0).toUpperCase() + athleteId.slice(1);
+                row.setAttribute('data-state', '0');
+                row.querySelector('.athlete-name').textContent = athleteName;
+                const distanceSelect = document.getElementById('distance-' + athleteId);
+                if (distanceSelect) {
+                    distanceSelect.disabled = false;
+                    distanceSelect.value = '0';
+                }
+            }
+        });
+        currentSession.rankings = [];
+        updateRankingsDisplay();
+        updateDropdownOptions();
+        showToast('Test Reset', 'Timer and player states have been reset.', 'info');
+    }
+}
+
+
+function selectAllPlayers() {
+    document.querySelectorAll('.athlete-checkbox').forEach(cb => { cb.checked = true; });
+    document.querySelectorAll('.athlete-row').forEach(row => row.classList.remove('unselected'));
+}
+
+function deselectAllPlayers() {
+    document.querySelectorAll('.athlete-checkbox').forEach(cb => { cb.checked = false; });
+    document.querySelectorAll('.athlete-row').forEach(row => row.classList.add('unselected'));
+}
+
+function getSelectedPlayers() {
+    return Array.from(document.querySelectorAll('.athlete-checkbox:checked'))
+        .map(cb => cb.id.replace('checkbox-', ''));
+}
+
+// Warning system visual state management
+function setWarningSystemState(enabled) {
+    const athletesCardContent = document.querySelector('.card-style .content');
+    athletesCardContent.classList.toggle('warning-system-disabled', !enabled);
+}
+
+async function resetDatabase() {
+    if (prompt('This will DELETE ALL data. Type "DELETE" to confirm.') !== 'DELETE') {
+        alert('Database reset cancelled.');
+        return;
+    }
+
+    try {
+        showToast('Resetting DB...', 'Please wait, deleting all data.', 'info');
+
+        await supabaseClient.from('active_sessions').delete().neq('session_id', '00000000-0000-0000-0000-000000000000');
+        await supabaseClient.from('yoyo_sessions').delete().neq('id', 0);
+
+        resetWorkflow(); // Reset the UI completely
+        loadAllTimeBestRankings(); // Refresh displays to show they are empty
+        showToast('Database Reset', 'All YoYo test data has been deleted.', 'success');
+
+    } catch (error) {
+        console.error('Error resetting database:', error);
+        showToast('DB Reset Error', 'Could not delete data. Check console.', 'error');
+    }
+}
+
+// Function to populate distance dropdown options
+function populateDistanceDropdown(selectElement, schedule) {
+    selectElement.innerHTML = '';
+    const distances = [...new Set(schedule.map(item => item.total_distance_m))].sort((a, b) => a - b);
+
+    distances.forEach(distance => {
+        const option = document.createElement('option');
+        option.value = distance;
+        option.textContent = `${distance}m`;
+        selectElement.appendChild(option);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', async function() {
+    // Initialize Audio elements
+    startSound = document.getElementById('startSound');
+    backSound = document.getElementById('backSound');
+    recoverySound = document.getElementById('recoverySound');
+
+    // Populate all distance dropdowns from schedule data
+    const distanceDropdowns = document.querySelectorAll('.distance-dropdown');
+    distanceDropdowns.forEach(dropdown => {
+        populateDistanceDropdown(dropdown, yoyoScheduleData);
+        // Add event listener for manual changes
+        dropdown.addEventListener('change', () => {
+            updateCurrentSessionProgress();
+        });
+    });
+
+    // Initialize all athlete rows
+    const athleteRows = document.querySelectorAll('.athlete-row');
+    athleteRows.forEach(row => {
+        row.setAttribute('data-state', '0');
+        const athleteId = row.id.replace('athlete-', '');
+        const distanceSelect = document.getElementById('distance-' + athleteId);
+        if (distanceSelect) {
+            distanceSelect.addEventListener('change', function() {
+                if (row.getAttribute('data-state') === '2') {
+                    updateDropdownOptions();
+                }
+                if (activeSessionData) {
+                    const warningState = parseInt(row.getAttribute('data-state'));
+                    const athleteName = athleteId.charAt(0).toUpperCase() + athleteId.slice(1);
+                    updatePlayerState(athleteName, this.value, warningState, warningState === 2);
+                }
+            });
+        }
+    });
+
+    updateDropdownOptions();
+
+    // Initialize Supabase and load data
+    initializeSupabase();
+    loadAllTimeBestRankings();
+
+    // Set today's date
+    document.getElementById('sessionDate').value = new Date().toISOString().split('T')[0];
+
+    // Check for and restore active session
+    try {
+        const activeSession = await checkForActiveSession();
+        if (activeSession) {
+            await restoreActiveSession(activeSession);
+        } else {
+            setWarningSystemState(false);
+            updateWorkflowUI();
+            updateCurrentSessionProgress();
+        }
+    } catch (error) {
+        console.error('Error during session check:', error);
+        setWarningSystemState(false);
+        updateWorkflowUI();
+        updateCurrentSessionProgress();
+    }
+});
+</script>
+</body>
+</html>
