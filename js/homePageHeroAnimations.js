@@ -4,6 +4,88 @@ export function initHomePageHeroAnimations() {
   // Add initial delay to account for page loading
   const initialDelay = 800; // 800ms delay before starting animations
 
+  // Get the first picture/hero image element - Updated to target background slides
+  const firstPicture = document.querySelector(
+    '.bg-slide.active, #bg-slideshow .bg-slide:first-child'
+  );
+
+  // Create and add reveal animation styles
+  if (firstPicture) {
+    // Create scanline element
+    const scanline = document.createElement('div');
+    scanline.classList.add('scanline');
+    scanline.style.cssText = `
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+      z-index: 10;
+      opacity: 0;
+      transform: translateY(-2px);
+    `;
+
+    // Create reveal mask container
+    const revealContainer = document.createElement('div');
+    revealContainer.classList.add('image-reveal-container');
+    revealContainer.style.cssText = `
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+      z-index: 5;
+      pointer-events: none;
+    `;
+
+    // Insert the reveal container into the bg-slideshow container
+    const bgSlideshow = document.querySelector('#bg-slideshow');
+    if (bgSlideshow) {
+      bgSlideshow.appendChild(revealContainer);
+      revealContainer.appendChild(scanline);
+    }
+
+    // Set initial state for reveal animation - create a reveal mask
+    const revealMask = document.createElement('div');
+    revealMask.classList.add('reveal-mask');
+    revealMask.style.cssText = `
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #1b1d21;
+      transform: translateY(0%);
+      transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      z-index: 8;
+    `;
+    revealContainer.appendChild(revealMask);
+
+    // Add CSS animation keyframes to document head
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes scanlineMove {
+        0% {
+          transform: translateY(-2px);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100vh);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
   // Get text elements for initial fade-in
   const charlierText = document.querySelector('.card-bottom h1.font-24');
   const finleyHeading = document.querySelector('.finley-animated-heading');
@@ -12,13 +94,44 @@ export function initHomePageHeroAnimations() {
   // Set initial opacity for Charlier text (clubText is already 0 via inline style)
   if (charlierText) charlierText.style.opacity = '0';
 
-  // Fade in Charlier text first
+  // Start image reveal animation immediately after initial delay
+  setTimeout(() => {
+    if (firstPicture) {
+      // Start image reveal by sliding the mask up
+      const revealMask = document.querySelector('.reveal-mask');
+      if (revealMask) {
+        revealMask.style.transform = 'translateY(-100%)';
+      }
+
+      // Start scanline animation
+      const scanline = document.querySelector('.scanline');
+      if (scanline) {
+        scanline.style.animation = 'scanlineMove 1.5s ease-out';
+
+        // Remove scanline after animation completes
+        setTimeout(() => {
+          if (scanline.parentNode) {
+            scanline.parentNode.removeChild(scanline);
+          }
+        }, 1500);
+      }
+
+      // Remove reveal mask after animation completes
+      setTimeout(() => {
+        if (revealMask && revealMask.parentNode) {
+          revealMask.parentNode.removeChild(revealMask);
+        }
+      }, 1500);
+    }
+  }, initialDelay);
+
+  // Fade in Charlier text slightly after image starts revealing
   setTimeout(() => {
     if (charlierText) {
       charlierText.style.transition = 'opacity 0.8s ease-in-out';
       charlierText.style.opacity = '1';
     }
-  }, initialDelay);
+  }, initialDelay + 200);
 
   // Then animate Finley letters
   if (finleyHeading) {
