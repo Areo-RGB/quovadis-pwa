@@ -94,19 +94,37 @@
         .trainer-square[data-number='3'].active { background-color: #007aff; color: #007aff; }
         .trainer-square[data-number='4'].active { background-color: #34c759; color: #34c759; }
 
-        .trainer-controls {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
+        .settings-container {
             margin-top: 20px;
             padding: 15px;
             background-color: #fff;
             border-radius: 8px;
         }
 
+        .mode-selection-area {
+            display: flex;
+            justify-content: center;
+        }
+        .mode-selection-area .control-group {
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 15px 0;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
         .control-group { display: flex; flex-direction: column; align-items: center; }
         .control-group label { font-size: clamp(0.8rem, 2.5vw, 0.9rem); color: #606770; margin-bottom: 5px; }
-        .trainer-controls input, .trainer-controls select {
+        .settings-container input, .settings-container select {
             padding: 10px 14px; border-radius: 6px; border: 1px solid #ccc; font-size: clamp(0.9rem, 3vw, 1rem); background-color: #f5f6f7; width: 100%; box-sizing: border-box;
         }
 
@@ -121,7 +139,9 @@
         #shuffle-btn:disabled { background-color: #c9c8f4; cursor: not-allowed; }
 
         .trainer-display { margin: 20px 0; padding: 15px; background-color: #fff; border-radius: 8px; }
-        #main-display { font-size: clamp(2rem, 8vw, 3rem); font-weight: bold; color: #1c1e21; font-variant-numeric: tabular-nums; }
+        #main-display { font-size: clamp(2rem, 8vw, 3rem); font-weight: bold; color: #1c1e21; font-variant-numeric: tabular-nums; transition: opacity 0.3s ease; }
+        #main-display.idle { opacity: 0.5; }
+
         #results-display { font-size: clamp(1rem, 3vw, 1.1rem); color: #333; min-height: 24px; display: flex; align-items: center; justify-content: center; }
 
         .avg-time-display {
@@ -134,8 +154,10 @@
             align-items: center;
             justify-content: center;
             display: none; /* Hidden by default */
+            flex-wrap: wrap;
         }
-        .avg-time-display strong { margin-left: 8px; }
+        .avg-time-display strong { margin: 0 4px; }
+        #missed-hits-display { color: #dc3545; margin-left: 8px; }
 
         .hidden {
             display: none !important;
@@ -150,8 +172,9 @@
             gap: 15px;
         }
 
-        #game-overlay #main-display { color: #fff; flex-shrink: 0; }
+        #game-overlay #main-display { color: #fff; flex-shrink: 0; opacity: 1; }
         #game-overlay .avg-time-display { color: #aeb8d0; margin: -10px 0 0 0; }
+        #game-overlay #missed-hits-display { color: #ff3b30; }
         #game-overlay .trainer-grid { width: 100%; max-width: 500px; display: grid; }
         #game-overlay #stop-btn { width: 100%; max-width: 410px; flex-shrink: 0; }
     </style>
@@ -163,28 +186,42 @@
 
         <div class="trainer-display">
             <div id="main-display-placeholder">
-                <div id="main-display">00:00</div>
+                <div id="main-display" class="idle">00:00</div>
             </div>
             <div id="avg-time-placeholder">
-                 <div id="avg-time-display" class="avg-time-display">Avg: <strong>- ms</strong></div>
+                 <div id="avg-time-display" class="avg-time-display">
+                     Avg: <strong>- ms</strong><span id="missed-hits-display"></span>
+                 </div>
             </div>
             <div id="results-display">
-                <span>Configure your session below.</span>
+                <span></span>
             </div>
         </div>
 
-        <div class="trainer-controls">
-            <div class="control-group"><label for="mode-select">Mode</label><select id="mode-select"><option value="automatic" selected>Automatic</option><option value="interactive">Interactive</option></select></div>
-            <div class="control-group"><label for="targets-select">Targets</label><select id="targets-select"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option></select></div>
-            <div class="control-group" id="control-group-interval"><label for="interval-select">Interval (ms)</label><select id="interval-select"><option value="250">250</option><option value="500">500</option><option value="750">750</option><option value="1000" selected>1000</option><option value="1250">1250</option><option value="1500">1500</option></select></div>
-            <div class="control-group" id="control-group-duration"><label for="session-duration">Duration (s)</label><input type="number" id="session-duration" value="30" min="5" step="5"></div>
-            <div class="control-group hidden" id="control-group-cards"><label for="card-amount-input">Cards to Press</label><input type="number" id="card-amount-input" value="10" min="5" step="1"></div>
-            <div class="control-group" id="control-group-shuffle">
-                <label for="shuffle-select">Shuffle Mid-Game</label>
-                <select id="shuffle-select">
-                    <option value="no" selected>No</option>
-                    <option value="yes">Yes</option>
-                </select>
+        <div class="settings-container">
+            <div class="mode-selection-area">
+                <div class="control-group">
+                    <label for="mode-select">Mode</label>
+                    <select id="mode-select">
+                        <option value="automatic" selected>Automatic</option>
+                        <option value="interactive">Interactive</option>
+                    </select>
+                </div>
+            </div>
+            <hr class="divider">
+            <div class="settings-grid">
+                <div class="control-group"><label for="targets-select">Targets</label><select id="targets-select"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option></select></div>
+                <div class="control-group" id="control-group-interval"><label for="interval-select">Interval (ms)</label><select id="interval-select"><option value="250">250</option><option value="500">500</option><option value="750">750</option><option value="1000" selected>1000</option><option value="1250">1250</option><option value="1500">1500</option></select></div>
+                <div class="control-group" id="control-group-duration"><label for="session-duration">Duration (s)</label><input type="number" id="session-duration" value="30" min="5" step="5"></div>
+                <div class="control-group hidden" id="control-group-cards"><label for="card-amount-input">Cards to Press</label><input type="number" id="card-amount-input" value="10" min="5" step="1"></div>
+                <div class="control-group hidden" id="control-group-livetime"><label for="livetime-select">Card Livetime</label><select id="livetime-select"><option value="none" selected>No Limit</option><option value="750">750 ms</option><option value="1000">1000 ms</option><option value="1250">1250 ms</option><option value="1500">1500 ms</option><option value="2000">2000 ms</option></select></div>
+                <div class="control-group" id="control-group-shuffle">
+                    <label for="shuffle-select">Shuffle Mid-Game</label>
+                    <select id="shuffle-select">
+                        <option value="no" selected>No</option>
+                        <option value="yes">Yes</option>
+                    </select>
+                </div>
             </div>
         </div>
 
@@ -218,6 +255,7 @@
             const trainerGrid = document.querySelector('.trainer-grid');
             const resultsDisplay = document.getElementById('results-display');
             const avgTimeDisplay = document.getElementById('avg-time-display');
+            const missedHitsDisplay = document.getElementById('missed-hits-display');
 
             const mainDisplayPlaceholder = document.getElementById('main-display-placeholder');
             const gridPlaceholder = document.getElementById('grid-placeholder');
@@ -229,16 +267,17 @@
             const intervalSelect = document.getElementById('interval-select');
             const durationInput = document.getElementById('session-duration');
             const cardAmountInput = document.getElementById('card-amount-input');
+            const livetimeSelect = document.getElementById('livetime-select');
             const shuffleSelect = document.getElementById('shuffle-select');
 
             const intervalGroup = document.getElementById('control-group-interval');
             const durationGroup = document.getElementById('control-group-duration');
             const cardsGroup = document.getElementById('control-group-cards');
-            const shuffleGroup = document.getElementById('control-group-shuffle');
+            const livetimeGroup = document.getElementById('control-group-livetime');
 
-            let activeSquareNumber = null, gameIntervalId = null, sessionTimerId = null, reactionTimerId = null;
+            let activeSquareNumber = null, gameIntervalId = null, sessionTimerId = null, reactionTimerId = null, cardLivetimeId = null;
             let timeRemaining = 0, isRunning = false;
-            let reactionStartTime = 0, reactionTimes = [], correctHits = 0, targetHits = 0;
+            let reactionStartTime = 0, reactionTimes = [], correctHits = 0, targetHits = 0, missedHits = 0;
             let midGameShuffleDone = false;
 
             const formatTime = (s) => `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
@@ -263,10 +302,12 @@
                     intervalGroup.classList.remove('hidden');
                     durationGroup.classList.remove('hidden');
                     cardsGroup.classList.add('hidden');
+                    livetimeGroup.classList.add('hidden');
                 } else { // interactive
                     intervalGroup.classList.add('hidden');
                     durationGroup.classList.add('hidden');
                     cardsGroup.classList.remove('hidden');
+                    livetimeGroup.classList.remove('hidden');
                 }
             };
 
@@ -277,10 +318,12 @@
                 });
                 startBtn.disabled = false; stopBtn.disabled = true; shuffleBtn.disabled = false;
 
-                document.querySelectorAll('.trainer-controls select, .trainer-controls input').forEach(el => el.disabled = false);
+                document.querySelectorAll('.settings-container select, .settings-container input').forEach(el => el.disabled = false);
 
-                resultsDisplay.innerHTML = '<span>Configure your session and press Start.</span>';
+                resultsDisplay.innerHTML = '<span></span>';
                 avgTimeDisplay.style.display = 'none';
+                missedHitsDisplay.textContent = '';
+                mainDisplay.classList.add('idle');
 
                 if (modeSelect.value === 'automatic') {
                     timeRemaining = parseInt(durationInput.value, 10);
@@ -301,7 +344,14 @@
                 return document.querySelector(`.trainer-square[data-number='${nextNum}']`);
             };
 
+            const handleCardTimeout = () => {
+                missedHits++;
+                missedHitsDisplay.innerHTML = `| Missed: <strong>${missedHits}</strong>`;
+                gameLoop();
+            };
+
             const activateSquare = (square) => {
+                clearTimeout(cardLivetimeId);
                 if (reactionTimerId) clearInterval(reactionTimerId);
                 document.querySelectorAll('.reaction-time-display').forEach(d => d.textContent = '');
                 if (activeSquareNumber) document.querySelector(`[data-number="${activeSquareNumber}"]`)?.classList.remove('active');
@@ -318,6 +368,11 @@
                             reactionDisplay.textContent = `${elapsed} ms`;
                         }
                     }, 10);
+
+                    if (livetimeSelect.value !== 'none') {
+                        const livetime = parseInt(livetimeSelect.value, 10);
+                        cardLivetimeId = setTimeout(handleCardTimeout, livetime);
+                    }
                 }
             };
 
@@ -337,6 +392,7 @@
                 }
 
                 if (modeSelect.value === 'interactive' && reactionStartTime && clickedSquare.dataset.number == activeSquareNumber) {
+                    if (cardLivetimeId) clearTimeout(cardLivetimeId);
                     if (reactionTimerId) clearInterval(reactionTimerId);
                     reactionTimerId = null;
 
@@ -345,12 +401,11 @@
                     correctHits++;
 
                     const avg = calculateAverage(reactionTimes);
-                    avgTimeDisplay.innerHTML = `Avg: <strong>${avg} ms</strong>`;
+                    avgTimeDisplay.querySelector('strong').textContent = `${avg} ms`;
                     mainDisplay.textContent = `${correctHits} / ${targetHits}`;
 
                     reactionStartTime = 0;
 
-                    // --- SHUFFLE LOGIC FOR INTERACTIVE MODE ---
                     const midPoint = Math.floor(targetHits / 2);
                     if (shuffleSelect.value === 'yes' && correctHits === midPoint && !midGameShuffleDone) {
                         shuffleNumbers();
@@ -382,18 +437,22 @@
             };
 
             const handleStart = () => {
-                midGameShuffleDone = false; isRunning = true;
+                midGameShuffleDone = false; isRunning = true; missedHits = 0;
 
-                document.querySelectorAll('.trainer-controls select, .trainer-controls input').forEach(el => el.disabled = true);
-                startBtn.disabled = true;
-                shuffleBtn.disabled = true;
-                stopBtn.disabled = false;
+                document.querySelectorAll('.settings-container select, .settings-container input').forEach(el => el.disabled = true);
+                startBtn.disabled = true; shuffleBtn.disabled = true; stopBtn.disabled = false;
+                mainDisplay.classList.remove('idle');
 
                 gameOverlay.style.display = 'flex';
                 gameOverlay.appendChild(mainDisplay);
                 if (modeSelect.value === 'interactive') {
                     avgTimeDisplay.style.display = 'flex';
-                    avgTimeDisplay.innerHTML = `Avg: <strong>- ms</strong>`;
+                    avgTimeDisplay.querySelector('strong').textContent = `- ms`;
+                    if (livetimeSelect.value !== 'none') {
+                        missedHitsDisplay.innerHTML = `| Missed: <strong>0</strong>`;
+                    } else {
+                        missedHitsDisplay.innerHTML = '';
+                    }
                     gameOverlay.appendChild(avgTimeDisplay);
                 }
                 gameOverlay.appendChild(trainerGrid);
@@ -417,7 +476,8 @@
                 isRunning = false;
                 clearInterval(gameIntervalId); clearInterval(sessionTimerId);
                 if (reactionTimerId) clearInterval(reactionTimerId);
-                gameIntervalId = sessionTimerId = reactionTimerId = null;
+                clearTimeout(cardLivetimeId);
+                gameIntervalId = sessionTimerId = reactionTimerId = cardLivetimeId = null;
 
                 mainDisplayPlaceholder.appendChild(mainDisplay);
                 avgTimePlaceholder.appendChild(avgTimeDisplay);
@@ -427,7 +487,12 @@
 
                 if (modeSelect.value === 'interactive') {
                     const avg = calculateAverage(reactionTimes);
-                    avgTimeDisplay.innerHTML = `Final Avg: <strong>${avg > 0 ? avg + ' ms' : 'N/A'}</strong> | Hits: <strong>${correctHits} / ${targetHits}</strong>`;
+                    avgTimeDisplay.querySelector('strong').textContent = `${avg > 0 ? avg + ' ms' : 'N/A'}`;
+                    if (livetimeSelect.value !== 'none') {
+                        missedHitsDisplay.innerHTML = `| Missed: <strong>${missedHits}</strong>`;
+                    } else {
+                        missedHitsDisplay.innerHTML = '';
+                    }
                     avgTimeDisplay.style.display = 'flex';
                     resultsDisplay.innerHTML = `<span>Session Complete.</span>`;
                 } else {
@@ -442,7 +507,7 @@
             shuffleBtn.addEventListener('click', shuffleNumbers);
             squares.forEach(square => square.addEventListener('click', handleSquareClick));
             modeSelect.addEventListener('change', resetUI);
-            [durationInput, cardAmountInput, intervalSelect].forEach(input => input.addEventListener('change', resetUI));
+            [durationInput, cardAmountInput, intervalSelect, livetimeSelect, shuffleSelect].forEach(input => input.addEventListener('change', resetUI));
 
             assignInitialNumbers();
             resetUI();

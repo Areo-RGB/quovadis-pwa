@@ -133,22 +133,77 @@ export function initHomePageHeroAnimations() {
     }
   }, initialDelay + 200);
 
-  // Then animate Finley letters
+  // Then animate Finley letters with terminal effect
   if (finleyHeading) {
     const finleyLetters = finleyHeading.querySelectorAll('span');
-    let finleyAnimationEndTime = initialDelay + 400; // Base time for Finley animation start
+    let finleyAnimationEndTime = initialDelay + 800; // Base time for Finley animation start
 
+    // Create blinking cursor
+    const cursor = document.createElement('span');
+    cursor.textContent = '|';
+    cursor.style.cssText = `
+      position: absolute;
+      color: #ffffff;
+      animation: blinkCursor 1s infinite;
+      left: 100%;
+      top: 0;
+      margin-left: 0.2em;
+      z-index: 10;
+      pointer-events: none;
+    `;
+
+    // Make finley heading relatively positioned for cursor positioning
+    finleyHeading.style.position = 'relative';
+    finleyHeading.appendChild(cursor);
+
+    // Add blinking cursor keyframes
+    const cursorStyle = document.createElement('style');
+    cursorStyle.textContent = `
+      @keyframes blinkCursor {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0; }
+      }
+    `;
+    document.head.appendChild(cursorStyle);
+
+    // Hide all letters initially
     finleyLetters.forEach((span, index) => {
-      const letterDelay = index * 100; // Stagger delay for each letter
-      span.style.animationDelay = `${initialDelay + 400 + letterDelay}ms`; // Absolute delay from page load
-      span.classList.add('fade-in-letter-anim');
+      span.style.opacity = '0';
+      span.style.transform = 'translateX(20px)';
+      span.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
+    });
+
+    // Animate letters from left to right (F, I, N, L, E, Y)
+    finleyLetters.forEach((span, index) => {
+      const letterDelay = index * 300; // Longer delay between letters
+      setTimeout(
+        () => {
+          span.style.opacity = '1';
+          span.style.transform = 'translateX(0)';
+
+          // Apply special styling to F during animation
+          if (index === 0) {
+            span.style.setProperty('font-size', '1.3em', 'important');
+            span.style.setProperty('color', '#ff4444', 'important');
+            span.style.setProperty('font-weight', '900', 'important');
+          }
+        },
+        initialDelay + 800 + letterDelay
+      );
+
       // Calculate when the last letter's animation will end
-      // fadeInLetter animation is 0.5s (500ms)
       finleyAnimationEndTime = Math.max(
         finleyAnimationEndTime,
-        initialDelay + 400 + letterDelay + 500
+        initialDelay + 800 + letterDelay + 300
       );
     });
+
+    // Remove cursor after all letters are typed
+    setTimeout(() => {
+      if (cursor.parentNode) {
+        cursor.parentNode.removeChild(cursor);
+      }
+    }, finleyAnimationEndTime + 500);
 
     // Animate Club Name after Finley animation completes
     const clubNameAnimationStartTime = finleyAnimationEndTime + 100; // Start 100ms after Finley
