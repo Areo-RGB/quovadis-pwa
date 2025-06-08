@@ -173,7 +173,7 @@ export function initHomePageHeroAnimations() {
           // Apply special styling to F during animation
           if (index === 0) {
             span.style.setProperty('font-size', '1.3em', 'important');
-            span.style.setProperty('color', '#ff4444', 'important');
+            span.style.setProperty('color', '#0064c8', 'important');
             span.style.setProperty('font-weight', '900', 'important');
           }
         },
