@@ -16,6 +16,10 @@
   </script>
   <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
   <meta content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" name="viewport">
+  <!-- Development cache-busting -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>
    QuoVadis
   </title>
@@ -27,6 +31,8 @@
   <link href="app/icons/icon-192x192.png" rel="apple-touch-icon" sizes="192x192">
   <meta content="#1b1d21" media="(prefers-color-scheme: light)" name="theme-color">
   <meta content="#1b1d21" media="(prefers-color-scheme: dark)" name="theme-color">
+  <!-- Development cache clearing -->
+  <script src="scripts/cache-clear.js"></script>
  </head>
  <body class="theme-dark" data-gradient="body-default" data-highlight="highlight-blue">
   <div id="preloader">
@@ -34,6 +40,16 @@
    </div>
   </div>
   <div id="page">
+   <div class="header header-fixed header-logo-center">
+         <a href="index.html" class="header-title" style="font-weight: 900; font-size: 1.4em;">FINLEY</a>
+    <a href="#" data-back-button class="header-icon header-icon-1"
+      ><i class="fas fa-arrow-left"></i
+    ></a>
+    <a href="#" data-toggle-theme class="header-icon header-icon-4"
+      ><i class="fas fa-lightbulb"></i
+    ></a>
+   </div>
+
    <div class="footer-bar-1" id="footer-bar">
     <a href="page-Vergleich.html">
      <i class="fa fa-chart-bar">
@@ -71,7 +87,6 @@
      </span>
     </a>
    </div>
-   <div class="page-content pb-0">
     <div class="card mb-0" data-card-height="cover" id="video-swiper" style="position: relative; overflow: hidden">
      <!-- Background Image Slides -->
      <div id="bg-slideshow">

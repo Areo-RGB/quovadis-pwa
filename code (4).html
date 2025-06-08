@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fullscreen Reaction Trainer</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* --- Component Styles --- */
+        #reaction-trainer-component {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            padding: 2vw;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 95%;
+            max-width: 600px;
+            margin: 20px auto;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        #reaction-trainer-component h2 {
+            margin-top: 0;
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            color: #1c1e21;
+        }
+
+        .trainer-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .trainer-square {
+            width: 100%;
+            padding-top: 100%;
+            position: relative;
+            border-radius: 12px;
+            background-color: #4a4a4a;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .trainer-square.active {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px 5px currentColor;
+        }
+
+        .trainer-square .number {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: clamp(2.5em, 10vw, 4em);
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.9);
+            user-select: none;
+            transition: top 0.2s ease;
+        }
+
+        /* Adjust number position when timer is active */
+        .trainer-square.active .number {
+            top: 45%;
+        }
+
+        .trainer-square .reaction-time-display {
+            display: none;
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.95);
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .trainer-square.active .reaction-time-display {
+            display: block;
+        }
+
+
+        .trainer-square[data-number='1'].active { background-color: #ffcc00; color: #ffcc00; }
+        .trainer-square[data-number='2'].active { background-color: #ff3b30; color: #ff3b30; }
+        .trainer-square[data-number='3'].active { background-color: #007aff; color: #007aff; }
+        .trainer-square[data-number='4'].active { background-color: #34c759; color: #34c759; }
+
+        .trainer-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+        }
+
+        .control-group { display: flex; flex-direction: column; align-items: center; }
+        .control-group label { font-size: clamp(0.8rem, 2.5vw, 0.9rem); color: #606770; margin-bottom: 5px; }
+        .trainer-controls select, .trainer-controls input { padding: 10px 14px; border-radius: 6px; border: 1px solid #ccc; font-size: clamp(0.9rem, 3vw, 1rem); background-color: #f5f6f7; width: 100%; box-sizing: border-box; }
+
+        .trainer-buttons { display: flex; flex-wrap: wrap; gap: 10px; width: 100%; justify-content: center; margin-top: 10px; }
+        .trainer-buttons button { padding: 12px 24px; font-size: clamp(1rem, 3.5vw, 1.1rem); font-weight: bold; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.2s ease, transform 0.1s ease; flex-grow: 1; max-width: 200px; }
+        .trainer-buttons button:active { transform: scale(0.98); }
+        #start-btn { background-color: #28a745; color: white; }
+        #start-btn:disabled { background-color: #94d3a2; cursor: not-allowed; }
+        #stop-btn { background-color: #dc3545; color: white; }
+        #stop-btn:disabled { background-color: #f1a2ab; cursor: not-allowed; }
+        #shuffle-btn { background-color: #5856d6; color: white; flex-basis: 100%; margin-top: 10px; max-width: 410px; }
+        #shuffle-btn:disabled { background-color: #c9c8f4; cursor: not-allowed; }
+
+        .trainer-display { margin: 20px 0; padding: 15px; background-color: #fff; border-radius: 8px; }
+        #timer-display { font-size: clamp(2rem, 8vw, 3rem); font-weight: bold; color: #1c1e21; font-variant-numeric: tabular-nums; }
+        #results-display { font-size: clamp(1rem, 3vw, 1.1rem); color: #333; min-height: 24px; display: flex; align-items: center; justify-content: center; }
+
+        /* --- FULLSCREEN GAME OVERLAY --- */
+        #game-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1c1c1e; /* Dark focus background */
+            z-index: 9999;
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            justify-content: center; /* Changed from space-between to center the content */
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            gap: 20px; /* Added to create space between the centered elements */
+        }
+
+        #game-overlay #timer-display {
+            color: #fff;
+            flex-shrink: 0; /* Prevent timer from shrinking */
+        }
+
+        #game-overlay .trainer-grid {
+            /* flex-grow and align-items were removed to prevent the grid from stretching */
+            /* and creating a large vertical gap between the card rows. */
+            width: 100%;
+            max-width: 500px; /* Keep it usable on very wide screens */
+            display: grid;
+        }
+
+        #game-overlay #stop-btn {
+            width: 100%;
+            max-width: 410px;
+            flex-shrink: 0; /* Prevent button from shrinking */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="reaction-trainer-component">
+        <h2>Reaction Trainer</h2>
+
+        <div class="trainer-display">
+            <div id="timer-placeholder">
+                <div id="timer-display">00:00</div>
+            </div>
+            <div id="results-display">
+                <span>Tap a square to change its number.</span>
+            </div>
+        </div>
+
+        <div id="grid-placeholder">
+            <div class="trainer-grid">
+                <div class="trainer-square" id="square-pos-1"><span class="number">1</span><span class="reaction-time-display"></span></div>
+                <div class="trainer-square" id="square-pos-2"><span class="number">2</span><span class="reaction-time-display"></span></div>
+                <div class="trainer-square" id="square-pos-3"><span class="number">3</span><span class="reaction-time-display"></span></div>
+                <div class="trainer-square" id="square-pos-4"><span class="number">4</span><span class="reaction-time-display"></span></div>
+            </div>
+        </div>
+
+        <div class="trainer-controls">
+            <!-- Control groups -->
+            <div class="control-group"><label for="mode-select">Mode</label><select id="mode-select"><option value="automatic">Automatic</option><option value="interactive">Interactive</option></select></div>
+            <div class="control-group"><label for="targets-select">Targets</label><select id="targets-select"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option></select></div>
+            <div class="control-group"><label for="interval-select">Interval (ms)</label><select id="interval-select"><option value="250">250</option><option value="500">500</option><option value="750">750</option><option value="1000" selected>1000</option><option value="1250">1250</option><option value="1500">1500</option></select></div>
+            <div class="control-group"><label for="session-duration">Duration (s)</label><input type="number" id="session-duration" value="30" min="5" step="5"></div>
+            <div class="control-group">
+                <label for="shuffle-select">Shuffle</label>
+                <select id="shuffle-select">
+                    <option value="no" selected>Nein</option>
+                    <option value="yes">Ja</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="trainer-buttons" id="buttons-placeholder">
+            <button id="start-btn">Start</button>
+            <button id="stop-btn" disabled>Stop</button>
+            <button id="shuffle-btn">Shuffle Numbers</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Create Game Overlay Dynamically ---
+            const gameOverlay = document.createElement('div');
+            gameOverlay.id = 'game-overlay';
+            document.body.appendChild(gameOverlay);
+
+            // --- DOM Element References ---
+            const squares = document.querySelectorAll('.trainer-square');
+            const startBtn = document.getElementById('start-btn');
+            const stopBtn = document.getElementById('stop-btn');
+            const shuffleBtn = document.getElementById('shuffle-btn');
+            const timerDisplay = document.getElementById('timer-display');
+            const trainerGrid = document.querySelector('.trainer-grid');
+            const resultsDisplay = document.getElementById('results-display');
+
+            // --- Placeholder References ---
+            const timerPlaceholder = document.getElementById('timer-placeholder');
+            const gridPlaceholder = document.getElementById('grid-placeholder');
+            const buttonsPlaceholder = document.getElementById('buttons-placeholder');
+
+            // --- Control References ---
+            const modeSelect = document.getElementById('mode-select');
+            const targetsSelect = document.getElementById('targets-select');
+            const intervalSelect = document.getElementById('interval-select');
+            const durationInput = document.getElementById('session-duration');
+            const shuffleSelect = document.getElementById('shuffle-select');
+
+            // --- State Variables ---
+            let activeSquareNumber = null, gameIntervalId = null, sessionTimerId = null, reactionTimerId = null;
+            let timeRemaining = 0, isRunning = false;
+            let reactionStartTime = 0, reactionTimes = [], correctHits = 0;
+            let midGameShuffleDone = false;
+
+            // --- Helper Functions ---
+            const formatTime = (s) => `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
+            const assignInitialNumbers = () => squares.forEach((sq, i) => { sq.dataset.number = i + 1; sq.querySelector('.number').textContent = i + 1; });
+            const calculateAverage = (arr) => arr.length === 0 ? 0 : Math.round(arr.reduce((a, b) => a + b, 0) / arr.length);
+
+            const shuffleNumbers = () => {
+                let numbers = [1, 2, 3, 4];
+                for (let i = numbers.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+                }
+                squares.forEach((square, index) => {
+                    square.dataset.number = numbers[index];
+                    square.querySelector('.number').textContent = numbers[index];
+                });
+            };
+
+            const resetUI = () => {
+                squares.forEach(sq => {
+                    sq.classList.remove('active');
+                    sq.querySelector('.reaction-time-display').textContent = '';
+                });
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+                shuffleBtn.disabled = false;
+                [modeSelect, intervalSelect, durationInput, targetsSelect, shuffleSelect].forEach(el => el.disabled = false);
+                resultsDisplay.innerHTML = '<span>Tap a square to change its number.</span>';
+                timeRemaining = parseInt(durationInput.value, 10);
+                timerDisplay.textContent = formatTime(timeRemaining);
+            };
+
+            const getRandomSquare = () => {
+                const numTargets = parseInt(targetsSelect.value, 10);
+                const available = Array.from({ length: numTargets }, (_, i) => i + 1);
+                let possible = available.filter(n => n != activeSquareNumber);
+                if (possible.length === 0) possible = available;
+                const nextNum = possible[Math.floor(Math.random() * possible.length)];
+                return document.querySelector(`.trainer-square[data-number='${nextNum}']`);
+            };
+
+            const activateSquare = (square) => {
+                if (reactionTimerId) clearInterval(reactionTimerId);
+                document.querySelectorAll('.reaction-time-display').forEach(d => d.textContent = '');
+
+                if (activeSquareNumber) document.querySelector(`[data-number="${activeSquareNumber}"]`)?.classList.remove('active');
+
+                activeSquareNumber = square.dataset.number;
+                square.classList.add('active');
+
+                if (modeSelect.value === 'interactive') {
+                    reactionStartTime = Date.now();
+                    const reactionDisplay = square.querySelector('.reaction-time-display');
+                    reactionTimerId = setInterval(() => {
+                        if(reactionStartTime > 0) {
+                            const elapsed = Date.now() - reactionStartTime;
+                            reactionDisplay.textContent = `${elapsed} ms`;
+                        }
+                    }, 10);
+                }
+            };
+
+            const gameLoop = () => {
+                const nextSquare = getRandomSquare();
+                if (nextSquare) activateSquare(nextSquare);
+            };
+
+            const handleSquareClick = (e) => {
+                const clickedSquare = e.currentTarget;
+                if (isRunning) {
+                    if (modeSelect.value !== 'interactive' || !reactionStartTime) return;
+                    if (clickedSquare.dataset.number == activeSquareNumber) {
+                        if (reactionTimerId) clearInterval(reactionTimerId);
+                        reactionTimerId = null;
+
+                        const reactionTime = Date.now() - reactionStartTime;
+                        reactionTimes.push(reactionTime);
+                        correctHits++;
+
+                        reactionStartTime = 0;
+                        gameLoop();
+                    }
+                } else {
+                    let currentNum = parseInt(clickedSquare.dataset.number, 10);
+                    let nextNum = (currentNum % 4) + 1;
+                    clickedSquare.dataset.number = nextNum;
+                    clickedSquare.querySelector('.number').textContent = nextNum;
+                }
+            };
+
+            const countdown = () => {
+                timeRemaining--;
+                timerDisplay.textContent = formatTime(timeRemaining);
+
+                const totalDuration = parseInt(durationInput.value, 10);
+                if (shuffleSelect.value === 'yes' && !midGameShuffleDone && timeRemaining <= Math.floor(totalDuration / 2)) {
+                    midGameShuffleDone = true;
+
+                    // 1. Find and deactivate the current visually active square to prevent visual bugs
+                    const currentActiveSquare = document.querySelector('.trainer-square.active');
+                    if (currentActiveSquare) {
+                        currentActiveSquare.classList.remove('active');
+                    }
+
+                    // 2. Shuffle the numbers on the cards
+                    shuffleNumbers();
+
+                    // 3. Immediately activate a new square to continue the game smoothly
+                    if (modeSelect.value === 'automatic') {
+                        clearInterval(gameIntervalId); // Stop the old timer
+                        gameLoop(); // Activate a new square right away
+                        gameIntervalId = setInterval(gameLoop, parseInt(intervalSelect.value, 10)); // Start a new timer
+                    } else { // Interactive mode
+                        gameLoop(); // Just activate a new square and wait for the user's click
+                    }
+                }
+
+                if (timeRemaining <= 0) handleStop();
+            };
+
+            const handleStart = () => {
+                midGameShuffleDone = false;
+                isRunning = true;
+                [startBtn, shuffleBtn, modeSelect, intervalSelect, durationInput, targetsSelect, shuffleSelect].forEach(el => el.disabled = true);
+                stopBtn.disabled = false;
+
+                // --- Enter Fullscreen Mode ---
+                gameOverlay.style.display = 'flex';
+                gameOverlay.appendChild(timerDisplay);
+                gameOverlay.appendChild(trainerGrid);
+                gameOverlay.appendChild(stopBtn);
+
+                reactionTimes = []; correctHits = 0; activeSquareNumber = null;
+                timeRemaining = parseInt(durationInput.value, 10);
+                timerDisplay.textContent = formatTime(timeRemaining);
+                sessionTimerId = setInterval(countdown, 1000);
+
+                if (modeSelect.value === 'automatic') {
+                    gameIntervalId = setInterval(gameLoop, parseInt(intervalSelect.value, 10));
+                }
+                gameLoop();
+            };
+
+            const handleStop = () => {
+                isRunning = false;
+                clearInterval(gameIntervalId);
+                clearInterval(sessionTimerId);
+                if (reactionTimerId) clearInterval(reactionTimerId);
+                gameIntervalId = sessionTimerId = reactionTimerId = null;
+
+                // --- Exit Fullscreen Mode ---
+                timerPlaceholder.appendChild(timerDisplay);
+                gridPlaceholder.appendChild(trainerGrid);
+                buttonsPlaceholder.insertBefore(stopBtn, shuffleBtn);
+                gameOverlay.style.display = 'none';
+
+                if (modeSelect.value === 'interactive') {
+                    const avg = calculateAverage(reactionTimes);
+                    resultsDisplay.innerHTML = `<span>Final Avg: <strong>${avg > 0 ? avg + ' ms' : 'N/A'}</strong> | Hits: <strong>${correctHits}</strong></span>`;
+                } else {
+                    resultsDisplay.innerHTML = '<span>Session stopped.</span>';
+                }
+                resetUI();
+            };
+
+            // --- Initial Setup ---
+            startBtn.addEventListener('click', handleStart);
+            stopBtn.addEventListener('click', handleStop);
+            shuffleBtn.addEventListener('click', shuffleNumbers);
+            squares.forEach(square => square.addEventListener('click', handleSquareClick));
+
+            assignInitialNumbers();
+            resetUI();
+        });
+    </script>
+
+</body>
+</html>

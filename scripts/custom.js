@@ -4,17 +4,17 @@ setTimeout(function () {
   if (preloader) {
     preloader.classList.add('preloader-hide');
   }
-}, 150);
+}, 1500); // Increased from 150ms to 1500ms for better loading
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   //Global Variables
-  let isPWA = true; // Enables or disables the service worker and PWA - ENABLED WITH MAXIMUM CACHING
+  let isPWA = false; // Disabled PWA for development to prevent caching issues
   let isAJAX = true; // AJAX transitions. Requires local server or server
   var pwaName = 'QuoVadis'; //Local Storage Names for PWA
   var pwaRemind = 1; //Days to re-remind to add to home
-  var pwaNoCache = false; //Requires server and HTTPS/SSL. Will clear cache with each visit
+  var pwaNoCache = true; //Clear cache with each visit during development
 
   //Setting Service Worker Locations scope = folder | location = service worker js location
   var pwaScope = '/';

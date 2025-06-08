@@ -8,6 +8,10 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <meta name="viewport"
     content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+  <!-- Development cache-busting -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <meta name="theme-color" content="#1b1d21" media="(prefers-color-scheme: dark)" />
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
   <title>Finley Profile - QuoVadis</title>
@@ -19,6 +23,8 @@
   <link rel="stylesheet" type="text/css" href="fonts/css/fontawesome-all.min.css" />
   <link rel="manifest" href="manifest.json" data-pwa-version="set_in_manifest_and_pwa_js" />
   <link rel="apple-touch-icon" sizes="180x180" href="app/icons/icon-192x192.png" />
+  <!-- Development cache clearing -->
+  <script src="scripts/cache-clear.js"></script>
 </head>
 
 <body class="theme-dark" data-highlight="highlight-blue" data-gradient="body-default">
@@ -27,6 +33,16 @@
   </div>
 
   <div id="page">
+    <div class="header header-fixed header-logo-center">
+             <a href="index.html" class="header-title" style="font-weight: 900; font-size: 1.4em;">TRAINING</a>
+      <a href="#" data-back-button class="header-icon header-icon-1"
+        ><i class="fas fa-arrow-left"></i
+      ></a>
+      <a href="#" data-toggle-theme class="header-icon header-icon-4"
+        ><i class="fas fa-lightbulb"></i
+      ></a>
+    </div>
+
     <!-- Footer Navigation -->
     <div id="footer-bar" class="footer-bar-1">
       <a href="page-Vergleich.html"><i class="fa fa-chart-bar"></i><span>Vergleich</span></a>
@@ -37,7 +53,7 @@
     </div>
 
     <!-- Page Content -->
-    <div class="page-content">
+    <div class="page-content" style="padding-top: 50px;">
       <div class="page-content header-clear-small">
 
         <!-- Tab Controls -->
