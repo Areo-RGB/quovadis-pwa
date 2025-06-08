@@ -10,9 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   //Global Variables
-  let isPWA = false; // Disabled PWA for development to prevent caching issues
+  let isPWA = true; // Disabled PWA for development to prevent caching issues
   let isAJAX = true; // AJAX transitions. Requires local server or server
-  var pwaName = 'QuoVadis'; //Local Storage Names for PWA
+  var pwaName = 'Finley'; //Local Storage Names for PWA
   var pwaRemind = 1; //Days to re-remind to add to home
   var pwaNoCache = true; //Clear cache with each visit during development
 
