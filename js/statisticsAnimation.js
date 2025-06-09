@@ -155,6 +155,12 @@ export function initStatisticsAnimation() {
         clubText.style.opacity = '0';
       }
 
+      // Show the Ente button after all animations are done
+      const enteBtn = document.getElementById('ente-btn');
+      if (enteBtn) {
+        enteBtn.style.display = 'block';
+      }
+
       // Video swiper will be handled by its module as it comes after stats fadeout
     }, animationCompletionTime + 5000); // 5000ms (5s) after all stats are shown
   }, statsActualStartTime);

@@ -1,15 +1,87 @@
 import { initStatisticsAnimation } from './statisticsAnimation.js';
 
+// Move getPath, updatePath, and animate to the very top of initHomePageHeroAnimations
+function getPath(cx, cy, r, a1, a2) {
+  const delta = a2 - a1;
+  if (delta === 360) {
+    return (
+      'M ' +
+      (cx - r) +
+      ' ' +
+      cy +
+      ' a ' +
+      r +
+      ' ' +
+      r +
+      ' 0 1 0 ' +
+      r * 2 +
+      ' 0 a ' +
+      r +
+      ' ' +
+      r +
+      ' 0 1 0 ' +
+      -r * 2 +
+      ' 0z'
+    );
+  }
+  const largeArc = delta > 180 ? 1 : 0;
+  a1 = (a1 * Math.PI) / 180 - Math.PI / 2;
+  a2 = (a2 * Math.PI) / 180 - Math.PI / 2;
+  const x1 = cx + r * Math.cos(a2);
+  const y1 = cy + r * Math.sin(a2);
+  const x2 = cx + r * Math.cos(a1);
+  const y2 = cy + r * Math.sin(a1);
+  return (
+    'M ' +
+    x1 +
+    ' ' +
+    y1 +
+    ' A ' +
+    r +
+    ' ' +
+    r +
+    ' 0 ' +
+    largeArc +
+    ' 0 ' +
+    x2 +
+    ' ' +
+    y2 +
+    ' L ' +
+    cx +
+    ' ' +
+    cy +
+    'z'
+  );
+}
+
+function updatePath(arcPath, arc, getPathFn) {
+  arcPath.setAttribute('d', getPathFn(arc.cx, arc.cy, arc.r, arc.start, arc.end));
+}
+
+function animate(arc, arcPath, getPathFn, logo, svg, startTime, duration) {
+  const elapsed = Date.now() - startTime;
+  const progress = Math.min(elapsed / duration, 1);
+  arc.end = progress * 360;
+  updatePath(arcPath, arc, getPathFn);
+  if (progress < 1) {
+    requestAnimationFrame(function() {
+      animate(arc, arcPath, getPathFn, logo, svg, startTime, duration);
+    });
+  } else {
+    setTimeout(function() {
+      logo.style.clipPath = 'none';
+      if (svg.parentNode) {
+        svg.parentNode.removeChild(svg);
+      }
+    }, 100);
+  }
+}
+
 export function initHomePageHeroAnimations() {
   console.log('Initializing Homepage Hero Animations');
 
   // Add initial delay to account for page loading
   const initialDelay = 2500; // 2500ms delay before starting animations
-
-  // Get the first picture/hero image element - Updated to target background slides
-  const firstPicture = document.querySelector(
-    '.bg-slide.active, #bg-slideshow .bg-slide:first-child'
-  );
 
   // Get text elements for initial fade-in
   const logoContainer = document.querySelector('.logo-container');
@@ -46,8 +118,6 @@ export function initHomePageHeroAnimations() {
         document.body.appendChild(svg);
 
         // Arc animation variables (based on CodePen)
-        const RAD = Math.PI / 180;
-        const PI_2 = Math.PI / 2;
         const arc = {
           start: 0,
           end: 0,
@@ -56,103 +126,21 @@ export function initHomePageHeroAnimations() {
           r: 60,
         };
 
-        // getPath function from CodePen
-        function getPath(cx, cy, r, a1, a2) {
-          const delta = a2 - a1;
-
-          if (delta === 360) {
-            return (
-              'M ' +
-              (cx - r) +
-              ' ' +
-              cy +
-              ' a ' +
-              r +
-              ' ' +
-              r +
-              ' 0 1 0 ' +
-              r * 2 +
-              ' 0 a ' +
-              r +
-              ' ' +
-              r +
-              ' 0 1 0 ' +
-              -r * 2 +
-              ' 0z'
-            );
-          }
-
-          const largeArc = delta > 180 ? 1 : 0;
-          a1 = a1 * RAD - PI_2;
-          a2 = a2 * RAD - PI_2;
-
-          const x1 = cx + r * Math.cos(a2);
-          const y1 = cy + r * Math.sin(a2);
-          const x2 = cx + r * Math.cos(a1);
-          const y2 = cy + r * Math.sin(a1);
-
-          return (
-            'M ' +
-            x1 +
-            ' ' +
-            y1 +
-            ' A ' +
-            r +
-            ' ' +
-            r +
-            ' 0 ' +
-            largeArc +
-            ' 0 ' +
-            x2 +
-            ' ' +
-            y2 +
-            ' L ' +
-            cx +
-            ' ' +
-            cy +
-            'z'
-          );
-        }
-
-        // updatePath function from CodePen
-        function updatePath() {
-          arcPath.setAttribute('d', getPath(arc.cx, arc.cy, arc.r, arc.start, arc.end));
-        }
-
         // Apply clipPath and start animation
         logoContainer.style.transition = 'opacity 0.3s ease-in-out';
         logoContainer.style.opacity = '1';
         logo.style.clipPath = 'url(#logoClipArc)';
 
         // Start with empty path
-        updatePath();
+        updatePath(arcPath, arc, getPath);
 
         // Animate the arc from 0 to 360 degrees over 2 seconds
         const startTime = Date.now();
         const duration = 2000;
 
-        function animate() {
-          const elapsed = Date.now() - startTime;
-          const progress = Math.min(elapsed / duration, 1);
-          arc.end = progress * 360;
-          updatePath();
-
-          if (progress < 1) {
-            requestAnimationFrame(animate);
-          } else {
-            // Cleanup after animation
-            setTimeout(() => {
-              logo.style.clipPath = 'none';
-              if (svg.parentNode) {
-                svg.parentNode.removeChild(svg);
-              }
-            }, 100);
-          }
-        }
-
         // Start animation after a small delay
         setTimeout(() => {
-          animate();
+          animate(arc, arcPath, getPath, logo, svg, startTime, duration);
         }, 50);
       }
     }
@@ -192,17 +180,17 @@ export function initHomePageHeroAnimations() {
     document.head.appendChild(cursorStyle);
 
     // Hide all letters initially
-    finleyLetters.forEach((span, index) => {
+    finleyLetters.forEach(function(span) {
       span.style.opacity = '0';
       span.style.transform = 'translateX(20px)';
       span.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
     });
 
     // Animate letters from left to right (F, I, N, L, E, Y)
-    finleyLetters.forEach((span, index) => {
+    finleyLetters.forEach(function(span, index) {
       const letterDelay = index * 300; // Longer delay between letters
       setTimeout(
-        () => {
+        function() {
           span.style.opacity = '1';
           span.style.transform = 'translateX(0)';
 
@@ -228,6 +216,11 @@ export function initHomePageHeroAnimations() {
       if (cursor.parentNode) {
         cursor.parentNode.removeChild(cursor);
       }
+      // Show the Enter button after Finley animation is done
+      const enteBtn = document.getElementById('ente-btn');
+      if (enteBtn) {
+        enteBtn.style.display = 'block';
+      }
     }, finleyAnimationEndTime + 500);
 
     // Animate Club Name at the same time as logo
@@ -237,8 +230,6 @@ export function initHomePageHeroAnimations() {
         clubText.classList.add('animate'); // Add .animate class to trigger CSS animation
       }
     }, clubNameAnimationStartTime);
-
-    const clubNameAnimationDuration = 2000; // Duration of club name fade-in (from CSS)
 
     // Initialize statistics animation from separate module
     // Statistics animation has been extracted to a separate file
