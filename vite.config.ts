@@ -1,4 +1,13 @@
-import { defineConfig } from 'vite';
+import { defineConfig, type HmrContext, type Plugin, type IndexHtmlTransform } from 'vite';
+
+// Define plugin interfaces
+interface HtmlHotReloadPlugin extends Plugin {
+  handleHotUpdate: (ctx: HmrContext) => void | Promise<void>;
+}
+
+interface DisablePwaDevPlugin extends Plugin {
+  transformIndexHtml: IndexHtmlTransform;
+}
 
 export default defineConfig({
   root: '.',
@@ -19,11 +28,10 @@ export default defineConfig({
       Expires: '0',
     },
   },
-  // Enable hot reload for HTML files and disable PWA caching during development
   plugins: [
     {
       name: 'html-hot-reload',
-      handleHotUpdate({ file, server }) {
+      handleHotUpdate: ({ file, server }: HmrContext) => {
         if (file.endsWith('.html')) {
           server.ws.send({
             type: 'full-reload',
@@ -31,10 +39,10 @@ export default defineConfig({
           return [];
         }
       },
-    },
+    } as HtmlHotReloadPlugin,
     {
       name: 'disable-pwa-dev',
-      transformIndexHtml(html) {
+      transformIndexHtml: (html: string) => {
         return html
           .replace('let isPWA = true;', 'let isPWA = false;')
           .replace('var pwaNoCache = false;', 'var pwaNoCache = true;')
@@ -63,6 +71,6 @@ export default defineConfig({
             </script></head>`
           );
       },
-    },
+    } as DisablePwaDevPlugin,
   ],
 });

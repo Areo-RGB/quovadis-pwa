@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#1b1d21" media="(prefers-color-scheme: dark)" />
+    <title>Training Video Grid</title>
+    <style>
+      /* Reset and base styles */
+      html,
+      body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Prevents scrollbars */
+        background-color: #1b1d21; /* A dark background color */
+        box-sizing: border-box;
+      }
+
+      body {
+        padding: 10px;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .grid-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        touch-action: none; /* Prevents browser default swipe actions like back/forward */
+      }
+
+      #card-grid-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      .grid-card {
+        grid-area: 1 / 1 / 2 / 2; /* All cards in the same grid cell */
+        opacity: 0;
+        pointer-events: none;
+        visibility: hidden;
+        transition:
+          opacity 0.4s ease-in-out,
+          visibility 0.4s;
+        width: 100%;
+        height: 100%;
+      }
+
+      .grid-card.active {
+        opacity: 1;
+        pointer-events: auto;
+        visibility: visible;
+        z-index: 1;
+      }
+
+      /* The main video container styling */
+      .video-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #000;
+      }
+
+      .fullscreen-video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        cursor: pointer;
+      }
+
+      .video-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        transition: opacity 0.3s ease;
+        z-index: 10;
+        border-radius: 20px;
+      }
+
+      .video-overlay.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .play-button-container {
+        color: white;
+        transition: transform 0.2s ease;
+      }
+
+      .video-overlay:hover .play-button-container {
+        transform: scale(1.1);
+      }
+
+      .info-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 15px 25px;
+        color: white;
+        text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+          0 0 5px rgba(0, 0, 0, 0.7);
+        z-index: 5;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 18px;
+        font-weight: 600;
+        box-sizing: border-box;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body class="theme-dark">
+    <div class="grid-wrapper">
+      <div id="card-grid-container">
+        <!-- Row 1, Col 1 (Index 0) -->
+        <div class="grid-card">
+          <div class="video-container">
+            <video playsinline muted loop class="fullscreen-video">
+              <source src="https://data4.fra1.cdn.digitaloceanspaces.com/a1.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <div class="video-overlay">
+              <div class="play-button-container">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="80"
+                  height="80"
+                  fill="currentColor"
+                  class="bi bi-play-circle-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div class="info-overlay">
+              <span>Übung A1</span>
+              <span class="video-time">Datum</span>
+            </div>
+          </div>
+        </div>
+        <!-- Row 1, Col 2 (Index 1) -->
+        <div class="grid-card">
+          <div class="video-container">
+            <video playsinline muted loop class="fullscreen-video">
+              <source src="https://data4.fra1.cdn.digitaloceanspaces.com/b1.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <div class="video-overlay">
+              <div class="play-button-container">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="80"
+                  height="80"
+                  fill="currentColor"
+                  class="bi bi-play-circle-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div class="info-overlay">
+              <span>Übung B1</span>
+              <span class="video-time">Video</span>
+            </div>
+          </div>
+        </div>
+        <!-- Row 1, Col 3 (Index 2) -->
+        <div class="grid-card">
+          <div class="video-container">
+            <video playsinline muted loop class="fullscreen-video">
+              <source src="https://data4.fra1.cdn.digitaloceanspaces.com/c1.mov" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <div class="video-overlay">
+              <div class="play-button-container">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="80"
+                  height="80"
+                  fill="currentColor"
+                  class="bi bi-play-circle-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div class="info-overlay">
+              <span>Übung C1</span>
+              <span class="video-time">09.06.25</span>
+            </div>
+          </div>
+        </div>
+        <!-- Row 2, Col 1 (Index 3) -->
+        <div class="grid-card">
+          <div class="video-container">
+            <video playsinline muted loop class="fullscreen-video">
+              <source src="https://data4.fra1.cdn.digitaloceanspaces.com/a2.MP4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <div class="video-overlay">
+              <div class="play-button-container">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="80"
+                  height="80"
+                  fill="currentColor"
+                  class="bi bi-play-circle-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div class="info-overlay">
+              <span>Übung:Finley (A2)</span>
+              <span class="video-time">Video</span>
+            </div>
+          </div>
+        </div>
+        <!-- Row 2, Col 2 (Index 4) -->
+        <div class="grid-card">
+          <div class="video-container">
+            <video playsinline muted loop class="fullscreen-video">
+              <source src="https://data4.fra1.cdn.digitaloceanspaces.com/b2.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <div class="video-overlay">
+              <div class="play-button-container">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="80"
+                  height="80"
+                  fill="currentColor"
+                  class="bi bi-play-circle-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div class="info-overlay">
+              <span>Übung (B2)</span>
+              <span class="video-time">Video</span>
+            </div>
+          </div>
+        </div>
+        <!-- Row 2, Col 3 (Index 5) -->
+        <div class="grid-card">
+          <div class="video-container">
+            <video playsinline muted loop class="fullscreen-video">
+              <source src="https://data4.fra1.cdn.digitaloceanspaces.com/c2.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <div class="video-overlay">
+              <div class="play-button-container">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="80"
+                  height="80"
+                  fill="currentColor"
+                  class="bi bi-play-circle-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div class="info-overlay">
+              <span>Übung:Bent (C2)</span>
+              <span class="video-time">Video</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const gridWrapper = document.querySelector('.grid-wrapper');
+        const cards = Array.from(document.querySelectorAll('.grid-card'));
+
+        const numCols = 3;
+        const numRows = 2;
+        let currentCol = 1; // Start at the second column (B)
+        let currentRow = 0;  // Start at the first row (1)
+
+        let startX = 0;
+        let startY = 0;
+
+        function showCard(row, col) {
+          // Pause all inactive videos
+          cards.forEach((card, index) => {
+            const video = card.querySelector('.fullscreen-video');
+            const targetIndex = row * numCols + col;
+            if (video && !video.paused && index !== targetIndex) {
+              video.pause();
+            }
+          });
+
+          // Hide the currently active card
+          const currentActive = document.querySelector('.grid-card.active');
+          if (currentActive) {
+            currentActive.classList.remove('active');
+          }
+
+          // Show the target card
+          const indexToShow = row * numCols + col;
+          if (cards[indexToShow]) {
+            cards[indexToShow].classList.add('active');
+          }
+        }
+
+        gridWrapper.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        });
+
+        gridWrapper.addEventListener('touchend', (e) => {
+            const endX = e.changedTouches[0].clientX;
+            const endY = e.changedTouches[0].clientY;
+
+            const diffX = startX - endX;
+            const diffY = startY - endY;
+            const swipeThreshold = 50; // Minimum distance for a swipe
+
+            if (Math.abs(diffX) > Math.abs(diffY)) { // Horizontal swipe
+                if (Math.abs(diffX) > swipeThreshold) {
+                    if (diffX > 0) { // Swipe Left
+                        if (currentCol < numCols - 1) {
+                            currentCol++;
+                        }
+                    } else { // Swipe Right
+                        if (currentCol > 0) {
+                            currentCol--;
+                        }
+                    }
+                }
+            } else { // Vertical swipe
+                if (Math.abs(diffY) > swipeThreshold) {
+                    if (diffY > 0) { // Swipe Up
+                        if (currentRow < numRows - 1) {
+                            currentRow++;
+                        }
+                    } else { // Swipe Down
+                        if (currentRow > 0) {
+                            currentRow--;
+                        }
+                    }
+                }
+            }
+            showCard(currentRow, currentCol);
+        });
+
+        /**
+         * Initializes a single video card with its own controls.
+         * @param {HTMLElement} cardElement - The .grid-card element.
+         */
+        function initializeVideoCard(cardElement) {
+          const video = cardElement.querySelector('.fullscreen-video');
+          const playButtonOverlay = cardElement.querySelector('.video-overlay');
+
+          if (!video) return;
+
+          // Combined click handler for toggling play/pause
+          const togglePlay = (e) => {
+            e.stopPropagation();
+            if (video.paused) {
+              video.play();
+            } else {
+              video.pause();
+            }
+          };
+
+          if (playButtonOverlay) {
+            playButtonOverlay.addEventListener('click', togglePlay);
+          }
+          video.addEventListener('click', togglePlay);
+
+          video.addEventListener('play', () => {
+            if (playButtonOverlay) playButtonOverlay.classList.add('hidden');
+          });
+
+          video.addEventListener('pause', () => {
+            if (playButtonOverlay) playButtonOverlay.classList.remove('hidden');
+          });
+
+           video.addEventListener('ended', () => {
+            if (playButtonOverlay) playButtonOverlay.classList.remove('hidden');
+          });
+        }
+
+        // Initialize all video cards
+        cards.forEach(initializeVideoCard);
+
+        // Initial load, starting at B1 (row 0, col 1)
+        showCard(currentRow, currentCol);
+      });
+    </script>
+  </body>
+</html>

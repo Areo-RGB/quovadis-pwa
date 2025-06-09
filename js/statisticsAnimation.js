@@ -141,14 +141,16 @@ export function initStatisticsAnimation() {
 
       // Add animation for FINLEY text
       if (finleyHeading) {
-        finleyHeading.style.transition = 'transform 1.5s cubic-bezier(0.19, 1, 0.22, 1), opacity 1s ease-in-out';
+        finleyHeading.style.transition =
+          'transform 1.5s cubic-bezier(0.19, 1, 0.22, 1), opacity 1s ease-in-out';
         finleyHeading.style.transform = 'translateY(-30px) scale(0.92)';
         finleyHeading.style.opacity = '0.9';
       }
 
       // Add animation for club text
       if (clubText) {
-        clubText.style.transition = 'transform 1.5s cubic-bezier(0.19, 1, 0.22, 1), opacity 1s ease-in-out';
+        clubText.style.transition =
+          'transform 1.5s cubic-bezier(0.19, 1, 0.22, 1), opacity 1s ease-in-out';
         clubText.style.transform = 'translateY(-20px)';
         clubText.style.opacity = '0';
       }
@@ -159,7 +161,7 @@ export function initStatisticsAnimation() {
 }
 
 // Add CSS for statistics animation
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   // Create a style element
   const styleEl = document.createElement('style');
 
